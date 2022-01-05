@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+/*
+ ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
+*/
 
 namespace SmashCup_AllStars
 {
@@ -8,8 +11,8 @@ namespace SmashCup_AllStars
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        /*Test modif Gab*/
         /*blabla*/
+        /*Test modif Gab*/
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
