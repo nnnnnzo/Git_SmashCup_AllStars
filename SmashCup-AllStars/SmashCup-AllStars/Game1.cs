@@ -8,7 +8,7 @@ namespace SmashCup_AllStars
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
+        /*blabla*/
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
