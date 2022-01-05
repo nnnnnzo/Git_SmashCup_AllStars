@@ -8,6 +8,7 @@ namespace SmashCup_AllStars
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        /*Test modif Gab*/
         /*blabla*/
         public Game1()
         {
