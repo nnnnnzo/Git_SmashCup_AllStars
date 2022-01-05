@@ -31,9 +31,10 @@ namespace SmashCup_AllStars
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _persoPosition = new Vector2(50, 0);
-            _vitessePerso = 100;
+            _persoPosition = new Vector2(400, 200);
+            _vitessePerso = 200;
             animation = "idleD";
+            lastDir = "D";
             base.Initialize();
         }
 
@@ -52,23 +53,27 @@ namespace SmashCup_AllStars
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
             float walkSpeed = deltaSeconds * _vitessePerso;
-            //if user
-            animation = "idleD";
-    
+            if (lastDir == "D")
+                animation = "idleD";
+            else
+                animation = "idleG";
+
             KeyboardState keyboardState = Keyboard.GetState();
             
             if (keyboardState.IsKeyDown(Keys.D))
             {
                 animation = "runD";
                 _persoPosition.X += walkSpeed;
+                lastDir = "D";
             }
 
             if (keyboardState.IsKeyDown(Keys.Q))
             {
                 animation = "runG";
                 _persoPosition.X -= walkSpeed;
+                lastDir = "G";
             }
             // TODO: Add your update logic here
             _perso.Play(animation);
