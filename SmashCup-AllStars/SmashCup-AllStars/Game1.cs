@@ -14,11 +14,17 @@ namespace SmashCup_AllStars
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Vector2 _persoPosition;
-        private AnimatedSprite _perso;
-        private int _vitessePerso;
-        private string animation;
-        private string lastDir;
+        private Vector2 _perso1Position;
+        private AnimatedSprite _perso1;
+        private int _vitessePerso1;
+        private string animationP1;
+        private string lastDirP1;
+
+        private Vector2 _perso2Position;
+        private AnimatedSprite _perso2;
+        private int _vitessePerso2;
+        private string animationP2;
+        private string lastDirP2;
         /*blabla*/
         /*Test modif Gab*/
         public Game1()
@@ -31,10 +37,16 @@ namespace SmashCup_AllStars
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _persoPosition = new Vector2(400, 200);
-            _vitessePerso = 200;
-            animation = "idleD";
-            lastDir = "D";
+            _perso1Position = new Vector2(200, 200);
+            _vitessePerso1 = 200;
+            animationP1 = "idleD";
+            lastDirP1 = "D";
+
+            _perso2Position = new Vector2(600, 200);
+            _vitessePerso2 = 200;
+            animationP2 = "idleG";
+            lastDirP2 = "G";
+
             base.Initialize();
         }
 
@@ -42,8 +54,11 @@ namespace SmashCup_AllStars
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             // spritesheet
-            SpriteSheet spriteSheet = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
-            _perso = new AnimatedSprite(spriteSheet);
+            SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
+            _perso1 = new AnimatedSprite(spriteSheetP1);
+
+            SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
+            _perso2 = new AnimatedSprite(spriteSheetP2);
 
             // TODO: use this.Content to load your game content here
         }
@@ -54,30 +69,52 @@ namespace SmashCup_AllStars
                 Exit();
 
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
-            float walkSpeed = deltaSeconds * _vitessePerso;
-            if (lastDir == "D")
-                animation = "idleD";
+            float walkSpeed = deltaSeconds * _vitessePerso1;
+            if (lastDirP1 == "D")
+                animationP1 = "idleD";
             else
-                animation = "idleG";
+                animationP1 = "idleG";
+
+            if (lastDirP2 == "D")
+                animationP2 = "idleD";
+            else
+                animationP2 = "idleG";
 
             KeyboardState keyboardState = Keyboard.GetState();
             
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                animation = "runD";
-                _persoPosition.X += walkSpeed;
-                lastDir = "D";
+                animationP1 = "runD";
+                _perso1Position.X += walkSpeed;
+                lastDirP1 = "D";
             }
 
             if (keyboardState.IsKeyDown(Keys.Q))
             {
-                animation = "runG";
-                _persoPosition.X -= walkSpeed;
-                lastDir = "G";
+                animationP1 = "runG";
+                _perso1Position.X -= walkSpeed;
+                lastDirP1 = "G";
+            }
+
+
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+                animationP2 = "runD";
+                _perso2Position.X += walkSpeed;
+                lastDirP2 = "D";
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Left))
+            {
+                animationP2 = "runG";
+                _perso2Position.X -= walkSpeed;
+                lastDirP2 = "G";
             }
             // TODO: Add your update logic here
-            _perso.Play(animation);
-            _perso.Update(deltaSeconds);
+            _perso1.Play(animationP1);
+            _perso2.Play(animationP2);
+            _perso1.Update(deltaSeconds);
+            _perso2.Update(deltaSeconds);
             base.Update(gameTime);
         }
 
@@ -86,7 +123,8 @@ namespace SmashCup_AllStars
             GraphicsDevice.Clear(Color.Gray);
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_perso, _persoPosition);
+            _spriteBatch.Draw(_perso1, _perso1Position);
+            _spriteBatch.Draw(_perso2, _perso2Position);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
