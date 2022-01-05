@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Content;
+using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Sprites;
 /*
- ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
+ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
 */
 
 namespace SmashCup_AllStars
@@ -11,6 +14,11 @@ namespace SmashCup_AllStars
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Vector2 _persoPosition;
+        private AnimatedSprite _perso;
+        private int _vitessePerso;
+        private string animation;
+        private string lastDir;
         /*blabla*/
         /*Test modif Gab*/
         public Game1()
@@ -23,13 +31,18 @@ namespace SmashCup_AllStars
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            _persoPosition = new Vector2(50, 0);
+            _vitessePerso = 100;
+            animation = "idleD";
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            // spritesheet
+            SpriteSheet spriteSheet = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
+            _perso = new AnimatedSprite(spriteSheet);
 
             // TODO: use this.Content to load your game content here
         }
@@ -39,17 +52,37 @@ namespace SmashCup_AllStars
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float walkSpeed = deltaSeconds * _vitessePerso;
+            //if user
+            animation = "idleD";
+    
+            KeyboardState keyboardState = Keyboard.GetState();
+            
+            if (keyboardState.IsKeyDown(Keys.D))
+            {
+                animation = "runD";
+                _persoPosition.X += walkSpeed;
+            }
 
+            if (keyboardState.IsKeyDown(Keys.Q))
+            {
+                animation = "runG";
+                _persoPosition.X -= walkSpeed;
+            }
+            // TODO: Add your update logic here
+            _perso.Play(animation);
+            _perso.Update(deltaSeconds);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            GraphicsDevice.Clear(Color.Gray);
             // TODO: Add your drawing code here
-
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(_perso, _persoPosition);
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
