@@ -9,7 +9,7 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
 
-namespace SmashCup-AllStars
+namespace SmashCup_AllStars
 {
     public class MapPrincipale : GameScreen
     {
