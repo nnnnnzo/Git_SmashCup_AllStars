@@ -14,7 +14,7 @@ namespace SmashCup_AllStars
 {
     public class Game1 : Game
     {
-        private Game _mapPrincipale;
+        
         private TiledMap _tiledMap;
         private TiledMapRenderer _tiledMapRenderer;
 
@@ -33,8 +33,13 @@ namespace SmashCup_AllStars
         private string lastDirP2;
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
-        /*blabla*/
-        /*Test modif Gab*/
+
+        //Test nouveau perso avec une classe sprite
+        private Sprite _persoTest;
+
+
+
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -67,6 +72,12 @@ namespace SmashCup_AllStars
             jumpingP2 = false;//Init jumping to false
             jumpspeedP2 = 0;
 
+
+            // Test nouveaux perso avec la classe sprite
+
+            _persoTest = new Sprite();
+            _persoTest.Initialize(new Vector2(500, 200), 200);
+
             base.Initialize();
         }
 
@@ -78,10 +89,14 @@ namespace SmashCup_AllStars
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
+
             _perso1 = new AnimatedSprite(spriteSheetP1);
 
             SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
             _perso2 = new AnimatedSprite(spriteSheetP2);
+
+
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -190,6 +205,7 @@ namespace SmashCup_AllStars
             base.Update(gameTime);
         }
 
+       
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Gray);
