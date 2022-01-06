@@ -17,6 +17,7 @@ namespace SmashCup_AllStars
         private Game _mapPrincipale;
         private TiledMap _tiledMap;
         private TiledMapRenderer _tiledMapRenderer;
+        private TiledMapTileLayer mapLayerSol;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -48,8 +49,11 @@ namespace SmashCup_AllStars
             _graphics.PreferredBackBufferWidth = 1750;  // set this value to the desired width of your window
             _graphics.PreferredBackBufferHeight = 950;   // set this value to the desired height of your window
             _graphics.ApplyChanges();
+
+            
+
             //var joueur 1
-            _perso1Position = new Vector2(200, 200);
+            _perso1Position = new Vector2(400, 200);
             _vitessePerso1 = 200;
             animationP1 = "idleD";
             lastDirP1 = "D";
@@ -70,11 +74,22 @@ namespace SmashCup_AllStars
             base.Initialize();
         }
 
+        private bool IsCollision(ushort x, ushort y)
+        {
+            // définition de tile qui peut être null (?)
+            TiledMapTile? tile;
+            if (mapLayerSol.TryGetTile(x, y, out tile) == false)
+                return false;
+            if (!tile.Value.IsBlank)
+                return true;
+            return false;
+        }
+
         protected override void LoadContent()
         {
             _tiledMap = Content.Load<TiledMap>("map");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
-
+            mapLayerSol = _tiledMap.GetLayer<TiledMapTileLayer>("île principale");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
@@ -137,6 +152,7 @@ namespace SmashCup_AllStars
                 }
             }
 
+            
 
             //Direction dans laquelles regarder
             if (lastDirP1 == "D")
@@ -163,6 +179,10 @@ namespace SmashCup_AllStars
                 lastDirP1 = "G";
             }
 
+            if (IsCollision((ushort)_perso1Position.X, (ushort)_perso1Position.Y) == false && jumpingP1 == false);
+            {
+                _perso1Position.Y += 14;
+            }
 
             //Deplacement Joueur 2
             if (keyboardState.IsKeyDown(Keys.Right))
