@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
 /*
 ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
 */
@@ -12,6 +14,9 @@ namespace SmashCup_AllStars
 {
     public class Game1 : Game
     {
+        private TiledMap _tiledMap;
+        private TiledMapRenderer _tiledMapRenderer;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Vector2 _perso1Position;
@@ -62,6 +67,9 @@ namespace SmashCup_AllStars
 
         protected override void LoadContent()
         {
+            _tiledMap = Content.Load<TiledMap>("map");
+            _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
@@ -172,7 +180,8 @@ namespace SmashCup_AllStars
             _perso2.Play(animationP2);
             _perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
-
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            _tiledMapRenderer.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -181,6 +190,7 @@ namespace SmashCup_AllStars
             GraphicsDevice.Clear(Color.Gray);
 
             _spriteBatch.Begin();
+            _tiledMapRenderer.Draw();
             _spriteBatch.Draw(_perso1, _perso1Position);
             _spriteBatch.Draw(_perso2, _perso2Position);
             _spriteBatch.End();
