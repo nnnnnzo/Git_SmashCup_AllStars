@@ -39,10 +39,14 @@ namespace SmashCup_AllStars
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
         }
 
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferWidth = 2048;  // set this value to the desired width of your window
+            _graphics.PreferredBackBufferHeight = 1536;   // set this value to the desired height of your window
+            _graphics.ApplyChanges();
             //var joueur 1
             _perso1Position = new Vector2(200, 200);
             _vitessePerso1 = 200;
