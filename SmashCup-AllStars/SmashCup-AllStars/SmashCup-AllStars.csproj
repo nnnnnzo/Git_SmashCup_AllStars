@@ -37,5 +37,8 @@
     <None Update="Content\animRed.sf">
        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\map.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
    </ItemGroup>
 </Project>
