@@ -14,6 +14,7 @@ namespace SmashCup_AllStars
 {
     public class Game1 : Game
     {
+        private Game _mapPrincipale;
         private TiledMap _tiledMap;
         private TiledMapRenderer _tiledMapRenderer;
 
@@ -185,7 +186,7 @@ namespace SmashCup_AllStars
             _perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            _tiledMapRenderer.Update(gameTime);
+           _tiledMapRenderer.Update(gameTime);
             base.Update(gameTime);
         }
 
