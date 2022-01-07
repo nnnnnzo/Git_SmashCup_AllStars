@@ -6,6 +6,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
+using System;
 /*
 ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
 */
@@ -46,11 +47,13 @@ namespace SmashCup_AllStars
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1750;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 950;   // set this value to the desired height of your window
+
+
+            _graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            _graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
             _graphics.ApplyChanges();
 
-            
+
 
             //var joueur 1
             _perso1Position = new Vector2(400, 200);
@@ -87,9 +90,9 @@ namespace SmashCup_AllStars
 
         protected override void LoadContent()
         {
-            _tiledMap = Content.Load<TiledMap>("map");
+            _tiledMap = Content.Load<TiledMap>("Ice");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
-            mapLayerSol = _tiledMap.GetLayer<TiledMapTileLayer>("île principale");
+            mapLayerSol = _tiledMap.GetLayer<TiledMapTileLayer>("Terrain");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
@@ -108,7 +111,6 @@ namespace SmashCup_AllStars
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             KeyboardState keyboardState = Keyboard.GetState();
 
-
             //Jump Joueur 1
             if (jumpingP1)
             {
@@ -126,7 +128,7 @@ namespace SmashCup_AllStars
                 if (keyboardState.IsKeyDown(Keys.Z))
                 {
                     jumpingP1 = true;
-                    jumpspeedP1 = -14;//Give it upward thrust
+                    jumpspeedP1 = -24;//Give it upward thrust
                 }
             }
 
@@ -148,7 +150,7 @@ namespace SmashCup_AllStars
                 if (keyboardState.IsKeyDown(Keys.Up))
                 {
                     jumpingP2 = true;
-                    jumpspeedP2 = -14;//Give it upward thrust
+                    jumpspeedP2 = -24;//Give it upward thrust
                 }
             }
 
@@ -178,11 +180,23 @@ namespace SmashCup_AllStars
                 _perso1Position.X -= walkSpeedPerso1;
                 lastDirP1 = "G";
             }
+            ushort x = (ushort)(_perso1Position.X + 150);
+            ushort y = (ushort)(_perso1Position.Y +300);
+            TiledMapTile? tile = null;
 
-            if (IsCollision((ushort)_perso1Position.X, (ushort)_perso1Position.Y) == false && jumpingP1 == false);
+            mapLayerSol.TryGetTile(x, y, out tile);
+
+
+            if (tile.HasValue)
+            {
+                startYP1 = _perso1Position.Y;// collided!
+                // you can also compute the tile's position using the X, Y and tileWidth if needed.
+            }
+            else
             {
                 _perso1Position.Y += 14;
             }
+  
 
             //Deplacement Joueur 2
             if (keyboardState.IsKeyDown(Keys.Right))
@@ -212,10 +226,13 @@ namespace SmashCup_AllStars
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Gray);
+            GraphicsDevice.Clear(new Color(99,160,166));
+            var scaleX = (float)_graphics.PreferredBackBufferWidth / 2800;
+            var scaleY = (float)_graphics.PreferredBackBufferHeight / 1400;
+            var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
 
-            _spriteBatch.Begin();
-            _tiledMapRenderer.Draw();
+            _spriteBatch.Begin(transformMatrix: matrix);
+            _tiledMapRenderer.Draw(matrix);
             _spriteBatch.Draw(_perso1, _perso1Position);
             _spriteBatch.Draw(_perso2, _perso2Position);
             _spriteBatch.End();

@@ -30,6 +30,11 @@
 /processorParam:TextureFormat=Color
 /build:arbres.png
 
+#begin Ice.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Ice.tmx
+
 #begin map.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -82,6 +87,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpritePlanche Mug.png
+
+#begin spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spritesheet.png
 
 #begin tiles.png
 /importer:TextureImporter
