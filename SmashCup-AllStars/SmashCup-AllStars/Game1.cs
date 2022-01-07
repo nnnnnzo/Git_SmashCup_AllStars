@@ -48,9 +48,10 @@ namespace SmashCup_AllStars
         protected override void Initialize()
         {
 
-
+            
             _graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             _graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
 
