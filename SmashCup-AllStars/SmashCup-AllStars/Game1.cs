@@ -35,6 +35,8 @@ namespace SmashCup_AllStars
         private string lastDirP2;
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
+
+        private Effect effect;
         /*blabla*/
         /*Test modif Gab*/
         public Game1()
@@ -51,7 +53,7 @@ namespace SmashCup_AllStars
             
             _graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             _graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
-            _graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = false; //activer plein ecran pour build final
             _graphics.ApplyChanges();
 
 
@@ -95,6 +97,8 @@ namespace SmashCup_AllStars
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             mapLayerSol = _tiledMap.GetLayer<TiledMapTileLayer>("Terrain");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            effect = Content.Load<Effect>("crt-lottes-mg");
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
             _perso1 = new AnimatedSprite(spriteSheetP1);
@@ -232,8 +236,10 @@ namespace SmashCup_AllStars
             var scaleY = (float)_graphics.PreferredBackBufferHeight / 1400;
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
 
-            _spriteBatch.Begin(transformMatrix: matrix);
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
+            effect.CurrentTechnique.Passes[0].Apply();
             _tiledMapRenderer.Draw(matrix);
+            
             _spriteBatch.Draw(_perso1, _perso1Position);
             _spriteBatch.Draw(_perso2, _perso2Position);
             _spriteBatch.End();
