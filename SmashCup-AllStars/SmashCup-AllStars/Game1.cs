@@ -56,8 +56,8 @@ namespace SmashCup_AllStars
             //WIdh: 1200
             //Height:700
             
-            _graphics.PreferredBackBufferWidth = 2560;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 1600;   // set this value to the desired height of your window
+            _graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            _graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
             _graphics.IsFullScreen = false; //activer plein ecran pour build final
             _graphics.ApplyChanges();
 
@@ -246,10 +246,10 @@ namespace SmashCup_AllStars
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
 
 
-            _spriteBatch.Begin();
+            
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
-            effect.CurrentTechnique.Passes[0].Apply();
-            _spriteBatch.Draw(_imageFondMenu, new Vector2(0,0),Color.White);
+            //effect.CurrentTechnique.Passes[0].Apply();
+            _spriteBatch.Draw(_imageFondMenu, new Vector2(scaleX, scaleY),Color.White);
             
             //_tiledMapRenderer.Draw(matrix);
            
