@@ -80,16 +80,7 @@ namespace SmashCup_AllStars
             base.Initialize();
         }
 
-        private bool IsCollision(ushort x, ushort y)
-        {
-            // définition de tile qui peut être null (?)
-            TiledMapTile? tile;
-            if (mapLayerSol.TryGetTile(x, y, out tile) == false)
-                return false;
-            if (!tile.Value.IsBlank)
-                return true;
-            return false;
-        }
+
 
         protected override void LoadContent()
         {
@@ -133,7 +124,7 @@ namespace SmashCup_AllStars
                 if (keyboardState.IsKeyDown(Keys.Z))
                 {
                     jumpingP1 = true;
-                    jumpspeedP1 = -24;//Give it upward thrust
+                    jumpspeedP1 = -44;//Give it upward thrust
                 }
             }
 
@@ -155,7 +146,7 @@ namespace SmashCup_AllStars
                 if (keyboardState.IsKeyDown(Keys.Up))
                 {
                     jumpingP2 = true;
-                    jumpspeedP2 = -24;//Give it upward thrust
+                    jumpspeedP2 = -44;//Give it upward thrust
                 }
             }
 
@@ -185,23 +176,43 @@ namespace SmashCup_AllStars
                 _perso1Position.X -= walkSpeedPerso1;
                 lastDirP1 = "G";
             }
-            ushort x = (ushort)(_perso1Position.X + 150);
-            ushort y = (ushort)(_perso1Position.Y +300);
-            TiledMapTile? tile = null;
+            ushort x1 = (ushort)(_perso1Position.X/70+0.5);
+            ushort y1 = (ushort)(_perso1Position.Y/70 +2.12);
+            
 
-            mapLayerSol.TryGetTile(x, y, out tile);
+            int tile1 = mapLayerSol.GetTile(x1, y1).GlobalIdentifier;
+            if (tile1 == 0)
+            {
+                _perso1Position.Y += 14;
+            }
+            else
+                startYP1 = _perso1Position.Y;
+
+            ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
+            ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
 
 
+            int tile2 = mapLayerSol.GetTile(x2, y2).GlobalIdentifier;
+            if (tile2 == 0)
+            {
+                _perso2Position.Y += 14;
+            }
+            else
+                startYP2 = _perso2Position.Y;
+
+
+            /*
             if (tile.HasValue)
             {
                 startYP1 = _perso1Position.Y;// collided!
                 // you can also compute the tile's position using the X, Y and tileWidth if needed.
+                Console.WriteLine(tile);
             }
             else
             {
                 _perso1Position.Y += 14;
             }
-  
+  */
 
             //Deplacement Joueur 2
             if (keyboardState.IsKeyDown(Keys.Right))
