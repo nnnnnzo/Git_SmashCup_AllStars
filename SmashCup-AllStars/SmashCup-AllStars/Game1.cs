@@ -14,7 +14,7 @@ namespace SmashCup_AllStars
 {
     public class Game1 : Game
     {
-        
+
         private TiledMap _tiledMap;
         private TiledMapRenderer _tiledMapRenderer;
 
@@ -37,7 +37,13 @@ namespace SmashCup_AllStars
         //Test nouveau perso avec une classe sprite
         private Sprite _persoTest;
 
-
+        //animation boule de feu
+        private AnimatedSprite _bdf;
+        private Vector2 _bdfPosition;
+        private string _bdfPositionDepart;
+        private string animationBdf;
+        private int _vitesseBdf;
+        private bool deplacementBDF;
 
 
         public Game1()
@@ -45,7 +51,6 @@ namespace SmashCup_AllStars
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
         }
 
         protected override void Initialize()
@@ -72,6 +77,10 @@ namespace SmashCup_AllStars
             jumpingP2 = false;//Init jumping to false
             jumpspeedP2 = 0;
 
+            animationBdf = "bouleDeFeuG";
+            _bdfPosition = new Vector2(200, 200);
+            _vitesseBdf = 200;
+            deplacementBDF = false;
 
             // Test nouveaux perso avec la classe sprite
 
@@ -95,6 +104,8 @@ namespace SmashCup_AllStars
             SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
             _perso2 = new AnimatedSprite(spriteSheetP2);
 
+            SpriteSheet spriteSheetBDF = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
+            _bdf = new AnimatedSprite(spriteSheetBDF);
 
 
         }
@@ -108,6 +119,66 @@ namespace SmashCup_AllStars
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             KeyboardState keyboardState = Keyboard.GetState();
 
+            float walkSpeedBdf = deltaSeconds * _vitesseBdf;
+            
+            if (deplacementBDF)
+            {
+                if (_bdfPositionDepart == "D")
+                {
+                    if (_bdfPosition.X > 1600)
+                    {
+                        _bdfPosition = new Vector2(200, 200);
+                        deplacementBDF = false;
+                    }
+                    else
+                    {
+                        animationBdf = "bouleDeFeuD";
+                        _bdfPosition.X += walkSpeedBdf;
+                    }
+                }
+                else
+                {
+                    if (_bdfPosition.X < 0)
+                    {
+                        _bdfPosition = new Vector2(200, 200);
+                        deplacementBDF = false;
+                    }
+                    else
+                    {
+                        animationBdf = "bouleDeFeuG";
+                        _bdfPosition.X -= walkSpeedBdf;
+                    }
+                }
+            }
+            else
+            {
+                if (keyboardState.IsKeyDown(Keys.X))
+                {
+                    deplacementBDF = true;
+                    _bdfPositionDepart = lastDirP2;
+                }
+            }
+
+
+            if (jumpingP1)
+            {
+                _perso1Position.Y += jumpspeedP1;//Making it go up
+                jumpspeedP1 += 1;//Some math (explained later)
+                if (_perso1Position.Y >= startYP1)
+                //If it's farther than ground
+                {
+                    _perso1Position.Y = startYP1;//Then set it on
+                    jumpingP1 = false;
+                }
+            }
+            else
+            {
+                if (keyboardState.IsKeyDown(Keys.Z))
+                {
+                    jumpingP1 = true;
+                    jumpspeedP1 = -14;//Give it upward thrust
+                }
+            }
 
             //Jump Joueur 1
             if (jumpingP1)
@@ -200,12 +271,14 @@ namespace SmashCup_AllStars
             _perso2.Play(animationP2);
             _perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
+            _bdf.Play(animationBdf);
+            _bdf.Update(deltaSeconds);
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
-           _tiledMapRenderer.Update(gameTime);
+            _tiledMapRenderer.Update(gameTime);
             base.Update(gameTime);
         }
 
-       
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Gray);
@@ -214,9 +287,11 @@ namespace SmashCup_AllStars
             _tiledMapRenderer.Draw();
             _spriteBatch.Draw(_perso1, _perso1Position);
             _spriteBatch.Draw(_perso2, _perso2Position);
+            _spriteBatch.Draw(_bdf, _bdfPosition);
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
     }
 }
+
