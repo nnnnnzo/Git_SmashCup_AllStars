@@ -160,6 +160,7 @@ namespace SmashCup_AllStars
                 _ecranEnCours = Ecran.Principal;
                 _screenManager.LoadScreen(_screenMapMenu);
 
+
             }
 
             else if (_ecranEnCours==Ecran.Principal && keyboardState.IsKeyDown(Keys.L))

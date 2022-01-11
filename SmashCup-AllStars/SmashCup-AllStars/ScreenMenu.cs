@@ -44,7 +44,7 @@ namespace SmashCup_AllStars
 
         public override void LoadContent()
         {
-            _backgroundImageMenu = Content.Load<Texture2D>("MenuImageSmashCup");
+            _backgroundImageMenu = Content.Load<Texture2D>("bgMenu");
 
             base.LoadContent();
         }
@@ -62,9 +62,9 @@ namespace SmashCup_AllStars
         {
 
            
-            _game1.GraphicsDevice.Clear(new Color(99, 160, 166));
-            var scaleX = (float)_game1.Graphics.PreferredBackBufferWidth / 2800;
-            var scaleY = (float)_game1.Graphics.PreferredBackBufferHeight / 1400;
+            _game1.GraphicsDevice.Clear(Color.Black);
+            var scaleX = (float)_game1.Graphics.PreferredBackBufferWidth / 1900;
+            var scaleY = (float)_game1.Graphics.PreferredBackBufferHeight / 1050;
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
 
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
