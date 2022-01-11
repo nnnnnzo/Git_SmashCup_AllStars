@@ -59,6 +59,11 @@ namespace SmashCup_AllStars
         private int _vieperso2;
         private Vector2 _positionVie2;
 
+        public Vector2 _finPosition;
+        public Vector2 _tailleTexteFin;
+
+
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -99,15 +104,13 @@ namespace SmashCup_AllStars
 
 
             // Test nouveaux perso avec la classe sprite
-
             _persoTest = new Sprite();
             _persoTest.Initialize(new Vector2(500, 200), 200);
 
             _positionVie1= new Vector2(0, 0);
-            _vieperso1 = 0;
-            _positionVie1 = new Vector2(0, 0);
-            _vieperso2 = 0;
-
+            _vieperso1 = 3;
+            _positionVie2 = new Vector2(0, 20);
+            _vieperso2 = 3;
 
             base.Initialize();
         }
@@ -137,21 +140,34 @@ namespace SmashCup_AllStars
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || Keyboard.GetState().IsKeyDown(Keys.P))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             float walkSpeedBdf = deltaSeconds * _vitesseBdf;
             KeyboardState keyboardState = Keyboard.GetState();
-
+            
+            //colisions
+            Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
+            Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
+            Rectangle bdf1 = new Rectangle((int)_bdfPosition1.X - 286 / 2, (int)_bdfPosition1.Y - 146 / 2, 286, 146);
+            Rectangle bdf2 = new Rectangle((int)_bdfPosition2.X - 286 / 2, (int)_bdfPosition2.Y - 146 / 2, 286, 146);
+            if (bdf2.Intersects(perso1))
+            {
+                _vieperso1--;
+            }
+            if (bdf1.Intersects(perso2))
+            {
+                _vieperso2--;
+            }
 
             //bdf perso rouge (1)
             if (deplacementBDF1)
             {
                 if (_bdfPositionDepart1 == "D")
                 {
-                    if (_bdfPosition1.X > 1600)
+                    if (_bdfPosition1.X > 1600 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition1 = new Vector2(800, -100);
                         deplacementBDF1 = false;
@@ -164,7 +180,7 @@ namespace SmashCup_AllStars
                 }
                 else
                 {
-                    if (_bdfPosition1.X < 0)
+                    if (_bdfPosition1.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition1 = new Vector2(800, -100);
                         deplacementBDF1 = false;
@@ -190,7 +206,7 @@ namespace SmashCup_AllStars
             {
                 if (_bdfPositionDepart2 == "D")
                 {
-                    if (_bdfPosition2.X > 1600)
+                    if (_bdfPosition2.X > 1600 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition2 = new Vector2(800, -100);
                         deplacementBDF2 = false;
@@ -203,7 +219,7 @@ namespace SmashCup_AllStars
                 }
                 else
                 {
-                    if (_bdfPosition2.X < 0)
+                    if (_bdfPosition2.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition2 = new Vector2(800, -100);
                         deplacementBDF2 = false;
@@ -223,20 +239,6 @@ namespace SmashCup_AllStars
                     _bdfPositionDepart2 = lastDirP2;
                     _bdfPosition2 = _perso2Position;
                 }
-            }
-
-
-            Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
-            Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
-            Rectangle bdf1 = new Rectangle((int)_bdfPosition1.X - 286 / 2, (int)_bdfPosition1.Y - 146 / 2, 286, 146);
-            Rectangle bdf2 = new Rectangle((int)_bdfPosition2.X - 286 / 2, (int)_bdfPosition2.Y - 146 / 2, 286, 146);
-            if (bdf2.Intersects(perso1))
-            {
-                _vieperso1--;
-            }
-            if (bdf1.Intersects(perso2))
-            {
-                _vieperso2--;
             }
 
             if (jumpingP1)
@@ -366,7 +368,8 @@ namespace SmashCup_AllStars
 
             _spriteBatch.Begin();
             _tiledMapRenderer.Draw();
-            _spriteBatch.DrawString(_police, $"Vie RED : {_vieperso1} / Vie BLUE : {_vieperso2} ", _positionVie1, Color.White);
+            _spriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
+            _spriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
             _spriteBatch.Draw(_perso1, _perso1Position);
             _spriteBatch.Draw(_perso2, _perso2Position);
             _spriteBatch.Draw(_bdf1, _bdfPosition1);
