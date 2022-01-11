@@ -184,7 +184,7 @@ namespace SmashCup_AllStars
             {
                 if (_bdfPositionDepart1 == "D")
                 {
-                    if (_bdfPosition1.X > 1600 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    if (_bdfPosition1.X > GraphicsDevice.Viewport.Width * 2|| bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition1 = new Vector2(800, -100);
                         deplacementBDF1 = false;
@@ -216,6 +216,8 @@ namespace SmashCup_AllStars
                     deplacementBDF1 = true;
                     _bdfPositionDepart1 = lastDirP1;
                     _bdfPosition1 = _perso1Position;
+                    _bdfPosition1.Y = _bdfPosition1.Y + 75;
+
                 }
             }
             //bdf perso bleu (2)
@@ -223,7 +225,7 @@ namespace SmashCup_AllStars
             {
                 if (_bdfPositionDepart2 == "D")
                 {
-                    if (_bdfPosition2.X > GraphicsDevice.Viewport.Width || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    if (_bdfPosition2.X > GraphicsDevice.Viewport.Width * 2 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition2 = new Vector2(800, -100);
                         deplacementBDF2 = false;
@@ -255,6 +257,7 @@ namespace SmashCup_AllStars
                     deplacementBDF2 = true;
                     _bdfPositionDepart2 = lastDirP2;
                     _bdfPosition2 = _perso2Position;
+                    _bdfPosition2.Y = _bdfPosition2.Y + 75;
                 }
             }
 
