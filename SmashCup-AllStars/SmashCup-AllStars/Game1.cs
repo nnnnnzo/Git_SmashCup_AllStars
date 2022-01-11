@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Content;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
@@ -13,6 +15,8 @@ ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
 
 namespace SmashCup_AllStars
 {
+
+    public enum Ecran { Principal,Menu};
     public class Game1 : Game
     {
         private Game _mapPrincipale;
@@ -37,16 +41,30 @@ namespace SmashCup_AllStars
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
 
 
-        private Texture2D _imageFondMenu;
+        //Test class screenMapPrincipale
+
+        private ScreenMapPrincipale _screenMapPrincipale;
+        private ScreenMenu _screenMapMenu;
+        private readonly ScreenManager _screenManager;
+        private Ecran _ecranEnCours;
+
+        // private Texture2D _imageFondMenu;
 
         private Effect effect;
+
+        // J'encapsule Graphic et spritebatch pour pouvoir les réutiliser dans les autres classes.
+        public GraphicsDeviceManager Graphics { get => _graphics; set => _graphics = value; }
+        public SpriteBatch SpriteBatch { get => _spriteBatch; set => _spriteBatch = value; }
+
         /*blabla*/
         /*Test modif Gab*/
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _screenManager = new ScreenManager();
+            Components.Add(_screenManager);
 
         }
 
@@ -56,10 +74,11 @@ namespace SmashCup_AllStars
             //WIdh: 1200
             //Height:700
             
-            _graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
-            _graphics.IsFullScreen = false; //activer plein ecran pour build final
-            _graphics.ApplyChanges();
+            /*Graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            Graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
+            Graphics.IsFullScreen = false; //activer plein ecran pour build final
+            Graphics.ApplyChanges();
+            */
 
 
 
@@ -98,16 +117,27 @@ namespace SmashCup_AllStars
 
         protected override void LoadContent()
         {
+            /*
             _tiledMap = Content.Load<TiledMap>("Ice");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             mapLayerSol = _tiledMap.GetLayer<TiledMapTileLayer>("Terrain");
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            */
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _imageFondMenu = Content.Load<Texture2D>("MenuImageSmashCup");
             
 
 
-            effect = Content.Load<Effect>("crt-lottes-mg");
+            //ScreenManager:
+            _screenMapPrincipale = new ScreenMapPrincipale(this);
+            _screenMapMenu = new ScreenMenu(this);
+            _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
+            _ecranEnCours = Ecran.Menu;
+
+            // _imageFondMenu = Content.Load<Texture2D>("MenuImageSmashCup");
+
+
+
+            //effect = Content.Load<Effect>("crt-lottes-mg");
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
             _perso1 = new AnimatedSprite(spriteSheetP1);
@@ -124,6 +154,27 @@ namespace SmashCup_AllStars
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             KeyboardState keyboardState = Keyboard.GetState();
+
+            //Gestion des screen avec touche:
+
+            if (_ecranEnCours==Ecran.Menu && keyboardState.IsKeyDown(Keys.K))
+            {
+                _ecranEnCours = Ecran.Principal;
+                _screenManager.LoadScreen(_screenMapMenu);
+
+            }
+
+            else if (_ecranEnCours==Ecran.Principal && keyboardState.IsKeyDown(Keys.L))
+            {
+                _ecranEnCours = Ecran.Menu;
+                _screenManager.LoadScreen(_screenMapPrincipale);
+
+            }
+
+
+
+
+
 
             //Jump Joueur 1
             if (jumpingP1)
@@ -194,6 +245,10 @@ namespace SmashCup_AllStars
                 _perso1Position.X -= walkSpeedPerso1;
                 lastDirP1 = "G";
             }
+
+
+
+            /*
             ushort x = (ushort)(_perso1Position.X + 150);
             ushort y = (ushort)(_perso1Position.Y +300);
             TiledMapTile? tile = null;
@@ -210,6 +265,7 @@ namespace SmashCup_AllStars
             {
                 _perso1Position.Y += 14;
             }
+            */
   
 
             //Deplacement Joueur 2
@@ -233,30 +289,30 @@ namespace SmashCup_AllStars
             _perso2.Play(animationP2);
             _perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
-           _tiledMapRenderer.Update(gameTime);
+           // GraphicsDevice.BlendState = BlendState.AlphaBlend;
+           //_tiledMapRenderer.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(99,160,166));
-            var scaleX = (float)_graphics.PreferredBackBufferWidth / 2800;
-            var scaleY = (float)_graphics.PreferredBackBufferHeight / 1400;
+            /*GraphicsDevice.Clear(new Color(99,160,166));
+            var scaleX = (float)Graphics.PreferredBackBufferWidth / 2800;
+            var scaleY = (float)Graphics.PreferredBackBufferHeight / 1400;
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
-
+            */
 
             
-            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
+            //SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
             //effect.CurrentTechnique.Passes[0].Apply();
-            _spriteBatch.Draw(_imageFondMenu, new Vector2(scaleX, scaleY),Color.White);
+           // SpriteBatch.Draw(_imageFondMenu, new Vector2(scaleX, scaleY),Color.White);
             
             //_tiledMapRenderer.Draw(matrix);
            
             
-            _spriteBatch.Draw(_perso1, _perso1Position);
-            _spriteBatch.Draw(_perso2, _perso2Position);
-            _spriteBatch.End();
+            //SpriteBatch.Draw(_perso1, _perso1Position);
+            //SpriteBatch.Draw(_perso2, _perso2Position);
+            //SpriteBatch.End();
 
             base.Draw(gameTime);
         }
