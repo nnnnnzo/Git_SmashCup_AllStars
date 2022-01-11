@@ -30,22 +30,17 @@
 /processorParam:TextureFormat=Color
 /build:arbres.png
 
-#begin crt-lottes-mg.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:crt-lottes-mg.fx
-
-#begin Ice.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Ice.tmx
-
 #begin bdf.sf
 /importer:SpriteFactoryContentImporter
 /processor:SpriteFactoryContentProcessor
 /processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
 /build:bdf.sf
+
+#begin crt-lottes-mg.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:crt-lottes-mg.fx
 
 #begin Font.spritefont
 /importer:FontDescriptionImporter
@@ -53,6 +48,11 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
+
+#begin Ice.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Ice.tmx
 
 #begin map.tmx
 /importer:TiledMapImporter
@@ -106,6 +106,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpritePlanche Mug.png
+
+#begin spritesBdf.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spritesBdf.png
 
 #begin spritesheet.png
 /importer:TextureImporter

@@ -223,7 +223,7 @@ namespace SmashCup_AllStars
             {
                 if (_bdfPositionDepart2 == "D")
                 {
-                    if (_bdfPosition2.X > 1600 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    if (_bdfPosition2.X > GraphicsDevice.Viewport.Width || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition2 = new Vector2(800, -100);
                         deplacementBDF2 = false;
@@ -426,11 +426,7 @@ namespace SmashCup_AllStars
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
             effect.CurrentTechnique.Passes[0].Apply();
             _tiledMapRenderer.Draw(matrix);
-            
-            GraphicsDevice.Clear(Color.Gray);
 
-            _spriteBatch.Begin();
-            _tiledMapRenderer.Draw();
             _spriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
             _spriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
             _spriteBatch.Draw(_perso1, _perso1Position);

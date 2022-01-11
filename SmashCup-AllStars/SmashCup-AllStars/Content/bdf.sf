@@ -1,6 +1,6 @@
 {
   "textureAtlas": {
-    "texture": "spritesheet.png",
+    "texture": "spritesBdf.png",
     "regionWidth": 286,
     "regionHeight": 145
   },
