@@ -155,18 +155,18 @@ namespace SmashCup_AllStars
 
             //Gestion des screen avec touche:
 
-            if (_ecranEnCours==Ecran.Menu && keyboardState.IsKeyDown(Keys.K))
+            if (_ecranEnCours==Ecran.Menu && keyboardState.IsKeyDown(Keys.L))
             {
                 _ecranEnCours = Ecran.Principal;
-                _screenManager.LoadScreen(_screenMapMenu);
+                _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
 
 
             }
 
-            else if (_ecranEnCours==Ecran.Principal && keyboardState.IsKeyDown(Keys.L))
+            else if (_ecranEnCours==Ecran.Principal && keyboardState.IsKeyDown(Keys.K))
             {
                 _ecranEnCours = Ecran.Menu;
-                _screenManager.LoadScreen(_screenMapPrincipale);
+                _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
 
             }
 
