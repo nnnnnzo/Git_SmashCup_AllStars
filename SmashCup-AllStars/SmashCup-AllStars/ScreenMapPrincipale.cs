@@ -67,7 +67,7 @@ namespace SmashCup_AllStars
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
 
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
-            _renduMapPrincipale.Draw();
+            _renduMapPrincipale.Draw(matrix);
             _game1.SpriteBatch.End();
            
 

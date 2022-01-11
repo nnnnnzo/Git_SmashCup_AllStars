@@ -61,7 +61,7 @@ namespace SmashCup_AllStars
         public override void Draw(GameTime gameTime)
         {
 
-            /*
+           
             _game1.GraphicsDevice.Clear(new Color(99, 160, 166));
             var scaleX = (float)_game1.Graphics.PreferredBackBufferWidth / 2800;
             var scaleY = (float)_game1.Graphics.PreferredBackBufferHeight / 1400;
@@ -70,12 +70,14 @@ namespace SmashCup_AllStars
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
             _game1.SpriteBatch.Draw(_backgroundImageMenu, new Vector2(scaleX, scaleY), Color.White);
             _game1.SpriteBatch.End();
-            */
+            
 
+            /*
             _game1.GraphicsDevice.Clear(Color.Red);
             _game1.SpriteBatch.Begin();
             _game1.SpriteBatch.Draw(_backgroundImageMenu, new Vector2(0, 0), Color.White);
             _game1.SpriteBatch.End();
+            */
 
 
 

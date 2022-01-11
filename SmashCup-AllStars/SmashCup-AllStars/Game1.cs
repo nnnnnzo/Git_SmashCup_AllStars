@@ -19,10 +19,8 @@ namespace SmashCup_AllStars
     public enum Ecran { Principal,Menu};
     public class Game1 : Game
     {
-        private Game _mapPrincipale;
-        private TiledMap _tiledMap;
-        private TiledMapRenderer _tiledMapRenderer;
-        private TiledMapTileLayer mapLayerSol;
+       
+        private TiledMapTileLayer _mapLayerSol;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -108,7 +106,7 @@ namespace SmashCup_AllStars
         {
             // définition de tile qui peut être null (?)
             TiledMapTile? tile;
-            if (mapLayerSol.TryGetTile(x, y, out tile) == false)
+            if (_mapLayerSol.TryGetTile(x, y, out tile) == false)
                 return false;
             if (!tile.Value.IsBlank)
                 return true;
