@@ -38,13 +38,26 @@ namespace SmashCup_AllStars
         private Sprite _persoTest;
 
         //animation boule de feu
-        private AnimatedSprite _bdf;
-        private Vector2 _bdfPosition;
-        private string _bdfPositionDepart;
-        private string animationBdf;
+        private AnimatedSprite _bdf1;
+        private AnimatedSprite _bdf2;
+        private Vector2 _bdfPosition1;
+        private Vector2 _bdfPosition2;
+        private string _bdfPositionDepart1;
+        private string _bdfPositionDepart2;
+        private string animationBdf1;
+        private string animationBdf2;
         private int _vitesseBdf;
-        private bool deplacementBDF;
+        private bool deplacementBDF1;
+        private bool deplacementBDF2;
 
+
+        private SpriteFont _police;
+        //vie perso 1
+        private int _vieperso1;
+        private Vector2 _positionVie1;
+        //vie perso 2
+        private int _vieperso2;
+        private Vector2 _positionVie2;
 
         public Game1()
         {
@@ -67,7 +80,6 @@ namespace SmashCup_AllStars
             jumpingP1 = false;//Init jumping to false
             jumpspeedP1 = 0;
 
-
             //var joueur 2
             _perso2Position = new Vector2(600, 200);
             _vitessePerso2 = 200;
@@ -77,15 +89,25 @@ namespace SmashCup_AllStars
             jumpingP2 = false;//Init jumping to false
             jumpspeedP2 = 0;
 
-            animationBdf = "bouleDeFeuG";
-            _bdfPosition = new Vector2(200, 200);
+            animationBdf1 = "bouleDeFeuG";
+            animationBdf2 = "bouleDeFeuD";
+            _bdfPosition1 = new Vector2(800, -100);
+            _bdfPosition2 = new Vector2(800, -100);
             _vitesseBdf = 200;
-            deplacementBDF = false;
+            deplacementBDF1 = false;
+            deplacementBDF2 = false;
+
 
             // Test nouveaux perso avec la classe sprite
 
             _persoTest = new Sprite();
             _persoTest.Initialize(new Vector2(500, 200), 200);
+
+            _positionVie1= new Vector2(0, 0);
+            _vieperso1 = 0;
+            _positionVie1 = new Vector2(0, 0);
+            _vieperso2 = 0;
+
 
             base.Initialize();
         }
@@ -104,61 +126,118 @@ namespace SmashCup_AllStars
             SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
             _perso2 = new AnimatedSprite(spriteSheetP2);
 
-            SpriteSheet spriteSheetBDF = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
-            _bdf = new AnimatedSprite(spriteSheetBDF);
+            SpriteSheet spriteSheetBDF1 = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
+            _bdf1 = new AnimatedSprite(spriteSheetBDF1);
+            SpriteSheet spriteSheetBDF2 = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
+            _bdf2 = new AnimatedSprite(spriteSheetBDF2);
 
+            _police = Content.Load<SpriteFont>("Font");
 
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || Keyboard.GetState().IsKeyDown(Keys.P))
                 Exit();
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
+            float walkSpeedBdf = deltaSeconds * _vitesseBdf;
             KeyboardState keyboardState = Keyboard.GetState();
 
-            float walkSpeedBdf = deltaSeconds * _vitesseBdf;
-            
-            if (deplacementBDF)
+
+            //bdf perso rouge (1)
+            if (deplacementBDF1)
             {
-                if (_bdfPositionDepart == "D")
+                if (_bdfPositionDepart1 == "D")
                 {
-                    if (_bdfPosition.X > 1600)
+                    if (_bdfPosition1.X > 1600)
                     {
-                        _bdfPosition = new Vector2(200, 200);
-                        deplacementBDF = false;
+                        _bdfPosition1 = new Vector2(800, -100);
+                        deplacementBDF1 = false;
                     }
                     else
                     {
-                        animationBdf = "bouleDeFeuD";
-                        _bdfPosition.X += walkSpeedBdf;
+                        animationBdf1 = "bouleDeFeuD";
+                        _bdfPosition1.X += walkSpeedBdf;
                     }
                 }
                 else
                 {
-                    if (_bdfPosition.X < 0)
+                    if (_bdfPosition1.X < 0)
                     {
-                        _bdfPosition = new Vector2(200, 200);
-                        deplacementBDF = false;
+                        _bdfPosition1 = new Vector2(800, -100);
+                        deplacementBDF1 = false;
                     }
                     else
                     {
-                        animationBdf = "bouleDeFeuG";
-                        _bdfPosition.X -= walkSpeedBdf;
+                        animationBdf1 = "bouleDeFeuG";
+                        _bdfPosition1.X -= walkSpeedBdf;
                     }
                 }
             }
             else
             {
-                if (keyboardState.IsKeyDown(Keys.X))
+                if (keyboardState.IsKeyDown(Keys.Space))
                 {
-                    deplacementBDF = true;
-                    _bdfPositionDepart = lastDirP2;
+                    deplacementBDF1 = true;
+                    _bdfPositionDepart1 = lastDirP1;
+                    _bdfPosition1 = _perso1Position;
+                }
+            }
+            //bdf perso bleu (2)
+            if (deplacementBDF2)
+            {
+                if (_bdfPositionDepart2 == "D")
+                {
+                    if (_bdfPosition2.X > 1600)
+                    {
+                        _bdfPosition2 = new Vector2(800, -100);
+                        deplacementBDF2 = false;
+                    }
+                    else
+                    {
+                        animationBdf2 = "bouleDeFeuD";
+                        _bdfPosition2.X += walkSpeedBdf;
+                    }
+                }
+                else
+                {
+                    if (_bdfPosition2.X < 0)
+                    {
+                        _bdfPosition2 = new Vector2(800, -100);
+                        deplacementBDF2 = false;
+                    }
+                    else
+                    {
+                        animationBdf2 = "bouleDeFeuG";
+                        _bdfPosition2.X -= walkSpeedBdf;
+                    }
+                }
+            }
+            else
+            {
+                if (keyboardState.IsKeyDown(Keys.RightControl))
+                {
+                    deplacementBDF2 = true;
+                    _bdfPositionDepart2 = lastDirP2;
+                    _bdfPosition2 = _perso2Position;
                 }
             }
 
+
+            Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
+            Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
+            Rectangle bdf1 = new Rectangle((int)_bdfPosition1.X - 286 / 2, (int)_bdfPosition1.Y - 146 / 2, 286, 146);
+            Rectangle bdf2 = new Rectangle((int)_bdfPosition2.X - 286 / 2, (int)_bdfPosition2.Y - 146 / 2, 286, 146);
+            if (bdf2.Intersects(perso1))
+            {
+                _vieperso1--;
+            }
+            if (bdf1.Intersects(perso2))
+            {
+                _vieperso2--;
+            }
 
             if (jumpingP1)
             {
@@ -269,10 +348,12 @@ namespace SmashCup_AllStars
             // TODO: Add your update logic here
             _perso1.Play(animationP1);
             _perso2.Play(animationP2);
+            _bdf1.Play(animationBdf1);
+            _bdf2.Play(animationBdf2);
             _perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
-            _bdf.Play(animationBdf);
-            _bdf.Update(deltaSeconds);
+            _bdf1.Update(deltaSeconds);
+            _bdf2.Update(deltaSeconds);
             GraphicsDevice.BlendState = BlendState.AlphaBlend;
             _tiledMapRenderer.Update(gameTime);
             base.Update(gameTime);
@@ -285,9 +366,11 @@ namespace SmashCup_AllStars
 
             _spriteBatch.Begin();
             _tiledMapRenderer.Draw();
+            _spriteBatch.DrawString(_police, $"Vie RED : {_vieperso1} / Vie BLUE : {_vieperso2} ", _positionVie1, Color.White);
             _spriteBatch.Draw(_perso1, _perso1Position);
             _spriteBatch.Draw(_perso2, _perso2Position);
-            _spriteBatch.Draw(_bdf, _bdfPosition);
+            _spriteBatch.Draw(_bdf1, _bdfPosition1);
+            _spriteBatch.Draw(_bdf2, _bdfPosition2);
             _spriteBatch.End();
 
             base.Draw(gameTime);
