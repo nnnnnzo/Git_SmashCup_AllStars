@@ -45,6 +45,11 @@ namespace SmashCup_AllStars
         private ScreenMenu _screenMapMenu;
         private readonly ScreenManager _screenManager;
         private Ecran _ecranEnCours;
+        private Bouton _boutonClick;
+
+        private MouseState _mouseState;
+
+        
 
         // private Texture2D _imageFondMenu;
 
@@ -133,6 +138,7 @@ namespace SmashCup_AllStars
 
             // _imageFondMenu = Content.Load<Texture2D>("MenuImageSmashCup");
 
+           
 
 
             //effect = Content.Load<Effect>("crt-lottes-mg");
@@ -152,18 +158,30 @@ namespace SmashCup_AllStars
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             KeyboardState keyboardState = Keyboard.GetState();
+            _mouseState = Mouse.GetState();
 
             //Gestion des screen avec touche:
 
-            if (_ecranEnCours==Ecran.Menu && keyboardState.IsKeyDown(Keys.L))
+            // Rectangle test = _screenMapMenu.Rectangle((int)_screenMapMenu.PositionButtonPlay.X, (int)_screenMapMenu.PositionButtonPlay.Y, _screenMapMenu.ButtonPlay.Width, _screenMapMenu.ButtonPlay.Height);
+
+            //Rectangle r1 = new Rectangle((int)_screenMapMenu.PositionButtonPlay.X, (int)_screenMapMenu.PositionButtonPlay.Y, _screenMapMenu.ButtonPlay.Width, _screenMapMenu.ButtonPlay.Height);
+            //r1.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
+            if (_mouseState.LeftButton == ButtonState.Pressed)
             {
-                _ecranEnCours = Ecran.Principal;
-                _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
+                Console.WriteLine(_screenMapMenu.MouseState.X + " " + _screenMapMenu.MouseState.Y);
 
 
+                if (_ecranEnCours == Ecran.Menu && _boutonClick == Bouton.Play)
+                {
+                    _ecranEnCours = Ecran.Principal;
+                    _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
+
+
+
+                }
             }
 
-            else if (_ecranEnCours==Ecran.Principal && keyboardState.IsKeyDown(Keys.K))
+            else if (_ecranEnCours == Ecran.Principal && keyboardState.IsKeyDown(Keys.K))
             {
                 _ecranEnCours = Ecran.Menu;
                 _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
@@ -171,7 +189,7 @@ namespace SmashCup_AllStars
             }
 
 
-
+            //_screenMapMenu.ButtonPlayRectangle.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
 
 
 
@@ -301,14 +319,15 @@ namespace SmashCup_AllStars
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
             */
 
-            
+
             //SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
             //effect.CurrentTechnique.Passes[0].Apply();
-           // SpriteBatch.Draw(_imageFondMenu, new Vector2(scaleX, scaleY),Color.White);
-            
+            // SpriteBatch.Draw(_imageFondMenu, new Vector2(scaleX, scaleY),Color.White);
+
             //_tiledMapRenderer.Draw(matrix);
-           
             
+          
+
             //SpriteBatch.Draw(_perso1, _perso1Position);
             //SpriteBatch.Draw(_perso2, _perso2Position);
             //SpriteBatch.End();
