@@ -6,6 +6,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
+using System;
 /*
 ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
 */
@@ -17,6 +18,7 @@ namespace SmashCup_AllStars
 
         private TiledMap _tiledMap;
         private TiledMapRenderer _tiledMapRenderer;
+        private TiledMapTileLayer mapLayerSol;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -33,6 +35,10 @@ namespace SmashCup_AllStars
         private string lastDirP2;
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
+
+        private Effect effect;
+        /*blabla*/
+        /*Test modif Gab*/
 
         //Test nouveau perso avec une classe sprite
         private Sprite _persoTest;
@@ -73,11 +79,17 @@ namespace SmashCup_AllStars
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1750;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 950;   // set this value to the desired height of your window
+
+            
+            _graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            _graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
+            _graphics.IsFullScreen = false; //activer plein ecran pour build final
             _graphics.ApplyChanges();
+
+
+
             //var joueur 1
-            _perso1Position = new Vector2(200, 200);
+            _perso1Position = new Vector2(400, 200);
             _vitessePerso1 = 200;
             animationP1 = "idleD";
             lastDirP1 = "D";
@@ -115,12 +127,16 @@ namespace SmashCup_AllStars
             base.Initialize();
         }
 
+
+
         protected override void LoadContent()
         {
-            _tiledMap = Content.Load<TiledMap>("map");
+            _tiledMap = Content.Load<TiledMap>("Ice");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
-
+            mapLayerSol = _tiledMap.GetLayer<TiledMapTileLayer>("Terrain");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            effect = Content.Load<Effect>("crt-lottes-mg");
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
 
@@ -147,6 +163,7 @@ namespace SmashCup_AllStars
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             float walkSpeedBdf = deltaSeconds * _vitesseBdf;
             KeyboardState keyboardState = Keyboard.GetState();
+
             
             //colisions
             Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
@@ -278,7 +295,7 @@ namespace SmashCup_AllStars
                 if (keyboardState.IsKeyDown(Keys.Z))
                 {
                     jumpingP1 = true;
-                    jumpspeedP1 = -14;//Give it upward thrust
+                    jumpspeedP1 = -44;//Give it upward thrust
                 }
             }
 
@@ -300,10 +317,11 @@ namespace SmashCup_AllStars
                 if (keyboardState.IsKeyDown(Keys.Up))
                 {
                     jumpingP2 = true;
-                    jumpspeedP2 = -14;//Give it upward thrust
+                    jumpspeedP2 = -44;//Give it upward thrust
                 }
             }
 
+            
 
             //Direction dans laquelles regarder
             if (lastDirP1 == "D")
@@ -329,7 +347,43 @@ namespace SmashCup_AllStars
                 _perso1Position.X -= walkSpeedPerso1;
                 lastDirP1 = "G";
             }
+            ushort x1 = (ushort)(_perso1Position.X/70+0.5);
+            ushort y1 = (ushort)(_perso1Position.Y/70 +2.12);
+            
 
+            int tile1 = mapLayerSol.GetTile(x1, y1).GlobalIdentifier;
+            if (tile1 == 0)
+            {
+                _perso1Position.Y += 14;
+            }
+            else
+                startYP1 = _perso1Position.Y;
+
+            ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
+            ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
+
+
+            int tile2 = mapLayerSol.GetTile(x2, y2).GlobalIdentifier;
+            if (tile2 == 0)
+            {
+                _perso2Position.Y += 14;
+            }
+            else
+                startYP2 = _perso2Position.Y;
+
+
+            /*
+            if (tile.HasValue)
+            {
+                startYP1 = _perso1Position.Y;// collided!
+                // you can also compute the tile's position using the X, Y and tileWidth if needed.
+                Console.WriteLine(tile);
+            }
+            else
+            {
+                _perso1Position.Y += 14;
+            }
+  */
 
             //Deplacement Joueur 2
             if (keyboardState.IsKeyDown(Keys.Right))
@@ -364,6 +418,15 @@ namespace SmashCup_AllStars
 
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(new Color(99,160,166));
+            var scaleX = (float)_graphics.PreferredBackBufferWidth / 2800;
+            var scaleY = (float)_graphics.PreferredBackBufferHeight / 1400;
+            var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
+            effect.CurrentTechnique.Passes[0].Apply();
+            _tiledMapRenderer.Draw(matrix);
+            
             GraphicsDevice.Clear(Color.Gray);
 
             _spriteBatch.Begin();

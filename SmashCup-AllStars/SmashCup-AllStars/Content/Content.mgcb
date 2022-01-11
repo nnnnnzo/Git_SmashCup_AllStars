@@ -30,6 +30,17 @@
 /processorParam:TextureFormat=Color
 /build:arbres.png
 
+#begin crt-lottes-mg.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:crt-lottes-mg.fx
+
+#begin Ice.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Ice.tmx
+
 #begin bdf.sf
 /importer:SpriteFactoryContentImporter
 /processor:SpriteFactoryContentProcessor
