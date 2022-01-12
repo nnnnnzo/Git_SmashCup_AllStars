@@ -518,8 +518,16 @@ namespace SmashCup_AllStars
             // SpriteBatch.Draw(_imageFondMenu, new Vector2(scaleX, scaleY),Color.White);
 
             //_tiledMapRenderer.Draw(matrix);
-            
-          
+
+            /*_spriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
+            _spriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
+            _spriteBatch.Draw(_perso1, _perso1Position);
+            _spriteBatch.Draw(_perso2, _perso2Position);
+            _spriteBatch.Draw(_bdf1, _bdfPosition1);
+            _spriteBatch.Draw(_bdf2, _bdfPosition2);
+            */
+
+
 
             //SpriteBatch.Draw(_perso1, _perso1Position);
             //SpriteBatch.Draw(_perso2, _perso2Position);
