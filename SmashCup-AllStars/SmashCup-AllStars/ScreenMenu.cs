@@ -12,6 +12,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
+using Microsoft.Xna.Framework.Media;
 
 
 namespace SmashCup_AllStars
@@ -28,6 +29,8 @@ namespace SmashCup_AllStars
 
         public static int WIDTH_WINDOW = 1200;
         public static int HEIGHT_WINDOW = 700;
+
+        private Song _musicMenu;
 
        
         public ScreenMenu(Game1 game) : base(game)
@@ -52,6 +55,10 @@ namespace SmashCup_AllStars
         {
             _backgroundImageMenu = Content.Load<Texture2D>("bgMenu");
             _enterToStart = Content.Load<Texture2D>("startEnter");
+
+            _musicMenu = Content.Load<Song>("musicMenu");
+                MediaPlayer.Play(_musicMenu);
+            MediaPlayer.Volume =1f;
 
 
             base.LoadContent();

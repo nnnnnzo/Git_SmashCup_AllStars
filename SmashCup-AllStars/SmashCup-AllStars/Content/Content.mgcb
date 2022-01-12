@@ -155,6 +155,12 @@
 /processorParam:TextureFormat=Color
 /build:minecraft.png
 
+#begin musicMenu.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:musicMenu.mp3
+
 #begin option.png
 /importer:TextureImporter
 /processor:TextureProcessor

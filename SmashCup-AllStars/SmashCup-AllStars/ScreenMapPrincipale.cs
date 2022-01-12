@@ -62,6 +62,8 @@ namespace SmashCup_AllStars
         public static int WIDTH_WINDOW = 1200;
         public static int HEIGHT_WINDOW = 700;
 
+        private ScreenMenu _screenMenuMusic;
+
 
 
         public ScreenMapPrincipale(Game1 game): base(game)
@@ -133,6 +135,7 @@ namespace SmashCup_AllStars
             _bdf2 = new AnimatedSprite(spriteSheetBDF2);
 
             _police = Content.Load<SpriteFont>("Font");
+            
             base.LoadContent();
         }
 
