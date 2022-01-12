@@ -25,12 +25,13 @@ namespace SmashCup_AllStars
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Vector2 _perso1Position;
+        private Vector2 _perso1PositionGame1;
         private AnimatedSprite _perso1;
         private int _vitessePerso1;
         private string animationP1;
         private string lastDirP1;
 
+        /*
         private Vector2 _perso2Position;
         private AnimatedSprite _perso2;
         private int _vitessePerso2;
@@ -38,14 +39,18 @@ namespace SmashCup_AllStars
         private string lastDirP2;
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
+        */
 
 
         //Test class screenMapPrincipale
 
+        
         private ScreenMapPrincipale _screenMapPrincipale;
         private ScreenMenu _screenMapMenu;
         private readonly ScreenManager _screenManager;
         private Ecran _ecranEnCours;
+
+        
         
 
         private MouseState _mouseState;
@@ -59,12 +64,15 @@ namespace SmashCup_AllStars
         // J'encapsule Graphic et spritebatch pour pouvoir les réutiliser dans les autres classes.
         public GraphicsDeviceManager Graphics { get => _graphics; set => _graphics = value; }
         public SpriteBatch SpriteBatch { get => _spriteBatch; set => _spriteBatch = value; }
+        public Vector2 Perso1PositionGame1 { get => _perso1PositionGame1; set => _perso1PositionGame1 = value; }
 
         /*blabla*/
         /*Test modif Gab*/
 
         //Test nouveau perso avec une classe sprite
         private Sprite _persoTest;
+
+        /*
 
         //animation boule de feu
         private AnimatedSprite _bdf1;
@@ -78,6 +86,8 @@ namespace SmashCup_AllStars
         private int _vitesseBdf;
         private bool deplacementBDF1;
         private bool deplacementBDF2;
+
+        */
 
 
         private SpriteFont _police;
@@ -108,14 +118,14 @@ namespace SmashCup_AllStars
 
             //WIdh: 1200
             //Height:700
-            
+
             /*Graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             Graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
             Graphics.IsFullScreen = false; //activer plein ecran pour build final
             Graphics.ApplyChanges();
             */
 
-
+            /*
 
             //var joueur 1
             _perso1Position = new Vector2(900, 200);
@@ -152,11 +162,15 @@ namespace SmashCup_AllStars
             _vieperso1 = 3;
             _positionVie2 = new Vector2(0, 20);
             _vieperso2 = 3;
+            */
+
+
+            Perso1PositionGame1 = new Vector2(ScreenMapPrincipale.WIDTH_WINDOW / 2, ScreenMapPrincipale.HEIGHT_WINDOW / 2);
 
             base.Initialize();
         }
 
-        private bool IsCollision(ushort x, ushort y)
+      /*  private bool IsCollision(ushort x, ushort y)
         {
             // définition de tile qui peut être null (?)
             TiledMapTile? tile;
@@ -166,6 +180,7 @@ namespace SmashCup_AllStars
                 return true;
             return false;
         }
+      */
 
 
         protected override void LoadContent()
@@ -186,12 +201,16 @@ namespace SmashCup_AllStars
             _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
             _ecranEnCours = Ecran.Menu;
 
+
+
             // _imageFondMenu = Content.Load<Texture2D>("MenuImageSmashCup");
 
            
 
 
             //effect = Content.Load<Effect>("crt-lottes-mg");
+
+            /*
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
 
@@ -206,6 +225,9 @@ namespace SmashCup_AllStars
             _bdf2 = new AnimatedSprite(spriteSheetBDF2);
 
             _police = Content.Load<SpriteFont>("Font");
+            */
+
+            base.LoadContent();
 
         }
 
@@ -213,6 +235,8 @@ namespace SmashCup_AllStars
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            /*
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
@@ -226,12 +250,12 @@ namespace SmashCup_AllStars
 
             //Rectangle r1 = new Rectangle((int)_screenMapMenu.PositionButtonPlay.X, (int)_screenMapMenu.PositionButtonPlay.Y, _screenMapMenu.ButtonPlay.Width, _screenMapMenu.ButtonPlay.Height);
             //r1.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
-           
-            
-                
+           */
+            KeyboardState keyboardState = Keyboard.GetState();
 
 
-                if (_ecranEnCours == Ecran.Menu && keyboardState.IsKeyDown(Keys.Enter))
+
+            if (_ecranEnCours == Ecran.Menu && keyboardState.IsKeyDown(Keys.Enter))
                 {
                         
                         
@@ -254,6 +278,8 @@ namespace SmashCup_AllStars
 
             //_screenMapMenu.ButtonPlayRectangle.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
 
+
+            /*
             //colisions
             Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
             Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
@@ -474,6 +500,7 @@ namespace SmashCup_AllStars
             }
             */
 
+            /*
 
             //Deplacement Joueur 2
             if (keyboardState.IsKeyDown(Keys.Right))
@@ -490,6 +517,9 @@ namespace SmashCup_AllStars
                 lastDirP2 = "G";
             }
 
+            */
+
+            /*
 
             // TODO: Add your update logic here
             _perso1.Play(animationP1);
@@ -502,6 +532,7 @@ namespace SmashCup_AllStars
             _bdf2.Update(deltaSeconds);
             // GraphicsDevice.BlendState = BlendState.AlphaBlend;
             //_tiledMapRenderer.Update(gameTime);
+            */
             base.Update(gameTime);
         }
 

@@ -1,0 +1,15 @@
+{
+  "textureAtlas": {
+    "texture": "bulletImage.png",
+    "regionWidth": 154,
+    "regionHeight": 125
+  },
+  "cycles": {
+    "dirG": {
+      "frames": [0,1,2,3]
+    },
+    "dirD": {
+      "frames": [4,5,6,7]
+    }
+  }
+}

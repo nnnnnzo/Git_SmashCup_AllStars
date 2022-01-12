@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework.Media;
 namespace SmashCup_AllStars
 {
    
-    class ScreenMenu: GameScreen
+    public class ScreenMenu: GameScreen
     {
 
         private Game1 _game1;

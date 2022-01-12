@@ -60,6 +60,24 @@
 /processorParam:TextureFormat=Color
 /build:BouttonPlay-removebg-preview.png
 
+#begin bullet.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:bullet.sf
+
+#begin bulletImage.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bulletImage.png
+
 #begin ButtonBack-removebg-preview.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -121,15 +139,10 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
-#begin Ice.tmx
+#begin IceMap.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Ice.tmx
-
-#begin map.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:map.tmx
+/build:IceMap.tmx
 
 #begin MenuImageSmashCup.jpg
 /importer:TextureImporter
@@ -160,6 +173,12 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:musicMenu.mp3
+
+#begin musicMenu2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:musicMenu2.mp3
 
 #begin option.png
 /importer:TextureImporter

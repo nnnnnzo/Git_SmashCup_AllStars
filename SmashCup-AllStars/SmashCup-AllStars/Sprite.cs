@@ -13,7 +13,7 @@ using MonoGame.Extended.Tiled.Renderers;
 
 namespace SmashCup_AllStars
 {
-    class Sprite
+    public class Sprite 
     {
         
         private Vector2 _position;
@@ -29,6 +29,8 @@ namespace SmashCup_AllStars
         {
             _position = position;
             _vitesse = vitesse;
+
+           
 
         }
 

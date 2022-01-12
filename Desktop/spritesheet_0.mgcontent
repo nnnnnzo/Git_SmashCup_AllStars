@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Users/olivegab/Desktop/spritesheet.png</SourceFile>
+  <SourceTime>2022-01-12T13:16:41.2288534+01:00</SourceTime>
+  <DestFile>C:/Users/olivegab/source/repos/Git_SmashCup_AllStars/SmashCup-AllStars/SmashCup-AllStars/Content/bin/DesktopGL/Content/../../../../../../Desktop/spritesheet_0.xnb</DestFile>
+  <DestTime>2022-01-12T17:17:03.9723623+01:00</DestTime>
+  <Importer>TextureImporter</Importer>
+  <ImporterTime>2020-08-10T18:17:54+02:00</ImporterTime>
+  <Processor>TextureProcessor</Processor>
+  <ProcessorTime>2020-08-10T18:17:54+02:00</ProcessorTime>
+  <Parameters>
+    <Key>ColorKeyColor</Key>
+    <Value>0,0,0,0</Value>
+  </Parameters>
+  <Parameters>
+    <Key>ColorKeyEnabled</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

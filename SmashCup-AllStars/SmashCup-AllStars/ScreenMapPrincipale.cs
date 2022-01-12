@@ -12,7 +12,7 @@ using System;
 
 namespace SmashCup_AllStars
 {
-    class ScreenMapPrincipale: GameScreen
+    public class ScreenMapPrincipale: GameScreen 
     {
 
         private Game1 _game1;
@@ -35,7 +35,7 @@ namespace SmashCup_AllStars
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
 
 
-        //animation boule de feu
+        //animation boule de feu 
         private AnimatedSprite _bdf1;
         private AnimatedSprite _bdf2;
         private Vector2 _bdfPosition1;
@@ -47,6 +47,12 @@ namespace SmashCup_AllStars
         private int _vitesseBdf;
         private bool deplacementBDF1;
         private bool deplacementBDF2;
+
+        // Animation bullets
+
+        private AnimatedSprite _bullet;
+        private Vector2 _positionBullet;
+        private string _annimationBullet;
 
         private SpriteFont _police;
         //vie perso 1
@@ -63,8 +69,10 @@ namespace SmashCup_AllStars
         public static int HEIGHT_WINDOW = 700;
 
         private ScreenMenu _screenMenuMusic;
+        private PersoRed _persoRed;
 
-
+        public TiledMapTileLayer MapLayerSol { get => _mapLayerSol; set => _mapLayerSol = value; }
+        public Vector2 Perso1Position { get => _perso1Position; set => _perso1Position = value; }
 
         public ScreenMapPrincipale(Game1 game): base(game)
         {
@@ -80,8 +88,15 @@ namespace SmashCup_AllStars
             _game1.Graphics.ApplyChanges();
 
 
+            // joueur 1
+            _persoRed = new PersoRed();
+            
+            
+
             //var joueur 1
             _perso1Position = new Vector2(900, 200);
+
+            /*
             _vitessePerso1 = 200;
             animationP1 = "idleD";
             lastDirP1 = "D";
@@ -89,8 +104,10 @@ namespace SmashCup_AllStars
             jumpingP1 = false;//Init jumping to false
             jumpspeedP1 = 0;
 
+            */
+
             //var joueur 2
-            _perso2Position = new Vector2(1900, 200);
+            _perso2Position = new Vector2(WIDTH_WINDOW/2, HEIGHT_WINDOW/2);
             _vitessePerso2 = 200;
             animationP2 = "idleG";
             lastDirP2 = "G";
@@ -98,6 +115,7 @@ namespace SmashCup_AllStars
             jumpingP2 = false;//Init jumping to false
             jumpspeedP2 = 0;
 
+            //Boule de feu
             animationBdf1 = "bouleDeFeuG";
             animationBdf2 = "bouleDeFeuD";
             _bdfPosition1 = new Vector2(800, -100);
@@ -106,37 +124,57 @@ namespace SmashCup_AllStars
             deplacementBDF1 = false;
             deplacementBDF2 = false;
 
+            // Vie perso
             _positionVie1 = new Vector2(0, 0);
             _vieperso1 = 3;
             _positionVie2 = new Vector2(0, 20);
             _vieperso2 = 3;
 
-            base.Initialize();
+
+            //Bullets
+            _positionBullet = new Vector2(800, 200);
+            _annimationBullet = "dirG";
+            
+
+
+            //base.Initialize();
 
         }
 
         public override void LoadContent()
         {
-            _mapPrincipale = Content.Load<TiledMap>("Ice");
+            _mapPrincipale = Content.Load<TiledMap>("IceMap");
             _renduMapPrincipale = new TiledMapRenderer(GraphicsDevice, _mapPrincipale);
-            _mapLayerSol = _mapPrincipale.GetLayer<TiledMapTileLayer>("Terrain");
+            MapLayerSol = _mapPrincipale.GetLayer<TiledMapTileLayer>("Terrain");
 
-            // spritesheet
+           
+            
+            /*// spritesheet personnages
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
 
             _perso1 = new AnimatedSprite(spriteSheetP1);
+            */
 
             SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
             _perso2 = new AnimatedSprite(spriteSheetP2);
 
+            // spritesheet boule de feu
             SpriteSheet spriteSheetBDF1 = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
             _bdf1 = new AnimatedSprite(spriteSheetBDF1);
             SpriteSheet spriteSheetBDF2 = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
             _bdf2 = new AnimatedSprite(spriteSheetBDF2);
 
+            // police de vie
             _police = Content.Load<SpriteFont>("Font");
-            
-            base.LoadContent();
+
+            //spritesheet bullet
+            SpriteSheet spriteSheetBullet = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+
+            _bullet = new AnimatedSprite(spriteSheetBullet);
+
+            _persoRed.LoadContent(Content);
+
+            //base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
@@ -151,7 +189,7 @@ namespace SmashCup_AllStars
             KeyboardState keyboardState = Keyboard.GetState();
 
             //colisions
-            Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
+            Rectangle perso1 = new Rectangle((int)Perso1Position.X - 98 / 2, (int)Perso1Position.Y - 5, 98, 150);
             Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
             Rectangle bdf1 = new Rectangle((int)_bdfPosition1.X - 286 / 2, (int)_bdfPosition1.Y - 146 / 2, 286, 146);
             Rectangle bdf2 = new Rectangle((int)_bdfPosition2.X - 286 / 2, (int)_bdfPosition2.Y - 146 / 2, 286, 146);
@@ -200,7 +238,7 @@ namespace SmashCup_AllStars
                 {
                     deplacementBDF1 = true;
                     _bdfPositionDepart1 = lastDirP1;
-                    _bdfPosition1 = _perso1Position;
+                    _bdfPosition1 = Perso1Position;
                     _bdfPosition1.Y = _bdfPosition1.Y + 75;
 
                 }
@@ -252,7 +290,7 @@ namespace SmashCup_AllStars
             {
                 _perso1Position.Y += jumpspeedP1;//Making it go up
                 jumpspeedP1 += 1;//Some math (explained later)
-                if (_perso1Position.Y >= startYP1)
+                if (Perso1Position.Y >= startYP1)
                 //If it's farther than ground
                 {
                     _perso1Position.Y = startYP1;//Then set it on
@@ -290,17 +328,22 @@ namespace SmashCup_AllStars
                 }
             }
 
-
+            /*
 
             //Direction dans laquelles regarder
             if (lastDirP1 == "D")
                 animationP1 = "idleD";
             else
                 animationP1 = "idleG";
+            */
+
+
             if (lastDirP2 == "D")
                 animationP2 = "idleD";
             else
                 animationP2 = "idleG";
+
+            /*
 
             //Deplacement Joueur 1
             if (keyboardState.IsKeyDown(Keys.D))
@@ -310,6 +353,8 @@ namespace SmashCup_AllStars
                 lastDirP1 = "D";
             }
 
+            
+
             if (keyboardState.IsKeyDown(Keys.Q))
             {
                 animationP1 = "runG";
@@ -317,23 +362,26 @@ namespace SmashCup_AllStars
                 lastDirP1 = "G";
             }
 
-            ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
+            */
+
+           /* ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
             ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
 
 
-             int tile1 = _mapLayerSol.GetTile(x1, y1).GlobalIdentifier;
+             int tile1 = MapLayerSol.GetTile(x1, y1).GlobalIdentifier;
              if (tile1 == 0)
              {
                  _perso1Position.Y += 14;
              }
              else
                  startYP1 = _perso1Position.Y;
+           */
 
              ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
              ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
 
 
-             int tile2 = _mapLayerSol.GetTile(x2, y2).GlobalIdentifier;
+             int tile2 = MapLayerSol.GetTile(x2, y2).GlobalIdentifier;
              if (tile2 == 0)
              {
                  _perso2Position.Y += 14;
@@ -359,16 +407,22 @@ namespace SmashCup_AllStars
 
 
             // TODO: Add your update logic here
-            _perso1.Play(animationP1);
+
+          
+            //_perso1.Play(animationP1);
             _perso2.Play(animationP2);
             _bdf1.Play(animationBdf1);
             _bdf2.Play(animationBdf2);
-            _perso1.Update(deltaSeconds);
+            _bullet.Play(_annimationBullet);
+            //_perso1.Update(deltaSeconds);
+            //_persoRed.Perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
             _bdf1.Update(deltaSeconds);
             _bdf2.Update(deltaSeconds);
+            _bullet.Update(deltaSeconds);
+            _persoRed.Update(gameTime);
 
-                //base.Update(gameTime);
+            //base.Update(gameTime);
 
 
 
@@ -387,14 +441,22 @@ namespace SmashCup_AllStars
 
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
             _renduMapPrincipale.Draw(matrix);
-            
+
+            //_game1.SpriteBatch.Draw(_persoRed.Perso1, _persoRed.Perso1Position);
+           
+
 
             _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
           _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
-          _game1.SpriteBatch.Draw(_perso1, _perso1Position);
+
+        
+
+          //_game1.SpriteBatch.Draw(_perso1, _perso1Position);
           _game1.SpriteBatch.Draw(_perso2, _perso2Position);
           _game1.SpriteBatch.Draw(_bdf1, _bdfPosition1);
           _game1.SpriteBatch.Draw(_bdf2, _bdfPosition2);
+            _game1.SpriteBatch.Draw(_bullet, _positionBullet);
+            _persoRed.Draw(_game1.SpriteBatch);
             _game1.SpriteBatch.End();
 
 
