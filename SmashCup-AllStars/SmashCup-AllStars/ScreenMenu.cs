@@ -51,7 +51,7 @@ namespace SmashCup_AllStars
         public override void LoadContent()
         {
             _backgroundImageMenu = Content.Load<Texture2D>("bgMenu");
-            _enterToStart = Content.Load<Texture2D>("enterStart");
+            _enterToStart = Content.Load<Texture2D>("startEnter");
 
 
             base.LoadContent();
