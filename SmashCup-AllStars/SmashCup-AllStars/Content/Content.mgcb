@@ -174,11 +174,11 @@
 /processorParam:Quality=Best
 /build:musicMenu.mp3
 
-#begin musicMenu2.mp3
+#begin musicMenu3.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:musicMenu2.mp3
+/build:musicMenu3.mp3
 
 #begin option.png
 /importer:TextureImporter
