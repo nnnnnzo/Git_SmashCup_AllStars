@@ -46,7 +46,7 @@ namespace SmashCup_AllStars
         private ScreenMenu _screenMapMenu;
         private readonly ScreenManager _screenManager;
         private Ecran _ecranEnCours;
-        
+        private Bouton _boutonClick;
 
         private MouseState _mouseState;
 
@@ -226,23 +226,20 @@ namespace SmashCup_AllStars
 
             //Rectangle r1 = new Rectangle((int)_screenMapMenu.PositionButtonPlay.X, (int)_screenMapMenu.PositionButtonPlay.Y, _screenMapMenu.ButtonPlay.Width, _screenMapMenu.ButtonPlay.Height);
             //r1.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
-           
-            
-                
+            if (_mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Console.WriteLine(_screenMapMenu.MouseState.X + " " + _screenMapMenu.MouseState.Y);
 
 
-                if (_ecranEnCours == Ecran.Menu && keyboardState.IsKeyDown(Keys.Enter))
+                if (_ecranEnCours == Ecran.Menu && _boutonClick == Bouton.Play)
                 {
-                        
-                        
-                           
-                            _ecranEnCours = Ecran.Principal;
-                            _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
-                        
+                    _ecranEnCours = Ecran.Principal;
+                    _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
+
 
 
                 }
-           
+            }
 
             else if (_ecranEnCours == Ecran.Principal && keyboardState.IsKeyDown(Keys.K))
             {
