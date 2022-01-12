@@ -167,18 +167,6 @@
 /processorParam:TextureFormat=Color
 /build:option.png
 
-#begin P:/SAé 1.01/enterStart.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:P:/SAé 1.01/enterStart.png;enterStart.png
-
 #begin Piskel Cup (1).png
 /importer:TextureImporter
 /processor:TextureProcessor
