@@ -420,7 +420,29 @@ namespace SmashCup_AllStars
                 _perso1Position.X -= walkSpeedPerso1;
                 lastDirP1 = "G";
             }
+            ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
+            ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
 
+
+            int tile1 = _mapLayerSol.GetTile(x1, y1).GlobalIdentifier;
+            if (tile1 == 0)
+            {
+                _perso1Position.Y += 14;
+            }
+            else
+                startYP1 = _perso1Position.Y;
+
+            ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
+            ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
+
+
+            int tile2 = _mapLayerSol.GetTile(x2, y2).GlobalIdentifier;
+            if (tile2 == 0)
+            {
+                _perso2Position.Y += 14;
+            }
+            else
+                startYP2 = _perso2Position.Y;
 
 
             /*
@@ -449,7 +471,7 @@ namespace SmashCup_AllStars
                 _perso1Position.Y += 14;
             }
             */
-  
+
 
             //Deplacement Joueur 2
             if (keyboardState.IsKeyDown(Keys.Right))
