@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Content;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
@@ -14,12 +16,12 @@ ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
 
 namespace SmashCup_AllStars
 {
+
+    public enum Ecran { Principal,Menu};
     public class Game1 : Game
     {
-
-        private TiledMap _tiledMap;
-        private TiledMapRenderer _tiledMapRenderer;
-        private TiledMapTileLayer mapLayerSol;
+       
+        private TiledMapTileLayer _mapLayerSol;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -37,7 +39,27 @@ namespace SmashCup_AllStars
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
 
+
+        //Test class screenMapPrincipale
+
+        private ScreenMapPrincipale _screenMapPrincipale;
+        private ScreenMenu _screenMapMenu;
+        private readonly ScreenManager _screenManager;
+        private Ecran _ecranEnCours;
+        
+
+        private MouseState _mouseState;
+
+        
+
+        // private Texture2D _imageFondMenu;
+
         private Effect effect;
+
+        // J'encapsule Graphic et spritebatch pour pouvoir les réutiliser dans les autres classes.
+        public GraphicsDeviceManager Graphics { get => _graphics; set => _graphics = value; }
+        public SpriteBatch SpriteBatch { get => _spriteBatch; set => _spriteBatch = value; }
+
         /*blabla*/
         /*Test modif Gab*/
 
@@ -73,19 +95,25 @@ namespace SmashCup_AllStars
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _screenManager = new ScreenManager();
+            Components.Add(_screenManager);
+
         }
 
         protected override void Initialize()
         {
 
+            //WIdh: 1200
+            //Height:700
             
-            _graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
-            _graphics.IsFullScreen = false; //activer plein ecran pour build final
-            _graphics.ApplyChanges();
+            /*Graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            Graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
+            Graphics.IsFullScreen = false; //activer plein ecran pour build final
+            Graphics.ApplyChanges();
+            */
 
 
 
@@ -128,16 +156,42 @@ namespace SmashCup_AllStars
             base.Initialize();
         }
 
+        private bool IsCollision(ushort x, ushort y)
+        {
+            // définition de tile qui peut être null (?)
+            TiledMapTile? tile;
+            if (_mapLayerSol.TryGetTile(x, y, out tile) == false)
+                return false;
+            if (!tile.Value.IsBlank)
+                return true;
+            return false;
+        }
 
 
         protected override void LoadContent()
         {
+            /*
             _tiledMap = Content.Load<TiledMap>("Ice");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             mapLayerSol = _tiledMap.GetLayer<TiledMapTileLayer>("Terrain");
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            */
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            effect = Content.Load<Effect>("crt-lottes-mg");
+            
+
+
+            //ScreenManager:
+            _screenMapPrincipale = new ScreenMapPrincipale(this);
+            _screenMapMenu = new ScreenMenu(this);
+            _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
+            _ecranEnCours = Ecran.Menu;
+
+            // _imageFondMenu = Content.Load<Texture2D>("MenuImageSmashCup");
+
+           
+
+
+            //effect = Content.Load<Effect>("crt-lottes-mg");
             // spritesheet
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
 
@@ -164,103 +218,43 @@ namespace SmashCup_AllStars
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             float walkSpeedBdf = deltaSeconds * _vitesseBdf;
             KeyboardState keyboardState = Keyboard.GetState();
+            _mouseState = Mouse.GetState();
 
+            //Gestion des screen avec touche:
+
+            // Rectangle test = _screenMapMenu.Rectangle((int)_screenMapMenu.PositionButtonPlay.X, (int)_screenMapMenu.PositionButtonPlay.Y, _screenMapMenu.ButtonPlay.Width, _screenMapMenu.ButtonPlay.Height);
+
+            //Rectangle r1 = new Rectangle((int)_screenMapMenu.PositionButtonPlay.X, (int)_screenMapMenu.PositionButtonPlay.Y, _screenMapMenu.ButtonPlay.Width, _screenMapMenu.ButtonPlay.Height);
+            //r1.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
+           
             
-            //colisions
-            Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
-            Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
-            Rectangle bdf1 = new Rectangle((int)_bdfPosition1.X - 286 / 2, (int)_bdfPosition1.Y - 146 / 2, 286, 146);
-            Rectangle bdf2 = new Rectangle((int)_bdfPosition2.X - 286 / 2, (int)_bdfPosition2.Y - 146 / 2, 286, 146);
-            if (bdf2.Intersects(perso1))
-            {
-                _vieperso1--;
-            }
-            if (bdf1.Intersects(perso2))
-            {
-                _vieperso2--;
-            }
+                
 
-            //bdf perso rouge (1)
-            if (deplacementBDF1)
-            {
-                if (_bdfPositionDepart1 == "D")
+
+                if (_ecranEnCours == Ecran.Menu && keyboardState.IsKeyDown(Keys.Enter))
                 {
-                    if (_bdfPosition1.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
-                    {
-                        _bdfPosition1 = new Vector2(800, -100);
-                        deplacementBDF1 = false;
-                    }
-                    else
-                    {
-                        animationBdf1 = "bouleDeFeuD";
-                        _bdfPosition1.X += walkSpeedBdf;
-                    }
-                }
-                else
-                {
-                    if (_bdfPosition1.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
-                    {
-                        _bdfPosition1 = new Vector2(800, -100);
-                        deplacementBDF1 = false;
-                    }
-                    else
-                    {
-                        animationBdf1 = "bouleDeFeuG";
-                        _bdfPosition1.X -= walkSpeedBdf;
-                    }
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.Space))
-                {
-                    deplacementBDF1 = true;
-                    _bdfPositionDepart1 = lastDirP1;
-                    _bdfPosition1 = _perso1Position;
-                    _bdfPosition1.Y = _bdfPosition1.Y + 75;
+                        
+                        
+                           
+                            _ecranEnCours = Ecran.Principal;
+                            _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
+                        
+
 
                 }
-            }
-            //bdf perso bleu (2)
-            if (deplacementBDF2)
+           
+
+            else if (_ecranEnCours == Ecran.Principal && keyboardState.IsKeyDown(Keys.K))
             {
-                if (_bdfPositionDepart2 == "D")
-                {
-                    if (_bdfPosition2.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
-                    {
-                        _bdfPosition2 = new Vector2(800, -100);
-                        deplacementBDF2 = false;
-                    }
-                    else
-                    {
-                        animationBdf2 = "bouleDeFeuD";
-                        _bdfPosition2.X += walkSpeedBdf;
-                    }
-                }
-                else
-                {
-                    if (_bdfPosition2.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
-                    {
-                        _bdfPosition2 = new Vector2(800, -100);
-                        deplacementBDF2 = false;
-                    }
-                    else
-                    {
-                        animationBdf2 = "bouleDeFeuG";
-                        _bdfPosition2.X -= walkSpeedBdf;
-                    }
-                }
+                _ecranEnCours = Ecran.Menu;
+                _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
+
             }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.RightControl))
-                {
-                    deplacementBDF2 = true;
-                    _bdfPositionDepart2 = lastDirP2;
-                    _bdfPosition2 = _perso2Position;
-                    _bdfPosition2.Y = _bdfPosition2.Y + 75;
-                }
-            }
+
+
+            //_screenMapMenu.ButtonPlayRectangle.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
+
+
 
             //Jump Joueur 1
             if (jumpingP1)
@@ -331,21 +325,13 @@ namespace SmashCup_AllStars
                 _perso1Position.X -= walkSpeedPerso1;
                 lastDirP1 = "G";
             }
-            ushort x1 = (ushort)(_perso1Position.X/70+0.5);
-            ushort y1 = (ushort)(_perso1Position.Y/70 +2.12);
-            
 
-            int tile1 = mapLayerSol.GetTile(x1, y1).GlobalIdentifier;
-            if (tile1 == 0)
-            {
-                _perso1Position.Y += 14;
-            }
-            else
-                startYP1 = _perso1Position.Y;
 
-            ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
-            ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
 
+            /*
+            ushort x = (ushort)(_perso1Position.X + 150);
+            ushort y = (ushort)(_perso1Position.Y +300);
+            TiledMapTile? tile = null;
 
             int tile2 = mapLayerSol.GetTile(x2, y2).GlobalIdentifier;
             if (tile2 == 0)
@@ -367,7 +353,8 @@ namespace SmashCup_AllStars
             {
                 _perso1Position.Y += 14;
             }
-  */
+            */
+  
 
             //Deplacement Joueur 2
             if (keyboardState.IsKeyDown(Keys.Right))
@@ -392,31 +379,32 @@ namespace SmashCup_AllStars
             _bdf2.Play(animationBdf2);
             _perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
-            _bdf1.Update(deltaSeconds);
-            _bdf2.Update(deltaSeconds);
-            GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            _tiledMapRenderer.Update(gameTime);
+           // GraphicsDevice.BlendState = BlendState.AlphaBlend;
+           //_tiledMapRenderer.Update(gameTime);
             base.Update(gameTime);
         }
 
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(99,160,166));
-            var scaleX = (float)_graphics.PreferredBackBufferWidth / 2800;
-            var scaleY = (float)_graphics.PreferredBackBufferHeight / 1400;
+            /*GraphicsDevice.Clear(new Color(99,160,166));
+            var scaleX = (float)Graphics.PreferredBackBufferWidth / 2800;
+            var scaleY = (float)Graphics.PreferredBackBufferHeight / 1400;
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+            */
 
-            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
-            effect.CurrentTechnique.Passes[0].Apply();
-            _tiledMapRenderer.Draw(matrix);
-            _spriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
-            _spriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
-            _spriteBatch.Draw(_perso1, _perso1Position);
-            _spriteBatch.Draw(_perso2, _perso2Position);
-            _spriteBatch.Draw(_bdf1, _bdfPosition1);
-            _spriteBatch.Draw(_bdf2, _bdfPosition2);
-            _spriteBatch.End();
+
+            //SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
+            //effect.CurrentTechnique.Passes[0].Apply();
+            // SpriteBatch.Draw(_imageFondMenu, new Vector2(scaleX, scaleY),Color.White);
+
+            //_tiledMapRenderer.Draw(matrix);
+            
+          
+
+            //SpriteBatch.Draw(_perso1, _perso1Position);
+            //SpriteBatch.Draw(_perso2, _perso2Position);
+            //SpriteBatch.End();
 
             base.Draw(gameTime);
         }
