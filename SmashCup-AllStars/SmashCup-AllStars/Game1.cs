@@ -254,6 +254,101 @@ namespace SmashCup_AllStars
 
             //_screenMapMenu.ButtonPlayRectangle.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
 
+            //colisions
+            Rectangle perso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
+            Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
+            Rectangle bdf1 = new Rectangle((int)_bdfPosition1.X - 286 / 2, (int)_bdfPosition1.Y - 146 / 2, 286, 146);
+            Rectangle bdf2 = new Rectangle((int)_bdfPosition2.X - 286 / 2, (int)_bdfPosition2.Y - 146 / 2, 286, 146);
+            if (bdf2.Intersects(perso1))
+            {
+                _vieperso1--;
+            }
+            if (bdf1.Intersects(perso2))
+            {
+                _vieperso2--;
+            }
+
+            //bdf perso rouge (1)
+            if (deplacementBDF1)
+            {
+                if (_bdfPositionDepart1 == "D")
+                {
+                    if (_bdfPosition1.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    {
+                        _bdfPosition1 = new Vector2(800, -100);
+                        deplacementBDF1 = false;
+                    }
+                    else
+                    {
+                        animationBdf1 = "bouleDeFeuD";
+                        _bdfPosition1.X += walkSpeedBdf;
+                    }
+                }
+                else
+                {
+                    if (_bdfPosition1.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    {
+                        _bdfPosition1 = new Vector2(800, -100);
+                        deplacementBDF1 = false;
+                    }
+                    else
+                    {
+                        animationBdf1 = "bouleDeFeuG";
+                        _bdfPosition1.X -= walkSpeedBdf;
+                    }
+                }
+            }
+            else
+            {
+                if (keyboardState.IsKeyDown(Keys.Space))
+                {
+                    deplacementBDF1 = true;
+                    _bdfPositionDepart1 = lastDirP1;
+                    _bdfPosition1 = _perso1Position;
+                    _bdfPosition1.Y = _bdfPosition1.Y + 75;
+
+                }
+            }
+            //bdf perso bleu (2)
+            if (deplacementBDF2)
+            {
+                if (_bdfPositionDepart2 == "D")
+                {
+                    if (_bdfPosition2.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    {
+                        _bdfPosition2 = new Vector2(800, -100);
+                        deplacementBDF2 = false;
+                    }
+                    else
+                    {
+                        animationBdf2 = "bouleDeFeuD";
+                        _bdfPosition2.X += walkSpeedBdf;
+                    }
+                }
+                else
+                {
+                    if (_bdfPosition2.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    {
+                        _bdfPosition2 = new Vector2(800, -100);
+                        deplacementBDF2 = false;
+                    }
+                    else
+                    {
+                        animationBdf2 = "bouleDeFeuG";
+                        _bdfPosition2.X -= walkSpeedBdf;
+                    }
+                }
+            }
+            else
+            {
+                if (keyboardState.IsKeyDown(Keys.RightControl))
+                {
+                    deplacementBDF2 = true;
+                    _bdfPositionDepart2 = lastDirP2;
+                    _bdfPosition2 = _perso2Position;
+                    _bdfPosition2.Y = _bdfPosition2.Y + 75;
+                }
+            }
 
 
             //Jump Joueur 1
