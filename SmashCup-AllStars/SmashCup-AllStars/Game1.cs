@@ -424,7 +424,7 @@ namespace SmashCup_AllStars
             ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
 
 
-            int tile1 = _mapLayerSol.GetTile(x1, y1).GlobalIdentifier;
+           /* int tile1 = _mapLayerSol.GetTile(x1, y1).GlobalIdentifier;
             if (tile1 == 0)
             {
                 _perso1Position.Y += 14;
@@ -443,6 +443,8 @@ namespace SmashCup_AllStars
             }
             else
                 startYP2 = _perso2Position.Y;
+           */
+           
 
 
             /*
