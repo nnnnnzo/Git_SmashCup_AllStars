@@ -496,8 +496,10 @@ namespace SmashCup_AllStars
             _bdf2.Play(animationBdf2);
             _perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
-           // GraphicsDevice.BlendState = BlendState.AlphaBlend;
-           //_tiledMapRenderer.Update(gameTime);
+            _bdf1.Update(deltaSeconds);
+            _bdf2.Update(deltaSeconds);
+            // GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            //_tiledMapRenderer.Update(gameTime);
             base.Update(gameTime);
         }
 
