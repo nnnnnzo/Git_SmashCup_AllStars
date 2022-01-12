@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
@@ -89,7 +90,7 @@ namespace SmashCup_AllStars
 
 
             //var joueur 1
-            _perso1Position = new Vector2(400, 200);
+            _perso1Position = new Vector2(900, 200);
             _vitessePerso1 = 200;
             animationP1 = "idleD";
             lastDirP1 = "D";
@@ -98,7 +99,7 @@ namespace SmashCup_AllStars
             jumpspeedP1 = 0;
 
             //var joueur 2
-            _perso2Position = new Vector2(600, 200);
+            _perso2Position = new Vector2(1900, 200);
             _vitessePerso2 = 200;
             animationP2 = "idleG";
             lastDirP2 = "G";
@@ -110,7 +111,7 @@ namespace SmashCup_AllStars
             animationBdf2 = "bouleDeFeuD";
             _bdfPosition1 = new Vector2(800, -100);
             _bdfPosition2 = new Vector2(800, -100);
-            _vitesseBdf = 200;
+            _vitesseBdf = 300;
             deplacementBDF1 = false;
             deplacementBDF2 = false;
 
@@ -184,7 +185,7 @@ namespace SmashCup_AllStars
             {
                 if (_bdfPositionDepart1 == "D")
                 {
-                    if (_bdfPosition1.X > GraphicsDevice.Viewport.Width * 2|| bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    if (_bdfPosition1.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition1 = new Vector2(800, -100);
                         deplacementBDF1 = false;
@@ -225,7 +226,7 @@ namespace SmashCup_AllStars
             {
                 if (_bdfPositionDepart2 == "D")
                 {
-                    if (_bdfPosition2.X > GraphicsDevice.Viewport.Width * 2 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    if (_bdfPosition2.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
                     {
                         _bdfPosition2 = new Vector2(800, -100);
                         deplacementBDF2 = false;
@@ -258,26 +259,6 @@ namespace SmashCup_AllStars
                     _bdfPositionDepart2 = lastDirP2;
                     _bdfPosition2 = _perso2Position;
                     _bdfPosition2.Y = _bdfPosition2.Y + 75;
-                }
-            }
-
-            if (jumpingP1)
-            {
-                _perso1Position.Y += jumpspeedP1;//Making it go up
-                jumpspeedP1 += 1;//Some math (explained later)
-                if (_perso1Position.Y >= startYP1)
-                //If it's farther than ground
-                {
-                    _perso1Position.Y = startYP1;//Then set it on
-                    jumpingP1 = false;
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.Z))
-                {
-                    jumpingP1 = true;
-                    jumpspeedP1 = -14;//Give it upward thrust
                 }
             }
 
@@ -429,7 +410,6 @@ namespace SmashCup_AllStars
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,  transformMatrix: matrix);
             effect.CurrentTechnique.Passes[0].Apply();
             _tiledMapRenderer.Draw(matrix);
-
             _spriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
             _spriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
             _spriteBatch.Draw(_perso1, _perso1Position);
