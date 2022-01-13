@@ -36,17 +36,17 @@ namespace SmashCup_AllStars
 
 
         //animation boule de feu 
-        private AnimatedSprite _bdf1;
-        private AnimatedSprite _bdf2;
-        private Vector2 _bdfPosition1;
-        private Vector2 _bdfPosition2;
-        private string _bdfPositionDepart1;
-        private string _bdfPositionDepart2;
-        private string animationBdf1;
-        private string animationBdf2;
-        private int _vitesseBdf;
-        private bool deplacementBDF1;
-        private bool deplacementBDF2;
+        private AnimatedSprite _bullet1;
+        private AnimatedSprite _bullet2;
+        private Vector2 _bulletPosition1;
+        private Vector2 _bulletPosition2;
+        private string _bulletPositionDepart1;
+        private string _bulletPositionDepart2;
+        private string animationBullet1;
+        private string animationBullet2;
+        private int _vitesseBullet;
+        private bool deplacementB1;
+        private bool deplacementB2;
 
         // Animation bullets
 
@@ -69,10 +69,10 @@ namespace SmashCup_AllStars
         public static int HEIGHT_WINDOW = 700;
 
         private ScreenMenu _screenMenuMusic;
-        private PersoRed _persoRed;
+        //private PersoRed _persoRed;
 
         public TiledMapTileLayer MapLayerSol { get => _mapLayerSol; set => _mapLayerSol = value; }
-        public Vector2 Perso1Position { get => _perso1Position; set => _perso1Position = value; }
+        //public Vector2 Perso1Position { get => _perso1Position; set => _perso1Position = value; }
 
         public ScreenMapPrincipale(Game1 game): base(game)
         {
@@ -89,22 +89,18 @@ namespace SmashCup_AllStars
 
 
             // joueur 1
-            _persoRed = new PersoRed();
+            //_persoRed = new PersoRed();
             
             
 
             //var joueur 1
             _perso1Position = new Vector2(900, 200);
-
-            /*
             _vitessePerso1 = 200;
             animationP1 = "idleD";
             lastDirP1 = "D";
             startYP1 = _perso1Position.Y;//Starting position
             jumpingP1 = false;//Init jumping to false
             jumpspeedP1 = 0;
-
-            */
 
             //var joueur 2
             _perso2Position = new Vector2(WIDTH_WINDOW/2, HEIGHT_WINDOW/2);
@@ -116,13 +112,13 @@ namespace SmashCup_AllStars
             jumpspeedP2 = 0;
 
             //Boule de feu
-            animationBdf1 = "bouleDeFeuG";
-            animationBdf2 = "bouleDeFeuD";
-            _bdfPosition1 = new Vector2(800, -100);
-            _bdfPosition2 = new Vector2(800, -100);
-            _vitesseBdf = 300;
-            deplacementBDF1 = false;
-            deplacementBDF2 = false;
+            animationBullet1 = "dirG";
+            animationBullet2 = "dirD";
+            _bulletPosition1 = new Vector2(800, -100);
+            _bulletPosition2 = new Vector2(800, -100);
+            _vitesseBullet = 500;
+            deplacementB1 = false;
+            deplacementB2 = false;
 
             // Vie perso
             _positionVie1 = new Vector2(0, 0);
@@ -149,30 +145,29 @@ namespace SmashCup_AllStars
 
            
             
-            /*// spritesheet personnages
+            // spritesheet personnages
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
 
             _perso1 = new AnimatedSprite(spriteSheetP1);
-            */
 
             SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
             _perso2 = new AnimatedSprite(spriteSheetP2);
 
             // spritesheet boule de feu
-            SpriteSheet spriteSheetBDF1 = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
-            _bdf1 = new AnimatedSprite(spriteSheetBDF1);
-            SpriteSheet spriteSheetBDF2 = Content.Load<SpriteSheet>("bdf.sf", new JsonContentLoader());
-            _bdf2 = new AnimatedSprite(spriteSheetBDF2);
+            SpriteSheet spriteSheetB1 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+            _bullet1 = new AnimatedSprite(spriteSheetB1);
+            SpriteSheet spriteSheetB2 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+            _bullet2 = new AnimatedSprite(spriteSheetB2);
 
             // police de vie
             _police = Content.Load<SpriteFont>("Font");
 
             //spritesheet bullet
-            SpriteSheet spriteSheetBullet = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+            //SpriteSheet spriteSheetBullet = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
 
-            _bullet = new AnimatedSprite(spriteSheetBullet);
+            //_bullet = new AnimatedSprite(spriteSheetBullet);
 
-            _persoRed.LoadContent(Content);
+            //_persoRed.LoadContent(Content);
 
             //base.LoadContent();
         }
@@ -185,50 +180,49 @@ namespace SmashCup_AllStars
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
-            float walkSpeedBdf = deltaSeconds * _vitesseBdf;
+            float walkSpeedBdf = deltaSeconds * _vitesseBullet;
             KeyboardState keyboardState = Keyboard.GetState();
 
             //colisions
-            Rectangle perso1 = new Rectangle((int)Perso1Position.X - 98 / 2, (int)Perso1Position.Y - 5, 98, 150);
-            Rectangle perso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
-            Rectangle bdf1 = new Rectangle((int)_bdfPosition1.X - 286 / 2, (int)_bdfPosition1.Y - 146 / 2, 286, 146);
-            Rectangle bdf2 = new Rectangle((int)_bdfPosition2.X - 286 / 2, (int)_bdfPosition2.Y - 146 / 2, 286, 146);
-            if (bdf2.Intersects(perso1))
+            Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
+            Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
+            Rectangle _boxB1 = new Rectangle((int)_bulletPosition1.X - 286 / 4, (int)_bulletPosition1.Y - 146 / 4, 143, 73);
+            Rectangle _boxB2 = new Rectangle((int)_bulletPosition2.X - 286 / 4, (int)_bulletPosition2.Y - 146 / 4, 143, 73);
+            if (_boxB2.Intersects(_boxPerso1))
             {
                 _vieperso1--;
             }
-            if (bdf1.Intersects(perso2))
+            if (_boxB1.Intersects(_boxPerso2))
             {
                 _vieperso2--;
             }
 
             //bdf perso rouge (1)
-            if (deplacementBDF1)
+            if (deplacementB1)
             {
-                if (_bdfPositionDepart1 == "D")
+                if (_bulletPositionDepart1 == "D")
                 {
-                    if (_bdfPosition1.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    animationBullet1 = "dirD";
+                    if (_bulletPosition1.X > 2800 || _boxB1.Intersects(_boxPerso2))
                     {
-                        _bdfPosition1 = new Vector2(800, -100);
-                        deplacementBDF1 = false;
+                        deplacementB1 = false;
                     }
                     else
                     {
-                        animationBdf1 = "bouleDeFeuD";
-                        _bdfPosition1.X += walkSpeedBdf;
+                        //animationBullet2 = "dirD";
+                        _bulletPosition1.X += walkSpeedBdf;
                     }
                 }
                 else
                 {
-                    if (_bdfPosition1.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    animationBullet1 = "dirG";
+                    if (_bulletPosition1.X < 0 || _boxB1.Intersects(_boxPerso2))
                     {
-                        _bdfPosition1 = new Vector2(800, -100);
-                        deplacementBDF1 = false;
+                        deplacementB1 = false;
                     }
                     else
                     {
-                        animationBdf1 = "bouleDeFeuG";
-                        _bdfPosition1.X -= walkSpeedBdf;
+                        _bulletPosition1.X -= walkSpeedBdf;
                     }
                 }
             }
@@ -236,40 +230,39 @@ namespace SmashCup_AllStars
             {
                 if (keyboardState.IsKeyDown(Keys.Space))
                 {
-                    deplacementBDF1 = true;
-                    _bdfPositionDepart1 = lastDirP1;
-                    _bdfPosition1 = Perso1Position;
-                    _bdfPosition1.Y = _bdfPosition1.Y + 75;
-
+                    deplacementB1 = true;
+                    _bulletPositionDepart1 = lastDirP1;
+                    _bulletPosition1 = _perso1Position;
+                    _bulletPosition1.Y = _bulletPosition1.Y + 75;
                 }
             }
             //bdf perso bleu (2)
-            if (deplacementBDF2)
+            if (deplacementB2)
             {
-                if (_bdfPositionDepart2 == "D")
+                if (_bulletPositionDepart2 == "D")
                 {
-                    if (_bdfPosition2.X > 2800 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    animationBullet2 = "dirD";
+                    if (_bulletPosition2.X > 2800 || _boxB2.Intersects(_boxPerso1))
                     {
-                        _bdfPosition2 = new Vector2(800, -100);
-                        deplacementBDF2 = false;
+                        deplacementB2 = false;
                     }
                     else
                     {
-                        animationBdf2 = "bouleDeFeuD";
-                        _bdfPosition2.X += walkSpeedBdf;
+                        //animationBullet2 = "dirD";
+                        _bulletPosition2.X += walkSpeedBdf;
                     }
                 }
                 else
                 {
-                    if (_bdfPosition2.X < 0 || bdf2.Intersects(perso1) || bdf1.Intersects(perso2))
+                    animationBullet2 = "dirG";
+                    if (_bulletPosition2.X < 0 || _boxB2.Intersects(_boxPerso1))
                     {
-                        _bdfPosition2 = new Vector2(800, -100);
-                        deplacementBDF2 = false;
+                        deplacementB2 = false;
                     }
                     else
                     {
-                        animationBdf2 = "bouleDeFeuG";
-                        _bdfPosition2.X -= walkSpeedBdf;
+                        //animationBullet2 = "dirG";
+                        _bulletPosition2.X -= walkSpeedBdf;
                     }
                 }
             }
@@ -277,20 +270,19 @@ namespace SmashCup_AllStars
             {
                 if (keyboardState.IsKeyDown(Keys.RightControl))
                 {
-                    deplacementBDF2 = true;
-                    _bdfPositionDepart2 = lastDirP2;
-                    _bdfPosition2 = _perso2Position;
-                    _bdfPosition2.Y = _bdfPosition2.Y + 75;
+                    deplacementB2 = true;
+                    _bulletPositionDepart2 = lastDirP2;
+                    _bulletPosition2 = _perso2Position;
+                    _bulletPosition2.Y = _bulletPosition2.Y + 75;
                 }
             }
-
 
             //Jump Joueur 1
             if (jumpingP1)
             {
                 _perso1Position.Y += jumpspeedP1;//Making it go up
                 jumpspeedP1 += 1;//Some math (explained later)
-                if (Perso1Position.Y >= startYP1)
+                if (_perso1Position.Y >= startYP1)
                 //If it's farther than ground
                 {
                     _perso1Position.Y = startYP1;//Then set it on
@@ -328,22 +320,18 @@ namespace SmashCup_AllStars
                 }
             }
 
-            /*
 
             //Direction dans laquelles regarder
             if (lastDirP1 == "D")
                 animationP1 = "idleD";
             else
                 animationP1 = "idleG";
-            */
 
 
             if (lastDirP2 == "D")
                 animationP2 = "idleD";
             else
                 animationP2 = "idleG";
-
-            /*
 
             //Deplacement Joueur 1
             if (keyboardState.IsKeyDown(Keys.D))
@@ -362,9 +350,7 @@ namespace SmashCup_AllStars
                 lastDirP1 = "G";
             }
 
-            */
-
-           /* ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
+            ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
             ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
 
 
@@ -375,7 +361,6 @@ namespace SmashCup_AllStars
              }
              else
                  startYP1 = _perso1Position.Y;
-           */
 
              ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
              ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
@@ -409,18 +394,18 @@ namespace SmashCup_AllStars
             // TODO: Add your update logic here
 
           
-            //_perso1.Play(animationP1);
+            _perso1.Play(animationP1);
             _perso2.Play(animationP2);
-            _bdf1.Play(animationBdf1);
-            _bdf2.Play(animationBdf2);
-            _bullet.Play(_annimationBullet);
-            //_perso1.Update(deltaSeconds);
+            _bullet1.Play(animationBullet1);
+            _bullet2.Play(animationBullet2);
+            //_bullet.Play(_annimationBullet);
+            _perso1.Update(deltaSeconds);
             //_persoRed.Perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
-            _bdf1.Update(deltaSeconds);
-            _bdf2.Update(deltaSeconds);
-            _bullet.Update(deltaSeconds);
-            _persoRed.Update(gameTime);
+            _bullet1.Update(deltaSeconds);
+            _bullet2.Update(deltaSeconds);
+            //_bullet.Update(deltaSeconds);
+            //_persoRed.Update(gameTime);
 
             //base.Update(gameTime);
 
@@ -438,6 +423,7 @@ namespace SmashCup_AllStars
             var scaleX = (float)_game1.Graphics.PreferredBackBufferWidth / 2800;
             var scaleY = (float)_game1.Graphics.PreferredBackBufferHeight / 1400;
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+            var matrixMin = Matrix.CreateScale(scaleX, scaleY, 0.5f);
 
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
             _renduMapPrincipale.Draw(matrix);
@@ -447,16 +433,18 @@ namespace SmashCup_AllStars
 
 
             _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
-          _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
+            _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
 
-        
 
-          //_game1.SpriteBatch.Draw(_perso1, _perso1Position);
-          _game1.SpriteBatch.Draw(_perso2, _perso2Position);
-          _game1.SpriteBatch.Draw(_bdf1, _bdfPosition1);
-          _game1.SpriteBatch.Draw(_bdf2, _bdfPosition2);
-            _game1.SpriteBatch.Draw(_bullet, _positionBullet);
-            _persoRed.Draw(_game1.SpriteBatch);
+            Vector2 scalem = new Vector2((float)scaleX * 1.5f, (float)scaleY * 1.5f);
+            _game1.SpriteBatch.Draw(_perso1, _perso1Position);
+            _game1.SpriteBatch.Draw(_perso2, _perso2Position);
+            if (deplacementB1 == true)
+                _game1.SpriteBatch.Draw(_bullet1, _bulletPosition1, 0, scalem);
+            if (deplacementB2 == true)
+                _game1.SpriteBatch.Draw(_bullet2, _bulletPosition2, 0, scalem);
+         //_game1.SpriteBatch.Draw(_bullet, _positionBullet);
+            //_persoRed.Draw(_game1.SpriteBatch);
             _game1.SpriteBatch.End();
 
 
