@@ -1,40 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Screens;
-using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
-using Microsoft.Xna.Framework.Media;
-
-
+using System;
 namespace SmashCup_AllStars
 {
-   
-    public class ScreenMenu: GameScreen
+    public class ScreenFin : GameScreen
     {
-
         private Game1 _game1;
-        private Texture2D _enterToStart;
-        private Vector2 _positionEnterToStart;
-
-        private Texture2D _backgroundImageMenu;
-
         public static int WIDTH_WINDOW = 1200;
         public static int HEIGHT_WINDOW = 700;
 
-        private Song _musicMenu;
-
+        private Texture2D _backgroundImageEnd;
        
-        public ScreenMenu(Game1 game) : base(game)
+
+
+
+
+        public ScreenFin(Game1 game): base(game)
         {
+
             _game1 = game;
         }
 
@@ -46,20 +37,19 @@ namespace SmashCup_AllStars
             _game1.Graphics.IsFullScreen = false;
             _game1.Graphics.ApplyChanges();
 
-    
-            _positionEnterToStart = new Vector2(450, 825);
+
+            
 
         }
 
         public override void LoadContent()
         {
-            _backgroundImageMenu = Content.Load<Texture2D>("bgMenu");
-            _enterToStart = Content.Load<Texture2D>("startEnter");
 
-           /* _musicMenu = Content.Load<Song>("musicMenu3");
-                MediaPlayer.Play(_musicMenu);
-            MediaPlayer.Volume =1f;
-           */
+            _backgroundImageEnd = Content.Load<Texture2D>("imageEnd");
+
+
+
+
 
 
             base.LoadContent();
@@ -68,7 +58,7 @@ namespace SmashCup_AllStars
         public override void Update(GameTime gameTime)
         {
 
-        
+
 
         }
 
@@ -76,17 +66,17 @@ namespace SmashCup_AllStars
         public override void Draw(GameTime gameTime)
         {
 
-           
+
             _game1.GraphicsDevice.Clear(Color.Black);
-            var scaleX = (float)_game1.Graphics.PreferredBackBufferWidth / 1900;
-            var scaleY = (float)_game1.Graphics.PreferredBackBufferHeight / 1050;
+            var scaleX = (float)_game1.Graphics.PreferredBackBufferWidth / 1200;
+            var scaleY = (float)_game1.Graphics.PreferredBackBufferHeight / 650;
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
 
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
-            _game1.SpriteBatch.Draw(_backgroundImageMenu, new Vector2(scaleX, scaleY), Color.White);
-            _game1.SpriteBatch.Draw(_enterToStart, _positionEnterToStart, Color.White);
+            _game1.SpriteBatch.Draw(_backgroundImageEnd, new Vector2(scaleX, scaleY), Color.White);
+           
             _game1.SpriteBatch.End();
-            
+
 
             /*
             _game1.GraphicsDevice.Clear(Color.Red);
@@ -98,11 +88,6 @@ namespace SmashCup_AllStars
 
 
         }
-
-
-       
-
-
 
 
 

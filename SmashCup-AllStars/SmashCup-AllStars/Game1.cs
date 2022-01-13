@@ -17,7 +17,8 @@ ATTENTION: Valider, Tirer, Resoudre conflits, Envoyer
 namespace SmashCup_AllStars
 {
 
-    public enum Ecran { Principal,Menu};
+    public enum Ecran { Principal,Menu,End};
+   
     public class Game1 : Game
     {
        
@@ -47,6 +48,7 @@ namespace SmashCup_AllStars
         
         private ScreenMapPrincipale _screenMapPrincipale;
         private ScreenMenu _screenMapMenu;
+        private ScreenFin _screenFin;
         private readonly ScreenManager _screenManager;
         private Ecran _ecranEnCours;
 
@@ -165,7 +167,7 @@ namespace SmashCup_AllStars
             */
 
 
-            Perso1PositionGame1 = new Vector2(ScreenMapPrincipale.WIDTH_WINDOW / 2, ScreenMapPrincipale.HEIGHT_WINDOW / 2);
+            //Perso1PositionGame1 = new Vector2(ScreenMapPrincipale.WIDTH_WINDOW / 2, ScreenMapPrincipale.HEIGHT_WINDOW / 2);
 
             base.Initialize();
         }
@@ -192,12 +194,13 @@ namespace SmashCup_AllStars
             */
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            
+
 
 
             //ScreenManager:
             _screenMapPrincipale = new ScreenMapPrincipale(this);
             _screenMapMenu = new ScreenMenu(this);
+            _screenFin = new ScreenFin(this);
             _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
             _ecranEnCours = Ecran.Menu;
 
@@ -259,7 +262,6 @@ namespace SmashCup_AllStars
                 {
                         
                         
-                           
                             _ecranEnCours = Ecran.Principal;
                             _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
                         
@@ -275,6 +277,13 @@ namespace SmashCup_AllStars
 
             }
 
+            else if (_ecranEnCours == Ecran.Principal && _screenMapPrincipale.Timer == -1)
+            {
+                _ecranEnCours = Ecran.End;
+                _screenManager.LoadScreen(_screenFin, new FadeTransition(GraphicsDevice, Color.Black));
+
+            }
+            
 
             //_screenMapMenu.ButtonPlayRectangle.Contains(_screenMapMenu.MouseState.X, _screenMapMenu.MouseState.Y);
 
@@ -470,7 +479,7 @@ namespace SmashCup_AllStars
             else
                 startYP2 = _perso2Position.Y;
            */
-           
+
 
 
             /*
