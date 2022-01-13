@@ -56,9 +56,6 @@ namespace SmashCup_AllStars
             _backgroundImageMenu = Content.Load<Texture2D>("bgMenu");
             _enterToStart = Content.Load<Texture2D>("startEnter");
 
-            _musicMenu = Content.Load<Song>("musicMenu3");
-                MediaPlayer.Play(_musicMenu);
-            MediaPlayer.Volume =1f;
 
 
             base.LoadContent();

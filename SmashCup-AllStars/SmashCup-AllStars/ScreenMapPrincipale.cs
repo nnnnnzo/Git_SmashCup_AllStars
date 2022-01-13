@@ -62,6 +62,10 @@ namespace SmashCup_AllStars
         private int _vieperso2;
         private Vector2 _positionVie2;
 
+        //timer
+        private float _timer;
+        private Vector2 _positionTimer;
+
         public Vector2 _finPosition;
         public Vector2 _tailleTexteFin;
 
@@ -123,8 +127,11 @@ namespace SmashCup_AllStars
             // Vie perso
             _positionVie1 = new Vector2(0, 0);
             _vieperso1 = 3;
-            _positionVie2 = new Vector2(0, 20);
+            _positionVie2 = new Vector2(0, 60);
             _vieperso2 = 3;
+
+            _positionTimer = new Vector2(0, 120);
+            _timer = 10;
 
 
             //Bullets
@@ -181,6 +188,9 @@ namespace SmashCup_AllStars
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             float walkSpeedBdf = deltaSeconds * _vitesseBullet;
+            _timer = _timer - (deltaSeconds / 3);
+            if (_timer <= 0)
+                _timer = 0;
             KeyboardState keyboardState = Keyboard.GetState();
 
             //colisions
@@ -205,6 +215,7 @@ namespace SmashCup_AllStars
                     animationBullet1 = "dirD";
                     if (_bulletPosition1.X > 2800 || _boxB1.Intersects(_boxPerso2))
                     {
+                        _bulletPosition1 = new Vector2(100, 100);
                         deplacementB1 = false;
                     }
                     else
@@ -218,6 +229,7 @@ namespace SmashCup_AllStars
                     animationBullet1 = "dirG";
                     if (_bulletPosition1.X < 0 || _boxB1.Intersects(_boxPerso2))
                     {
+                        _bulletPosition1 = new Vector2(100, 100);
                         deplacementB1 = false;
                     }
                     else
@@ -244,6 +256,7 @@ namespace SmashCup_AllStars
                     animationBullet2 = "dirD";
                     if (_bulletPosition2.X > 2800 || _boxB2.Intersects(_boxPerso1))
                     {
+                        _bulletPosition2 = new Vector2(100, 100);
                         deplacementB2 = false;
                     }
                     else
@@ -257,6 +270,7 @@ namespace SmashCup_AllStars
                     animationBullet2 = "dirG";
                     if (_bulletPosition2.X < 0 || _boxB2.Intersects(_boxPerso1))
                     {
+                        _bulletPosition2 = new Vector2(100, 100);
                         deplacementB2 = false;
                     }
                     else
@@ -391,9 +405,8 @@ namespace SmashCup_AllStars
             }
 
 
-            // TODO: Add your update logic here
+            Console.WriteLine(_bulletPosition1);
 
-          
             _perso1.Play(animationP1);
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
@@ -434,7 +447,7 @@ namespace SmashCup_AllStars
 
             _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
             _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
-
+            _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(_timer)} ", _positionTimer, Color.White);
 
             Vector2 scalem = new Vector2((float)scaleX * 1.5f, (float)scaleY * 1.5f);
             _game1.SpriteBatch.Draw(_perso1, _perso1Position);
