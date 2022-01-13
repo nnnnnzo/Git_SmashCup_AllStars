@@ -9,6 +9,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
+using System.Collections.Generic;
 
 namespace SmashCup_AllStars
 {
@@ -19,6 +20,8 @@ namespace SmashCup_AllStars
         private TiledMap _mapPrincipale;
         private TiledMapRenderer _renduMapPrincipale;
         private TiledMapTileLayer _mapLayerSol;
+        private float _definedCooldown = 0.5f;
+        private float _currentCooldown;
 
         private Vector2 _perso1Position;
         private AnimatedSprite _perso1;
@@ -53,6 +56,9 @@ namespace SmashCup_AllStars
         private AnimatedSprite _bullet;
         private Vector2 _positionBullet;
         private string _annimationBullet;
+
+        List<Vector2> bullets;
+        
 
         private SpriteFont _police;
         //vie perso 1
@@ -90,7 +96,7 @@ namespace SmashCup_AllStars
 
             // joueur 1
             //_persoRed = new PersoRed();
-            
+            _currentCooldown = _definedCooldown;
             
 
             //var joueur 1
@@ -129,7 +135,7 @@ namespace SmashCup_AllStars
 
             //Bullets
             _positionBullet = new Vector2(800, 200);
-            _annimationBullet = "dirG";
+            _annimationBullet = "dirD";
             
 
 
@@ -159,11 +165,15 @@ namespace SmashCup_AllStars
             SpriteSheet spriteSheetB2 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
             _bullet2 = new AnimatedSprite(spriteSheetB2);
 
+            bullets = new List<Vector2>();
+            SpriteSheet bulletImage = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+            _bullet = new AnimatedSprite(bulletImage);
+
+
             // police de vie
             _police = Content.Load<SpriteFont>("Font");
 
             //spritesheet bullet
-            //SpriteSheet spriteSheetBullet = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
 
             //_bullet = new AnimatedSprite(spriteSheetBullet);
 
@@ -183,6 +193,7 @@ namespace SmashCup_AllStars
             float walkSpeedBdf = deltaSeconds * _vitesseBullet;
             KeyboardState keyboardState = Keyboard.GetState();
 
+            _currentCooldown += deltaSeconds;
             //colisions
             Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
             Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
@@ -196,6 +207,24 @@ namespace SmashCup_AllStars
             {
                 _vieperso2--;
             }
+
+
+            if (keyboardState.IsKeyDown(Keys.R))
+            {
+                if (_currentCooldown >= _definedCooldown)
+                {
+                    bullets.Add(_perso1Position);
+                    _currentCooldown = 0;
+                }
+            }
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                  float x = bullets[i].X;
+                  x += walkSpeedBdf;
+                  bullets[i] = new Vector2(x, bullets[i].Y);
+  
+            }
+
 
             //bdf perso rouge (1)
             if (deplacementB1)
@@ -398,13 +427,13 @@ namespace SmashCup_AllStars
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
             _bullet2.Play(animationBullet2);
-            //_bullet.Play(_annimationBullet);
+            _bullet.Play(_annimationBullet);
             _perso1.Update(deltaSeconds);
             //_persoRed.Perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
             _bullet1.Update(deltaSeconds);
             _bullet2.Update(deltaSeconds);
-            //_bullet.Update(deltaSeconds);
+            _bullet.Update(deltaSeconds);
             //_persoRed.Update(gameTime);
 
             //base.Update(gameTime);
@@ -443,6 +472,9 @@ namespace SmashCup_AllStars
                 _game1.SpriteBatch.Draw(_bullet1, _bulletPosition1, 0, scalem);
             if (deplacementB2 == true)
                 _game1.SpriteBatch.Draw(_bullet2, _bulletPosition2, 0, scalem);
+            for (int i = 0; i < bullets.Count; i++)
+                _game1.SpriteBatch.Draw(_bullet, bullets[i], 0, scalem);
+
          //_game1.SpriteBatch.Draw(_bullet, _positionBullet);
             //_persoRed.Draw(_game1.SpriteBatch);
             _game1.SpriteBatch.End();
