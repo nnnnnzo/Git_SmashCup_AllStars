@@ -93,7 +93,6 @@ namespace SmashCup_AllStars
         public static int WIDTH_WINDOW = 1200;
         public static int HEIGHT_WINDOW = 700;
 
-
         //private PersoRed _persoRed;
 
         public TiledMapTileLayer MapLayerSol { get => _mapLayerSol; set => _mapLayerSol = value; }
@@ -245,19 +244,9 @@ namespace SmashCup_AllStars
                 //colisions
                 Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
-                Rectangle _boxB1 = new Rectangle((int)_bulletPosition1.X - 286 / 4, (int)_bulletPosition1.Y - 146 / 4, 143, 73);
-                Rectangle _boxB2 = new Rectangle((int)_bulletPosition2.X - 286 / 4, (int)_bulletPosition2.Y - 146 / 4, 143, 73);
-                if (_boxB2.Intersects(_boxPerso1))
-                {
-                    _vieperso1--;
-                }
-                if (_boxB1.Intersects(_boxPerso2))
-                {
-                    _vieperso2--;
-                }
 
 
-                if (keyboardState.IsKeyDown(Keys.R))
+                if (keyboardState.IsKeyDown(Keys.Space))
                 {
                     if (_currentCooldownP1 >= _definedCooldown)
                     {
@@ -275,7 +264,7 @@ namespace SmashCup_AllStars
                     }
                 }
 
-                if (keyboardState.IsKeyDown(Keys.RightAlt))
+                if (keyboardState.IsKeyDown(Keys.RightControl))
                 {
                     if (_currentCooldownP2 >= _definedCooldown)
                     {
@@ -295,9 +284,16 @@ namespace SmashCup_AllStars
 
                 for (int i = 0; i < bulletsD1.Count; i++)
                 {
+                    
                     float x = bulletsD1[i].X;
                     x += walkSpeedBdf;
                     bulletsD1[i] = new Vector2(x, bulletsD1[i].Y);
+                    Rectangle _colBoxD1 = new Rectangle((int)bulletsD1[i].X - 286 / 4, (int)bulletsD1[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxD1.Intersects(_boxPerso2))
+                    {
+                        _vieperso2--;
+                        bulletsD1.RemoveAt(i);
+                    }
 
                 }
 
@@ -306,15 +302,28 @@ namespace SmashCup_AllStars
                     float x = bulletsG1[i].X;
                     x -= walkSpeedBdf;
                     bulletsG1[i] = new Vector2(x, bulletsG1[i].Y);
+                    Rectangle _colBoxG1 = new Rectangle((int)bulletsG1[i].X - 286 / 4, (int)bulletsG1[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxG1.Intersects(_boxPerso2))
+                    {
+                        _vieperso2--;
+                        bulletsG1.RemoveAt(i);
+                    }
 
                 }
 
-                
+
                 for (int i = 0; i < bulletsD2.Count; i++)
                 {
                     float x = bulletsD2[i].X;
                     x += walkSpeedBdf;
                     bulletsD2[i] = new Vector2(x, bulletsD2[i].Y);
+                    Rectangle _colBoxD2 = new Rectangle((int)bulletsD2[i].X - 286 / 4, (int)bulletsD2[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxD2.Intersects(_boxPerso1))
+                    {
+                        _vieperso1--;
+                        bulletsD2.RemoveAt(i);
+                    }
+
 
                 }
                 for (int i = 0; i < bulletsG2.Count; i++)
@@ -322,87 +331,11 @@ namespace SmashCup_AllStars
                     float x = bulletsG2[i].X;
                     x -= walkSpeedBdf;
                     bulletsG2[i] = new Vector2(x, bulletsG2[i].Y);
-
-                }
-
-
-                //bdf perso rouge (1)
-                if (deplacementB1)
-                {
-                    if (_bulletPositionDepart1 == "D")
+                    Rectangle _colBoxG2 = new Rectangle((int)bulletsG2[i].X - 286 / 4, (int)bulletsG2[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxG2.Intersects(_boxPerso1))
                     {
-                        animationBullet1 = "dirD";
-                        if (_bulletPosition1.X > 2800 || _boxB1.Intersects(_boxPerso2))
-                        {
-                            deplacementB1 = false;
-                        }
-                        else
-                        {
-                            //animationBullet2 = "dirD";
-                            _bulletPosition1.X += walkSpeedBdf;
-                        }
-                    }
-                    else
-                    {
-                        animationBullet1 = "dirG";
-                        if (_bulletPosition1.X < 0 || _boxB1.Intersects(_boxPerso2))
-                        {
-                            deplacementB1 = false;
-                        }
-                        else
-                        {
-                            _bulletPosition1.X -= walkSpeedBdf;
-                        }
-                    }
-                }
-                else
-                {
-                    if (keyboardState.IsKeyDown(Keys.Space))
-                    {
-                        deplacementB1 = true;
-                        _bulletPositionDepart1 = lastDirP1;
-                        _bulletPosition1 = _perso1Position;
-                        _bulletPosition1.Y = _bulletPosition1.Y + 75;
-                    }
-                }
-                //bdf perso bleu (2)
-                if (deplacementB2)
-                {
-                    if (_bulletPositionDepart2 == "D")
-                    {
-                        animationBullet2 = "dirD";
-                        if (_bulletPosition2.X > 2800 || _boxB2.Intersects(_boxPerso1))
-                        {
-                            deplacementB2 = false;
-                        }
-                        else
-                        {
-                            //animationBullet2 = "dirD";
-                            _bulletPosition2.X += walkSpeedBdf;
-                        }
-                    }
-                    else
-                    {
-                        animationBullet2 = "dirG";
-                        if (_bulletPosition2.X < 0 || _boxB2.Intersects(_boxPerso1))
-                        {
-                            deplacementB2 = false;
-                        }
-                        else
-                        {
-                            //animationBullet2 = "dirG";
-                            _bulletPosition2.X -= walkSpeedBdf;
-                        }
-                    }
-                }
-                else
-                {
-                    if (keyboardState.IsKeyDown(Keys.RightControl))
-                    {
-                        deplacementB2 = true;
-                        _bulletPositionDepart2 = lastDirP2;
-                        _bulletPosition2 = _perso2Position;
-                        _bulletPosition2.Y = _bulletPosition2.Y + 75;
+                        _vieperso1--;
+                        bulletsG2.RemoveAt(i);
                     }
                 }
 
@@ -567,11 +500,6 @@ namespace SmashCup_AllStars
             //base.Update(gameTime);
         }
            
-
-
-
-        
-
 
         public override void Draw(GameTime gameTime)
         {
