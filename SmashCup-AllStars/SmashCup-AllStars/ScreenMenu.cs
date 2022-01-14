@@ -79,10 +79,10 @@ namespace SmashCup_AllStars
 
             _controlKey = Content.Load<Texture2D>("holdControlKey");
 
-           /* _musicMenu = Content.Load<Song>("musicMenu3");
+            _musicMenu = Content.Load<Song>("musicMenu3");
                 MediaPlayer.Play(_musicMenu);
             MediaPlayer.Volume =1f;
-           */
+           
 
 
             base.LoadContent();
