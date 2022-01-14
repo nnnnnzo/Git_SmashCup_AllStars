@@ -38,6 +38,9 @@ namespace SmashCup_AllStars
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
 
+        private Vector2 _mobPosition;
+        private AnimatedSprite _mob;
+        private string animationMob;
 
         //animation boule de feu 
         private AnimatedSprite _bullet1;
@@ -106,7 +109,7 @@ namespace SmashCup_AllStars
 
 
             //var joueur 1
-            _perso1Position = new Vector2(900, 200);
+            _perso1Position = new Vector2(WIDTH_WINDOW / 2, HEIGHT_WINDOW / 2);
             _vitessePerso1 = 200;
             animationP1 = "idleD";
             lastDirP1 = "D";
@@ -122,6 +125,11 @@ namespace SmashCup_AllStars
             startYP2 = _perso2Position.Y;//Starting position
             jumpingP2 = false;//Init jumping to false
             jumpspeedP2 = 0;
+
+            //var Mob
+            _mobPosition = new Vector2(800, 650);
+            animationMob = "idle";
+
 
             //Boule de feu
             animationBullet1 = "dirG";
@@ -141,7 +149,7 @@ namespace SmashCup_AllStars
 
             //Timer
             _positionTimer = new Vector2(0, 120);
-            _timer = 10;
+            _timer = 180;
 
             //Bullets
             _positionBullet = new Vector2(800, 200);
@@ -169,6 +177,10 @@ namespace SmashCup_AllStars
             SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
             _perso2 = new AnimatedSprite(spriteSheetP2);
 
+            // spritesheet mob
+            SpriteSheet mobSheet = Content.Load<SpriteSheet>("mob.sf", new JsonContentLoader());
+            _mob = new AnimatedSprite(mobSheet);
+
             // spritesheet boule de feu
             SpriteSheet spriteSheetB1 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
             _bullet1 = new AnimatedSprite(spriteSheetB1);
@@ -179,6 +191,7 @@ namespace SmashCup_AllStars
             SpriteSheet bulletImage = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
             _bullet = new AnimatedSprite(bulletImage);
 
+            
 
             // police de vie
             _police = Content.Load<SpriteFont>("Font");
@@ -215,6 +228,9 @@ namespace SmashCup_AllStars
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
                 Rectangle _boxB1 = new Rectangle((int)_bulletPosition1.X - 286 / 4, (int)_bulletPosition1.Y - 146 / 4, 143, 73);
                 Rectangle _boxB2 = new Rectangle((int)_bulletPosition2.X - 286 / 4, (int)_bulletPosition2.Y - 146 / 4, 143, 73);
+                Rectangle _boxMob = new Rectangle((int)_mobPosition.X, (int)_mobPosition.Y, 750, 900); // collision pour que les joueurs lui tire dessus
+                Rectangle _boxMobRangeG = new Rectangle((int)_mobPosition.X - 750, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
+                Rectangle _boxMobRangeD = new Rectangle((int)_mobPosition.X, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
                 if (_boxB2.Intersects(_boxPerso1))
                 {
                     _vieperso1--;
@@ -367,6 +383,24 @@ namespace SmashCup_AllStars
                     }
                 }
 
+                //Direction du mob selon le joueur
+                if (_perso1Position.X >= _mobPosition.X)
+                {
+                    animationMob = "idleD";
+                    if(_boxPerso1.Intersects(_boxMobRangeD))
+                    {
+                        _mobPosition.X++;
+                    }
+                }
+                else
+                {
+                    animationMob = "idleG";
+                    if (_boxPerso1.Intersects(_boxMobRangeG))
+                    {
+                        _mobPosition.X--;
+                    }
+                }
+                
 
                 //Direction dans laquelles regarder
                 if (lastDirP1 == "D")
@@ -688,7 +722,8 @@ namespace SmashCup_AllStars
             _bullet2.Update(deltaSeconds);
             //_bullet.Update(deltaSeconds);
             //_persoRed.Update(gameTime);
-
+            _mob.Play(animationMob);
+            _mob.Update(deltaSeconds);
             _perso1.Play(animationP1);
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
@@ -724,17 +759,16 @@ namespace SmashCup_AllStars
             _renduMapPrincipale.Draw(matrix);
 
             //_game1.SpriteBatch.Draw(_persoRed.Perso1, _persoRed.Perso1Position);
-           
-
 
             _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
             _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
             _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
 
-
             Vector2 scalem = new Vector2((float)scaleX * 1.5f, (float)scaleY * 1.5f);
+            Vector2 scalem2 = new Vector2((float)scaleX * 2f, (float)scaleY * 1.8f);
             _game1.SpriteBatch.Draw(_perso1, _perso1Position);
             _game1.SpriteBatch.Draw(_perso2, _perso2Position);
+            _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
             if (deplacementB1 == true)
                 _game1.SpriteBatch.Draw(_bullet1, _bulletPosition1, 0, scalem);
             if (deplacementB2 == true)
