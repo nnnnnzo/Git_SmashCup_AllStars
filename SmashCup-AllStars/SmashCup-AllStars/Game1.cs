@@ -21,7 +21,7 @@ namespace SmashCup_AllStars
    
     public class Game1 : Game
     {
-       
+       /*
         private TiledMapTileLayer _mapLayerSol;
 
         private GraphicsDeviceManager _graphics;
@@ -31,6 +31,7 @@ namespace SmashCup_AllStars
         private int _vitessePerso1;
         private string animationP1;
         private string lastDirP1;
+       */
 
         /*
         private Vector2 _perso2Position;
@@ -51,9 +52,11 @@ namespace SmashCup_AllStars
         private ScreenFin _screenFin;
         private readonly ScreenManager _screenManager;
         private Ecran _ecranEnCours;
+        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager _graphics;
 
-        
-        
+
+
 
         private MouseState _mouseState;
 
@@ -66,13 +69,13 @@ namespace SmashCup_AllStars
         // J'encapsule Graphic et spritebatch pour pouvoir les réutiliser dans les autres classes.
         public GraphicsDeviceManager Graphics { get => _graphics; set => _graphics = value; }
         public SpriteBatch SpriteBatch { get => _spriteBatch; set => _spriteBatch = value; }
-        public Vector2 Perso1PositionGame1 { get => _perso1PositionGame1; set => _perso1PositionGame1 = value; }
+       // public Vector2 Perso1PositionGame1 { get => _perso1PositionGame1; set => _perso1PositionGame1 = value; }
 
         /*blabla*/
         /*Test modif Gab*/
 
         //Test nouveau perso avec une classe sprite
-        private Sprite _persoTest;
+       // private Sprite _persoTest;
 
         /*
 
@@ -91,7 +94,7 @@ namespace SmashCup_AllStars
 
         */
 
-
+        /*
         private SpriteFont _police;
         //vie perso 1
         private int _vieperso1;
@@ -102,6 +105,7 @@ namespace SmashCup_AllStars
 
         public Vector2 _finPosition;
         public Vector2 _tailleTexteFin;
+        */
 
 
 
