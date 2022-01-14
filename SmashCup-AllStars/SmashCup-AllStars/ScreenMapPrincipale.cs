@@ -184,7 +184,7 @@ namespace SmashCup_AllStars
             _perso2 = new AnimatedSprite(spriteSheetP2);
 
             // spritesheet mob
-            SpriteSheet mobSheet = Content.Load<SpriteSheet>("mob.sf", new JsonContentLoader());
+            SpriteSheet mobSheet = Content.Load<SpriteSheet>("mob1.sf", new JsonContentLoader());
             _mob = new AnimatedSprite(mobSheet);
 
             // spritesheet boule de feu
@@ -430,33 +430,58 @@ namespace SmashCup_AllStars
                 }
 
                 //Direction du mob selon le joueur (IA)
-                if (_perso1Position.X > _mobPosition.X)
+                if (_vieMob <= 6 && _vieMob > 0)
                 {
-                    animationMob = "idleD";
-                    if(_boxPerso1.Intersects(_boxMobRangeD))
+                    if (_perso1Position.X > _mobPosition.X)
                     {
-                        _mobPosition.X++;
+                        animationMob = "rageD";
+                        if (_boxPerso1.Intersects(_boxMobRangeD))
+                        {
+                            _mobPosition.X++;
+                        }
                     }
-                }
-                else if (_perso1Position.X < _mobPosition.X)
-                {
-                    animationMob = "idleG";
-                    if (_boxPerso1.Intersects(_boxMobRangeG))
+                    else if (_perso1Position.X < _mobPosition.X)
                     {
-                        _mobPosition.X--;
+                        animationMob = "rageG";
+                        if (_boxPerso1.Intersects(_boxMobRangeG))
+                        {
+                            _mobPosition.X--;
+                        }
+                    }
+                    else
+                    {
+                        animationMob = "rageG";
                     }
                 }
                 else
                 {
-                    animationMob = "idleG";
+                    if (_perso1Position.X > _mobPosition.X)
+                    {
+                        animationMob = "idleD";
+                        if (_boxPerso1.Intersects(_boxMobRangeD))
+                        {
+                            _mobPosition.X++;
+                        }
+                    }
+                    else if (_perso1Position.X < _mobPosition.X)
+                    {
+                        animationMob = "idleG";
+                        if (_boxPerso1.Intersects(_boxMobRangeG))
+                        {
+                            _mobPosition.X--;
+                        }
+                    }
+                    else
+                    {
+                        animationMob = "idleG";
+                    }
                 }
 
-                if(_vieMob <= 6)
+                if(_vieMob == 0)
                 {
-                    animationMob = "idleD";
+                    animationMob = "mort";
                 }
                 
-
 
                 //Direction dans laquelles regarder
                 if (lastDirP1 == "D")

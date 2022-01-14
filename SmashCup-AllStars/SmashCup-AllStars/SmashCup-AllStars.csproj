@@ -59,10 +59,10 @@
     <None Update="Content\IceMap.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\mob.sf">
+    <None Update="Content\mob.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\mobspritesheet.png">
+    <None Update="Content\mob1.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\musicMenu3.mp3">
