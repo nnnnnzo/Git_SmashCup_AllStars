@@ -208,6 +208,7 @@ namespace SmashCup_AllStars
 
                 KeyboardState keyboardState = Keyboard.GetState();
 
+                _currentCooldown += deltaSeconds;
                 //colisions
                 Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
@@ -222,6 +223,24 @@ namespace SmashCup_AllStars
                     _vieperso2--;
                 }
 
+
+                if (keyboardState.IsKeyDown(Keys.R))
+                {
+                    if (_currentCooldown >= _definedCooldown)
+                    {
+                        bullets.Add(_perso1Position);
+                        _currentCooldown = 0;
+                    }
+                }
+                for (int i = 0; i < bullets.Count; i++)
+                {
+                    float x = bullets[i].X;
+                    x += walkSpeedBdf;
+                    bullets[i] = new Vector2(x, bullets[i].Y);
+
+                }
+
+
                 //bdf perso rouge (1)
                 if (deplacementB1)
                 {
@@ -230,7 +249,6 @@ namespace SmashCup_AllStars
                         animationBullet1 = "dirD";
                         if (_bulletPosition1.X > 2800 || _boxB1.Intersects(_boxPerso2))
                         {
-                            _bulletPosition1 = new Vector2(100, 100);
                             deplacementB1 = false;
                         }
                         else
@@ -244,7 +262,6 @@ namespace SmashCup_AllStars
                         animationBullet1 = "dirG";
                         if (_bulletPosition1.X < 0 || _boxB1.Intersects(_boxPerso2))
                         {
-                            _bulletPosition1 = new Vector2(100, 100);
                             deplacementB1 = false;
                         }
                         else
@@ -271,7 +288,6 @@ namespace SmashCup_AllStars
                         animationBullet2 = "dirD";
                         if (_bulletPosition2.X > 2800 || _boxB2.Intersects(_boxPerso1))
                         {
-                            _bulletPosition2 = new Vector2(100, 100);
                             deplacementB2 = false;
                         }
                         else
@@ -285,7 +301,6 @@ namespace SmashCup_AllStars
                         animationBullet2 = "dirG";
                         if (_bulletPosition2.X < 0 || _boxB2.Intersects(_boxPerso1))
                         {
-                            _bulletPosition2 = new Vector2(100, 100);
                             deplacementB2 = false;
                         }
                         else
@@ -305,6 +320,8 @@ namespace SmashCup_AllStars
                         _bulletPosition2.Y = _bulletPosition2.Y + 75;
                     }
                 }
+            }
+            /*
             _currentCooldown += deltaSeconds;
             //colisions
             Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
@@ -417,6 +434,7 @@ namespace SmashCup_AllStars
                     _bulletPosition2.Y = _bulletPosition2.Y + 75;
                 }
             }
+            */
 
                 //Jump Joueur 1
                 if (jumpingP1)
