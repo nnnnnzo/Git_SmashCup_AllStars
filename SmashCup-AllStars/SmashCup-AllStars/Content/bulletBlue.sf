@@ -1,6 +1,6 @@
 {
   "textureAtlas": {
-    "texture": "bulletImage.png",
+    "texture": "bulletBlueImage.png",
     "regionWidth": 154,
     "regionHeight": 125
   },

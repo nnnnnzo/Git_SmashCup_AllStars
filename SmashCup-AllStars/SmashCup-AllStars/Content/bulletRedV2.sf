@@ -1,7 +1,7 @@
 {
   "textureAtlas": {
-    "texture": "bulletImage.png",
-    "regionWidth": 154,
+    "texture": "bulletRedIm2.png",
+    "regionWidth": 155,
     "regionHeight": 125
   },
   "cycles": {
@@ -9,7 +9,7 @@
       "frames": [0,1,2,3]
     },
     "dirD": {
-      "frames": [7,6,5,4]
+      "frames": [11,10,9,8]
     }
   }
 }

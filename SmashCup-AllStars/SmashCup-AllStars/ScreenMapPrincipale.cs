@@ -22,7 +22,8 @@ namespace SmashCup_AllStars
         private TiledMapRenderer _renduMapPrincipale;
         private TiledMapTileLayer _mapLayerSol;
         private float _definedCooldown = 0.5f;
-        private float _currentCooldown;
+        private float _currentCooldownP1;
+        private float _currentCooldownP2;
 
         private Vector2 _perso1Position;
         private AnimatedSprite _perso1;
@@ -54,11 +55,25 @@ namespace SmashCup_AllStars
 
         // Animation bullets
 
-        private AnimatedSprite _bullet;
-        private Vector2 _positionBullet;
-        private string _annimationBullet;
+        private AnimatedSprite _bulletD1;
+        private Vector2 _positionBulletD1;
+        private string _annimationBulletD1;
+        List<Vector2> bulletsD1;
 
-        List<Vector2> bullets;
+        private AnimatedSprite _bulletG1;
+        private Vector2 _positionBulletG1;
+        private string _annimationBulletG1;
+        List<Vector2> bulletsG1;
+
+        private AnimatedSprite _bulletD2;
+        private Vector2 _positionBulletD2;
+        private string _annimationBulletD2;
+        List<Vector2> bulletsD2;
+
+        private AnimatedSprite _bulletG2;
+        private Vector2 _positionBulletG2;
+        private string _annimationBulletG2;
+        List<Vector2> bulletsG2;
 
 
         private SpriteFont _police;
@@ -102,7 +117,8 @@ namespace SmashCup_AllStars
 
             // joueur 1
             //_persoRed = new PersoRed();
-            _currentCooldown = _definedCooldown;
+            _currentCooldownP1 = _definedCooldown;
+            _currentCooldownP2 = _definedCooldown;
 
 
             //var joueur 1
@@ -141,11 +157,15 @@ namespace SmashCup_AllStars
 
             //Timer
             _positionTimer = new Vector2(0, 120);
-            _timer = 10;
+            _timer = 500;
 
             //Bullets
-            _positionBullet = new Vector2(800, 200);
-            _annimationBullet = "dirD";
+            //_positionBulletD1 = new Vector2(800, 200);
+            _annimationBulletD1 = "dirD";
+            _annimationBulletG1 = "dirG";
+
+            _annimationBulletD2 = "dirD";
+            _annimationBulletG2 = "dirG";
 
 
 
@@ -175,10 +195,21 @@ namespace SmashCup_AllStars
             SpriteSheet spriteSheetB2 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
             _bullet2 = new AnimatedSprite(spriteSheetB2);
 
-            bullets = new List<Vector2>();
-            SpriteSheet bulletImage = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
-            _bullet = new AnimatedSprite(bulletImage);
+            bulletsD1 = new List<Vector2>();
+            SpriteSheet bulletD1Image = Content.Load<SpriteSheet>("bulletRedV2.sf", new JsonContentLoader());
+            _bulletD1 = new AnimatedSprite(bulletD1Image);
 
+            bulletsG1 = new List<Vector2>();
+            SpriteSheet bulletG1Image = Content.Load<SpriteSheet>("bulletRedV2.sf", new JsonContentLoader());
+            _bulletG1 = new AnimatedSprite(bulletG1Image);
+
+            bulletsD2 = new List<Vector2>();
+            SpriteSheet bulletD2Image = Content.Load<SpriteSheet>("bulletBlueV2.sf", new JsonContentLoader());
+            _bulletD2 = new AnimatedSprite(bulletD2Image);
+
+            bulletsG2 = new List<Vector2>();
+            SpriteSheet bulletG2Image = Content.Load<SpriteSheet>("bulletBlueV2.sf", new JsonContentLoader());
+            _bulletG2 = new AnimatedSprite(bulletG2Image);
 
             // police de vie
             _police = Content.Load<SpriteFont>("Font");
@@ -209,7 +240,8 @@ namespace SmashCup_AllStars
 
                 KeyboardState keyboardState = Keyboard.GetState();
 
-                _currentCooldown += deltaSeconds;
+                _currentCooldownP1 += deltaSeconds;
+                _currentCooldownP2 += deltaSeconds;
                 //colisions
                 Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
@@ -227,17 +259,69 @@ namespace SmashCup_AllStars
 
                 if (keyboardState.IsKeyDown(Keys.R))
                 {
-                    if (_currentCooldown >= _definedCooldown)
+                    if (_currentCooldownP1 >= _definedCooldown)
                     {
-                        bullets.Add(_perso1Position);
-                        _currentCooldown = 0;
+                        if(lastDirP1 == "D")
+                        {
+                            bulletsD1.Add(new Vector2(_perso1Position.X + 50, _perso1Position.Y + 60));
+                            _currentCooldownP1 = 0;
+                        }
+                        else
+                        {
+                            bulletsG1.Add(new Vector2(_perso1Position.X - 50, _perso1Position.Y + 60));
+                            _currentCooldownP1 = 0;
+                        }
+
                     }
                 }
-                for (int i = 0; i < bullets.Count; i++)
+
+                if (keyboardState.IsKeyDown(Keys.RightAlt))
                 {
-                    float x = bullets[i].X;
+                    if (_currentCooldownP2 >= _definedCooldown)
+                    {
+                        if (lastDirP2 == "D")
+                        {
+                            bulletsD2.Add(new Vector2(_perso2Position.X+50, _perso2Position.Y + 60));
+                            _currentCooldownP2 = 0;
+                        }
+                        else
+                        {
+                            bulletsG2.Add(new Vector2(_perso2Position.X - 50, _perso2Position.Y + 60));
+                            _currentCooldownP2 = 0;
+                        }
+
+                    }
+                }
+
+                for (int i = 0; i < bulletsD1.Count; i++)
+                {
+                    float x = bulletsD1[i].X;
                     x += walkSpeedBdf;
-                    bullets[i] = new Vector2(x, bullets[i].Y);
+                    bulletsD1[i] = new Vector2(x, bulletsD1[i].Y);
+
+                }
+
+                for (int i = 0; i < bulletsG1.Count; i++)
+                {
+                    float x = bulletsG1[i].X;
+                    x -= walkSpeedBdf;
+                    bulletsG1[i] = new Vector2(x, bulletsG1[i].Y);
+
+                }
+
+                
+                for (int i = 0; i < bulletsD2.Count; i++)
+                {
+                    float x = bulletsD2[i].X;
+                    x += walkSpeedBdf;
+                    bulletsD2[i] = new Vector2(x, bulletsD2[i].Y);
+
+                }
+                for (int i = 0; i < bulletsG2.Count; i++)
+                {
+                    float x = bulletsG2[i].X;
+                    x -= walkSpeedBdf;
+                    bulletsG2[i] = new Vector2(x, bulletsG2[i].Y);
 
                 }
 
@@ -441,238 +525,6 @@ namespace SmashCup_AllStars
             else
                 _timer = -1;
 
-            /*
-            _currentCooldown += deltaSeconds;
-            //colisions
-            Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
-            Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
-            Rectangle _boxB1 = new Rectangle((int)_bulletPosition1.X - 286 / 4, (int)_bulletPosition1.Y - 146 / 4, 143, 73);
-            Rectangle _boxB2 = new Rectangle((int)_bulletPosition2.X - 286 / 4, (int)_bulletPosition2.Y - 146 / 4, 143, 73);
-            if (_boxB2.Intersects(_boxPerso1))
-            {
-                _vieperso1--;
-            }
-            if (_boxB1.Intersects(_boxPerso2))
-            {
-                _vieperso2--;
-            }
-
-
-            if (keyboardState.IsKeyDown(Keys.R))
-            {
-                if (_currentCooldown >= _definedCooldown)
-                {
-                    bullets.Add(_perso1Position);
-                    _currentCooldown = 0;
-                }
-            }
-            for (int i = 0; i < bullets.Count; i++)
-            {
-                  float x = bullets[i].X;
-                  x += walkSpeedBdf;
-                  bullets[i] = new Vector2(x, bullets[i].Y);
-  
-            }
-
-
-            //bdf perso rouge (1)
-            if (deplacementB1)
-            {
-                if (_bulletPositionDepart1 == "D")
-                {
-                    animationBullet1 = "dirD";
-                    if (_bulletPosition1.X > 2800 || _boxB1.Intersects(_boxPerso2))
-                    {
-                        deplacementB1 = false;
-                    }
-                    else
-                    {
-                        //animationBullet2 = "dirD";
-                        _bulletPosition1.X += walkSpeedBdf;
-                    }
-                }
-                else
-                {
-                    animationBullet1 = "dirG";
-                    if (_bulletPosition1.X < 0 || _boxB1.Intersects(_boxPerso2))
-                    {
-                        deplacementB1 = false;
-                    }
-                    else
-                    {
-                        _bulletPosition1.X -= walkSpeedBdf;
-                    }
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.Space))
-                {
-                    deplacementB1 = true;
-                    _bulletPositionDepart1 = lastDirP1;
-                    _bulletPosition1 = _perso1Position;
-                    _bulletPosition1.Y = _bulletPosition1.Y + 75;
-                }
-            }
-            //bdf perso bleu (2)
-            if (deplacementB2)
-            {
-                if (_bulletPositionDepart2 == "D")
-                {
-                    animationBullet2 = "dirD";
-                    if (_bulletPosition2.X > 2800 || _boxB2.Intersects(_boxPerso1))
-                    {
-                        deplacementB2 = false;
-                    }
-                    else
-                    {
-                        //animationBullet2 = "dirD";
-                        _bulletPosition2.X += walkSpeedBdf;
-                    }
-                }
-                else
-                {
-                    animationBullet2 = "dirG";
-                    if (_bulletPosition2.X < 0 || _boxB2.Intersects(_boxPerso1))
-                    {
-                        deplacementB2 = false;
-                    }
-                    else
-                    {
-                        //animationBullet2 = "dirG";
-                        _bulletPosition2.X -= walkSpeedBdf;
-                    }
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.RightControl))
-                {
-                    deplacementB2 = true;
-                    _bulletPositionDepart2 = lastDirP2;
-                    _bulletPosition2 = _perso2Position;
-                    _bulletPosition2.Y = _bulletPosition2.Y + 75;
-                }
-            }
-            */
-
-            /*
-
-            //Jump Joueur 1
-            if (jumpingP1)
-            {
-                _perso1Position.Y += jumpspeedP1;//Making it go up
-                jumpspeedP1 += 1;//Some math (explained later)
-                if (_perso1Position.Y >= startYP1)
-                //If it's farther than ground
-                {
-                    _perso1Position.Y = startYP1;//Then set it on
-                    jumpingP1 = false;
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.Z))
-                {
-                    jumpingP1 = true;
-                    jumpspeedP1 = -44;//Give it upward thrust
-                }
-            }
-
-
-            //Jump Joueur 2
-            if (jumpingP2)
-            {
-                _perso2Position.Y += jumpspeedP2;//Making it go up
-                jumpspeedP2 += 1;//Some math (explained later)
-                if (_perso2Position.Y >= startYP2)
-                //If it's farther than ground
-                {
-                    _perso2Position.Y = startYP2;//Then set it on
-                    jumpingP2 = false;
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.Up))
-                {
-                    jumpingP2 = true;
-                    jumpspeedP2 = -44;//Give it upward thrust
-                }
-            }
-
-
-            //Direction dans laquelles regarder
-            if (lastDirP1 == "D")
-                animationP1 = "idleD";
-            else
-                animationP1 = "idleG";
-
-
-            if (lastDirP2 == "D")
-                animationP2 = "idleD";
-            else
-                animationP2 = "idleG";
-
-            //Deplacement Joueur 1
-            if (keyboardState.IsKeyDown(Keys.D))
-            {
-                animationP1 = "runD";
-                _perso1Position.X += walkSpeedPerso1;
-                lastDirP1 = "D";
-            }
-
-
-
-            if (keyboardState.IsKeyDown(Keys.Q))
-            {
-                animationP1 = "runG";
-                _perso1Position.X -= walkSpeedPerso1;
-                lastDirP1 = "G";
-            }
-
-            ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
-            ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
-
-
-            int tile1 = MapLayerSol.GetTile(x1, y1).GlobalIdentifier;
-            if (tile1 == 0)
-            {
-                _perso1Position.Y += 14;
-            }
-            else
-                startYP1 = _perso1Position.Y;
-
-            ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
-            ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
-
-
-            int tile2 = MapLayerSol.GetTile(x2, y2).GlobalIdentifier;
-            if (tile2 == 0)
-            {
-                _perso2Position.Y += 14;
-            }
-            else
-                startYP2 = _perso2Position.Y;
-
-
-            //Deplacement Joueur 2
-            if (keyboardState.IsKeyDown(Keys.Right))
-            {
-                animationP2 = "runD";
-                _perso2Position.X += walkSpeedPerso2;
-                lastDirP2 = "D";
-            }
-
-            if (keyboardState.IsKeyDown(Keys.Left))
-            {
-                animationP2 = "runG";
-                _perso2Position.X -= walkSpeedPerso2;
-                lastDirP2 = "G";
-            }
-            */
-
-
             // TODO: Add your update logic here
 
 
@@ -693,13 +545,23 @@ namespace SmashCup_AllStars
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
             _bullet2.Play(animationBullet2);
-            _bullet.Play(_annimationBullet);
+            _bulletD1.Play(_annimationBulletD1);
+            _bulletG1.Play(_annimationBulletG1);
+
+            _bulletD2.Play(_annimationBulletD2);
+            _bulletG2.Play(_annimationBulletG2);
             _perso1.Update(deltaSeconds);
+
             //_persoRed.Perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
             _bullet1.Update(deltaSeconds);
             _bullet2.Update(deltaSeconds);
-            _bullet.Update(deltaSeconds);
+
+            _bulletD1.Update(deltaSeconds);
+            _bulletG1.Update(deltaSeconds);
+
+            _bulletD2.Update(deltaSeconds);
+            _bulletG2.Update(deltaSeconds);
             //_persoRed.Update(gameTime);
 
             //base.Update(gameTime);
@@ -720,7 +582,8 @@ namespace SmashCup_AllStars
             var matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
             var matrixMin = Matrix.CreateScale(scaleX, scaleY, 0.5f);
 
-            _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
+
+            _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             _renduMapPrincipale.Draw(matrix);
 
             //_game1.SpriteBatch.Draw(_persoRed.Perso1, _persoRed.Perso1Position);
@@ -732,17 +595,29 @@ namespace SmashCup_AllStars
             _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
 
 
-            Vector2 scalem = new Vector2((float)scaleX * 1.5f, (float)scaleY * 1.5f);
+            Vector2 scalem = new Vector2((float)scaleX * 1.65f, (float)scaleY * 1.35f);
             _game1.SpriteBatch.Draw(_perso1, _perso1Position);
             _game1.SpriteBatch.Draw(_perso2, _perso2Position);
             if (deplacementB1 == true)
                 _game1.SpriteBatch.Draw(_bullet1, _bulletPosition1, 0, scalem);
             if (deplacementB2 == true)
                 _game1.SpriteBatch.Draw(_bullet2, _bulletPosition2, 0, scalem);
-            for (int i = 0; i < bullets.Count; i++)
-                _game1.SpriteBatch.Draw(_bullet, bullets[i], 0, scalem);
 
-         //_game1.SpriteBatch.Draw(_bullet, _positionBullet);
+
+            for (int i = 0; i < bulletsD1.Count; i++)
+                _game1.SpriteBatch.Draw(_bulletD1, bulletsD1[i], 0, scalem);
+
+            for (int i = 0; i < bulletsG1.Count; i++)
+                _game1.SpriteBatch.Draw(_bulletG1, bulletsG1[i], 0, scalem);
+
+            for (int i = 0; i < bulletsD2.Count; i++)
+                _game1.SpriteBatch.Draw(_bulletD2, bulletsD2[i], 0, scalem);
+
+            for (int i = 0; i < bulletsG2.Count; i++)
+                _game1.SpriteBatch.Draw(_bulletG2, bulletsG2[i], 0, scalem);
+
+
+            //_game1.SpriteBatch.Draw(_bullet, _positionBullet);
             //_persoRed.Draw(_game1.SpriteBatch);
             _game1.SpriteBatch.End();
 
