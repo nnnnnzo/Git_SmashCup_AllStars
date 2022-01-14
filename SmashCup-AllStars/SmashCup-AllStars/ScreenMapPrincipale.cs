@@ -250,6 +250,7 @@ namespace SmashCup_AllStars
                         animationBullet1 = "dirD";
                         if (_bulletPosition1.X > 2800 || _boxB1.Intersects(_boxPerso2))
                         {
+                            _bulletPosition1 = new Vector2(800, -100);
                             deplacementB1 = false;
                         }
                         else
@@ -263,6 +264,7 @@ namespace SmashCup_AllStars
                         animationBullet1 = "dirG";
                         if (_bulletPosition1.X < 0 || _boxB1.Intersects(_boxPerso2))
                         {
+                            _bulletPosition1 = new Vector2(800, -100);
                             deplacementB1 = false;
                         }
                         else
@@ -289,6 +291,7 @@ namespace SmashCup_AllStars
                         animationBullet2 = "dirD";
                         if (_bulletPosition2.X > 2800 || _boxB2.Intersects(_boxPerso1))
                         {
+                            _bulletPosition2 = new Vector2(800, -100);
                             deplacementB2 = false;
                         }
                         else
@@ -302,6 +305,7 @@ namespace SmashCup_AllStars
                         animationBullet2 = "dirG";
                         if (_bulletPosition2.X < 0 || _boxB2.Intersects(_boxPerso1))
                         {
+                            _bulletPosition2 = new Vector2(800, -100);
                             deplacementB2 = false;
                         }
                         else
@@ -724,13 +728,16 @@ namespace SmashCup_AllStars
             _renduMapPrincipale.Draw(matrix);
 
             //_game1.SpriteBatch.Draw(_persoRed.Perso1, _persoRed.Perso1Position);
+
+
            
-
-
-            _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
-            _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
-            _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
-
+            
+                _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
+                _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
+            if (_timer > 0)
+            {
+                _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
+            }
 
             Vector2 scalem = new Vector2((float)scaleX * 1.5f, (float)scaleY * 1.5f);
             _game1.SpriteBatch.Draw(_perso1, _perso1Position);

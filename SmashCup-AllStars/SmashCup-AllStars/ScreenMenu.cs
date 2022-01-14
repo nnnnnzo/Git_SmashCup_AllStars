@@ -17,7 +17,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SmashCup_AllStars
 {
-   
+   public enum Touche { Oui,Non}
     public class ScreenMenu: GameScreen
     {
 
@@ -27,10 +27,24 @@ namespace SmashCup_AllStars
 
         private Texture2D _backgroundImageMenu;
 
+        private Texture2D _reglesImage;
+        private Texture2D _controlImage;
+
+        private Texture2D _reglesTexte;
+        private Vector2 _positionReglesTexte;
+
+        private Texture2D _controlKey;
+        private Vector2 _positionControKey;
+
+
+       
+
         public static int WIDTH_WINDOW = 1200;
         public static int HEIGHT_WINDOW = 700;
 
         private Song _musicMenu;
+
+
 
        
         public ScreenMenu(Game1 game) : base(game)
@@ -47,7 +61,11 @@ namespace SmashCup_AllStars
             _game1.Graphics.ApplyChanges();
 
     
-            _positionEnterToStart = new Vector2(450, 825);
+            _positionEnterToStart = new Vector2(450, 625);
+            _positionControKey = new Vector2(525, 700);
+            _positionReglesTexte = new Vector2(650, 760);
+
+
 
         }
 
@@ -55,6 +73,11 @@ namespace SmashCup_AllStars
         {
             _backgroundImageMenu = Content.Load<Texture2D>("bgMenu");
             _enterToStart = Content.Load<Texture2D>("startEnter");
+            _reglesImage = Content.Load<Texture2D>("Règles");
+            _reglesTexte = Content.Load<Texture2D>("regleCorrection");
+            _controlImage = Content.Load<Texture2D>("Touches");
+
+            _controlKey = Content.Load<Texture2D>("holdControlKey");
 
            /* _musicMenu = Content.Load<Song>("musicMenu3");
                 MediaPlayer.Play(_musicMenu);
@@ -67,8 +90,7 @@ namespace SmashCup_AllStars
 
         public override void Update(GameTime gameTime)
         {
-
-        
+            
 
         }
 
@@ -85,6 +107,22 @@ namespace SmashCup_AllStars
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, transformMatrix: matrix);
             _game1.SpriteBatch.Draw(_backgroundImageMenu, new Vector2(scaleX, scaleY), Color.White);
             _game1.SpriteBatch.Draw(_enterToStart, _positionEnterToStart, Color.White);
+            _game1.SpriteBatch.Draw(_reglesTexte,_positionReglesTexte,Color.White);
+            _game1.SpriteBatch.Draw(_controlKey, _positionControKey, Color.White);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.E))
+            {
+                _game1.SpriteBatch.Draw(_reglesImage, new Vector2(scaleX, scaleY), Color.White);
+
+            }
+
+            if(Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                _game1.SpriteBatch.Draw(_controlImage, new Vector2(scaleX, scaleY), Color.White);
+
+
+            }
+          
             _game1.SpriteBatch.End();
             
 
