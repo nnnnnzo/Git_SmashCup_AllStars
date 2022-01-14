@@ -237,6 +237,8 @@ namespace SmashCup_AllStars
                 Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 100, 400, 600); // collision pour que les joueurs lui tire dessus
                 Rectangle _boxMobRangeG = new Rectangle((int)_mobPosition.X - 750, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
                 Rectangle _boxMobRangeD = new Rectangle((int)_mobPosition.X, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
+                
+                
                 if (_boxB2.Intersects(_boxPerso1))
                 {
                     _vieperso1--;
@@ -245,8 +247,6 @@ namespace SmashCup_AllStars
                 {
                     _vieperso2--;
                 }
-
-
                 if (keyboardState.IsKeyDown(Keys.R))
                 {
                     if (_currentCooldown >= _definedCooldown)
@@ -279,7 +279,7 @@ namespace SmashCup_AllStars
                             _vieperso2--;
                             deplacementB1 = false;
                         }
-                        if(_boxB1.Intersects(_boxMob))
+                        if(_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB1 = false;
@@ -302,7 +302,7 @@ namespace SmashCup_AllStars
                             _vieperso2--;
                             deplacementB1 = false;
                         }
-                        if (_boxB1.Intersects(_boxMob))
+                        if (_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB1 = false;
@@ -338,7 +338,7 @@ namespace SmashCup_AllStars
                             _vieperso2--;
                             deplacementB2 = false;
                         }
-                        if (_boxB1.Intersects(_boxMob))
+                        if (_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB2 = false;
@@ -352,7 +352,7 @@ namespace SmashCup_AllStars
                     else
                     {
                         animationBullet2 = "dirG";
-                        if (_bulletPosition2.X < 0 || _boxB2.Intersects(_boxPerso1))
+                        if (_bulletPosition2.X < 0)
                         {
                             deplacementB2 = false;
                         }
@@ -361,7 +361,7 @@ namespace SmashCup_AllStars
                             _vieperso2--;
                             deplacementB2 = false;
                         }
-                        if (_boxB1.Intersects(_boxMob))
+                        if (_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB2 = false;
