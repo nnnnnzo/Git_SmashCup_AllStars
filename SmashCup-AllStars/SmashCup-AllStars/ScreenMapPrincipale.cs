@@ -41,6 +41,8 @@ namespace SmashCup_AllStars
         private Vector2 _mobPosition;
         private AnimatedSprite _mob;
         private string animationMob;
+        private bool spawnMob;
+        private float _timerMort;
 
         //animation boule de feu 
         private AnimatedSprite _bullet1;
@@ -78,7 +80,6 @@ namespace SmashCup_AllStars
         //timer
         private float _timer;
         private Vector2 _positionTimer;
-
         public Vector2 _finPosition;
         public Vector2 _tailleTexteFin;
 
@@ -130,9 +131,6 @@ namespace SmashCup_AllStars
             jumpingP2 = false;//Init jumping to false
             jumpspeedP2 = 0;
 
-            //var Mob
-            _mobPosition = new Vector2(800, 650);
-            animationMob = "idleG";
 
 
             //Boule de feu
@@ -149,13 +147,20 @@ namespace SmashCup_AllStars
             _vieperso1 = 3;
             _positionVie2 = new Vector2(0, 60);
             _vieperso2 = 3;
+
             // Vie IA / Mob
             _positionVieMob = new Vector2(1200, 0);
             _vieMob = 12;
+            
+            //var Mob
+            _mobPosition = new Vector2(800, -650);
+            animationMob = "idleG";
 
             //Timer
             _positionTimer = new Vector2(0, 120);
             _timer = 180;
+
+            _timerMort = 2;
 
             //Bullets
             _positionBullet = new Vector2(800, 200);
@@ -279,7 +284,7 @@ namespace SmashCup_AllStars
                             _vieperso2--;
                             deplacementB1 = false;
                         }
-                        if(_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
+                        if(_boxB1.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB1 = false;
@@ -302,7 +307,7 @@ namespace SmashCup_AllStars
                             _vieperso2--;
                             deplacementB1 = false;
                         }
-                        if (_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
+                        if (_boxB1.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB1 = false;
@@ -333,12 +338,12 @@ namespace SmashCup_AllStars
                         {
                             deplacementB2 = false;
                         }
-                        if (_boxB1.Intersects(_boxPerso2))
+                        if (_boxB2.Intersects(_boxPerso1))
                         {
                             _vieperso2--;
                             deplacementB2 = false;
                         }
-                        if (_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
+                        if (_boxB2.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB2 = false;
@@ -356,12 +361,12 @@ namespace SmashCup_AllStars
                         {
                             deplacementB2 = false;
                         }
-                        if (_boxB1.Intersects(_boxPerso2))
+                        if (_boxB2.Intersects(_boxPerso1))
                         {
-                            _vieperso2--;
+                            _vieperso1--;
                             deplacementB2 = false;
                         }
-                        if (_boxB1.Intersects(_boxMob) || _boxB2.Intersects(_boxMob))
+                        if (_boxB2.Intersects(_boxMob))
                         {
                             _vieMob--;
                             deplacementB2 = false;
@@ -429,59 +434,82 @@ namespace SmashCup_AllStars
                     }
                 }
 
-                //Direction du mob selon le joueur (IA)
-                if (_vieMob <= 6 && _vieMob > 0)
+                if (_timer >= 100 && _timer <= 170 ) // temps où l'IA va apparaitre dans le jeu
                 {
-                    if (_perso1Position.X > _mobPosition.X)
-                    {
-                        animationMob = "rageD";
-                        if (_boxPerso1.Intersects(_boxMobRangeD))
-                        {
-                            _mobPosition.X++;
-                        }
-                    }
-                    else if (_perso1Position.X < _mobPosition.X)
-                    {
-                        animationMob = "rageG";
-                        if (_boxPerso1.Intersects(_boxMobRangeG))
-                        {
-                            _mobPosition.X--;
-                        }
-                    }
-                    else
-                    {
-                        animationMob = "rageG";
-                    }
+                    spawnMob = true;
                 }
                 else
                 {
-                    if (_perso1Position.X > _mobPosition.X)
-                    {
-                        animationMob = "idleD";
-                        if (_boxPerso1.Intersects(_boxMobRangeD))
-                        {
-                            _mobPosition.X++;
-                        }
-                    }
-                    else if (_perso1Position.X < _mobPosition.X)
-                    {
-                        animationMob = "idleG";
-                        if (_boxPerso1.Intersects(_boxMobRangeG))
-                        {
-                            _mobPosition.X--;
-                        }
-                    }
-                    else
-                    {
-                        animationMob = "idleG";
-                    }
+                    spawnMob = false;
                 }
 
-                if(_vieMob == 0)
+                if (_vieMob == 0) // si la vie de l'IA est égale à 0 on fait apparaitre le sprite de sa mort pendant 2s
                 {
                     animationMob = "mort";
+                    _timerMort--;
                 }
-                
+                if (_timerMort == 0)
+                {
+                    spawnMob = false;
+                }
+
+                if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
+                {
+                    _vieMob = 0;
+                }
+
+                if (spawnMob)
+                {
+                    _mobPosition = new Vector2(800, 650);
+                    //Direction du mob selon le joueur (IA)
+                    if (_vieMob > 6) // si la vie est supérieur à 6
+                    {
+                        if (_perso1Position.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
+                        {
+                            animationMob = "idleG";
+                            if (_boxPerso1.Intersects(_boxMobRangeD)) // permet de savoir si le personnage est dans la zone de détection du boss afin de le faire se déplacer
+                            {
+                                _mobPosition.X++;
+                            }
+                        }
+                        else if (_perso1Position.X < _mobPosition.X)
+                        {
+                            animationMob = "idleG";
+                            if (_boxPerso1.Intersects(_boxMobRangeG))
+                            {
+                                _mobPosition.X--;
+                            }
+                        }
+                        else if (_perso1Position.X == _mobPosition.X)
+                        {
+                            animationMob = "idleG";
+                        }
+                    }
+
+                    if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6
+                    {
+                        if (_perso1Position.X > _mobPosition.X)
+                        {
+                            animationMob = "rageG";
+                            if (_boxPerso1.Intersects(_boxMobRangeD))
+                            {
+                                _mobPosition.X++;
+                            }
+                        }
+                        else if (_perso1Position.X < _mobPosition.X)
+                        {
+                            animationMob = "rageG";
+                            if (_boxPerso1.Intersects(_boxMobRangeG))
+                            {
+                                _mobPosition.X--;
+                            }
+                        }
+                        else if (_perso1Position.X == _mobPosition.X)
+                        {
+                            animationMob = "rageG";
+                        }
+                    }
+                }
 
                 //Direction dans laquelles regarder
                 if (lastDirP1 == "D")
@@ -844,15 +872,19 @@ namespace SmashCup_AllStars
             _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
             _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
             _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
-            _game1.SpriteBatch.DrawString(_police, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.White);
+           // _game1.SpriteBatch.DrawString(_police, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.White);
 
 
             Vector2 scalem = new Vector2((float)scaleX * 1.5f, (float)scaleY * 1.5f);
             Vector2 scalem2 = new Vector2((float)scaleX * 2f, (float)scaleY * 1.6f);
             _game1.SpriteBatch.Draw(_perso1, _perso1Position);
             _game1.SpriteBatch.Draw(_perso2, _perso2Position);
-            _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
             //_game1.SpriteBatch.DrawRectangle(new RectangleF(300, 350, 400, 600), Color.Black, 1f);
+            if(spawnMob == true)
+            {
+                _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
+                _game1.SpriteBatch.DrawString(_police, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.White);
+            }
             if (deplacementB1 == true)
                 _game1.SpriteBatch.Draw(_bullet1, _bulletPosition1, 0, scalem);
             if (deplacementB2 == true)
