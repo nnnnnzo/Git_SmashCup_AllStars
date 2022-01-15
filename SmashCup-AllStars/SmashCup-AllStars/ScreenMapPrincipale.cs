@@ -153,7 +153,7 @@ namespace SmashCup_AllStars
             _vieMob = 12;
             
             //var Mob
-            _mobPosition = new Vector2(800, -650);
+            _mobPosition = new Vector2(800, 650);
             animationMob = "idleG";
 
             //Timer
@@ -219,15 +219,17 @@ namespace SmashCup_AllStars
         public override void Update(GameTime gameTime)
         {
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
+            float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
+            float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
+            float walkSpeedBdf = deltaSeconds * _vitesseBullet;
+            float deltaSecond = deltaSeconds / 3;
+            _timer = _timer - (deltaSeconds / 3);
             if (_timer > 0)
             {
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     _game1.Exit();
               
-                float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
-                float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
-                float walkSpeedBdf = deltaSeconds * _vitesseBullet;
-                _timer = _timer - (deltaSeconds / 3);
+                
 
 
 
@@ -240,8 +242,8 @@ namespace SmashCup_AllStars
                 Rectangle _boxB1 = new Rectangle((int)_bulletPosition1.X - 286 / 4, (int)_bulletPosition1.Y - 146 / 4, 143, 73);
                 Rectangle _boxB2 = new Rectangle((int)_bulletPosition2.X - 286 / 4, (int)_bulletPosition2.Y - 146 / 4, 143, 73);
                 Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 100, 400, 600); // collision pour que les joueurs lui tire dessus
-                Rectangle _boxMobRangeG = new Rectangle((int)_mobPosition.X - 750, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
-                Rectangle _boxMobRangeD = new Rectangle((int)_mobPosition.X, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
+                //Rectangle _boxMobRangeG = new Rectangle((int)_mobPosition.X - 750, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
+                //Rectangle _boxMobRangeD = new Rectangle((int)_mobPosition.X, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
                 
                 
                 if (_boxB2.Intersects(_boxPerso1))
@@ -443,12 +445,12 @@ namespace SmashCup_AllStars
                     spawnMob = false;
                 }
 
-                if (_vieMob == 0) // si la vie de l'IA est égale à 0 on fait apparaitre le sprite de sa mort pendant 2s
+                if (_vieMob == 0) // si la vie de l'IA est égale à 0 on fait apparaitre le sprite de sa mort pendant 2s (PS : ça marche)
                 {
-                    animationMob = "mort";
-                    _timerMort--;
+                    animationMob = "mortG";
+                    _timerMort = _timerMort - (deltaSeconds / 3);
                 }
-                if (_timerMort == 0)
+                if (_timerMort <= 0)
                 {
                     spawnMob = false;
                 }
@@ -460,25 +462,20 @@ namespace SmashCup_AllStars
 
                 if (spawnMob)
                 {
-                    _mobPosition = new Vector2(800, 650);
+                    //_mobPosition = new Vector2(800, 650);
                     //Direction du mob selon le joueur (IA)
                     if (_vieMob > 6) // si la vie est supérieur à 6
                     {
                         if (_perso1Position.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                         {
-                            animationMob = "idleG";
-                            if (_boxPerso1.Intersects(_boxMobRangeD)) // permet de savoir si le personnage est dans la zone de détection du boss afin de le faire se déplacer
-                            {
-                                _mobPosition.X++;
-                            }
+                            animationMob = "idleD";
+                            _mobPosition.X++;
+                            
                         }
                         else if (_perso1Position.X < _mobPosition.X)
                         {
                             animationMob = "idleG";
-                            if (_boxPerso1.Intersects(_boxMobRangeG))
-                            {
-                                _mobPosition.X--;
-                            }
+                            _mobPosition.X--;
                         }
                         else if (_perso1Position.X == _mobPosition.X)
                         {
@@ -490,19 +487,13 @@ namespace SmashCup_AllStars
                     {
                         if (_perso1Position.X > _mobPosition.X)
                         {
-                            animationMob = "rageG";
-                            if (_boxPerso1.Intersects(_boxMobRangeD))
-                            {
-                                _mobPosition.X++;
-                            }
+                            animationMob = "rageD";
+                            _mobPosition.X++;
                         }
                         else if (_perso1Position.X < _mobPosition.X)
                         {
                             animationMob = "rageG";
-                            if (_boxPerso1.Intersects(_boxMobRangeG))
-                            {
-                                _mobPosition.X--;
-                            }
+                            _mobPosition.X--;
                         }
                         else if (_perso1Position.X == _mobPosition.X)
                         {
@@ -832,7 +823,7 @@ namespace SmashCup_AllStars
             //_bullet.Update(deltaSeconds);
             //_persoRed.Update(gameTime);
             _mob.Play(animationMob);
-            _mob.Update(deltaSeconds);
+            _mob.Update(deltaSecond);
             _perso1.Play(animationP1);
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
