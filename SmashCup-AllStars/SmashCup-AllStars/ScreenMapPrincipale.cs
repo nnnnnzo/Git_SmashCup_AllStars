@@ -263,7 +263,7 @@ namespace SmashCup_AllStars
             {
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     _game1.Exit();
-              
+
                 float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
                 float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
                 float walkSpeedPersoTest = deltaSeconds * _persoBlue.VitesseBleu;
@@ -285,7 +285,7 @@ namespace SmashCup_AllStars
                 {
                     if (_currentCooldownP1 >= _definedCooldown)
                     {
-                        if(lastDirP1 == "D")
+                        if (lastDirP1 == "D")
                         {
                             bulletsD1.Add(new Vector2(_perso1Position.X + 50, _perso1Position.Y + 60));
                             _currentCooldownP1 = 0;
@@ -305,7 +305,7 @@ namespace SmashCup_AllStars
                     {
                         if (lastDirP2 == "D")
                         {
-                            bulletsD2.Add(new Vector2(_perso2Position.X+50, _perso2Position.Y + 60));
+                            bulletsD2.Add(new Vector2(_perso2Position.X + 50, _perso2Position.Y + 60));
                             _currentCooldownP2 = 0;
                         }
                         else
@@ -319,7 +319,7 @@ namespace SmashCup_AllStars
 
                 for (int i = 0; i < bulletsD1.Count; i++)
                 {
-                    
+
                     float x = bulletsD1[i].X;
                     x += walkSpeedBdf;
                     bulletsD1[i] = new Vector2(x, bulletsD1[i].Y);
@@ -365,13 +365,13 @@ namespace SmashCup_AllStars
                     lastDirP1 = "G";
                 }
                 */
-                
 
-               
-               
-                
+
+
+
+
                 ushort xTest = (ushort)(_persoRed.PositionPersoRed.X / 70 + 0.5);
-                ushort yTest = (ushort)(_persoRed.PositionPersoRed.Y/ 70 + 2.12);
+                ushort yTest = (ushort)(_persoRed.PositionPersoRed.Y / 70 + 2.12);
 
 
                 int tileTest = MapLayerSol.GetTile(xTest, yTest).GlobalIdentifier;
@@ -382,22 +382,11 @@ namespace SmashCup_AllStars
                 else
                 {
                     _startYPtest = _persoRed.PositionPersoRed;
-                    
+
                 }
-                
 
 
 
-               
-
-
-
-
-
-            }
-
-            else
-                _timer = -1;
 
                 for (int i = 0; i < bulletsD2.Count; i++)
                 {
@@ -540,16 +529,169 @@ namespace SmashCup_AllStars
                     _perso2Position.X -= walkSpeedPerso2;
                     lastDirP2 = "G";
                 }
+
+
+
+
+
+
+
+
             }
 
             else
                 _timer = -1;
 
+            /*
+            for (int i = 0; i < bulletsD2.Count; i++)
+            {
+                float x = bulletsD2[i].X;
+                x += walkSpeedBdf;
+                bulletsD2[i] = new Vector2(x, bulletsD2[i].Y);
+                Rectangle _colBoxD2 = new Rectangle((int)bulletsD2[i].X - 286 / 4, (int)bulletsD2[i].Y - 146 / 4, 143, 30);
+                if (_colBoxD2.Intersects(_boxPerso1))
+                {
+                    _vieperso1--;
+                    bulletsD2.RemoveAt(i);
+                }
+
+
+            }
+            for (int i = 0; i < bulletsG2.Count; i++)
+            {
+                float x = bulletsG2[i].X;
+                x -= walkSpeedBdf;
+                bulletsG2[i] = new Vector2(x, bulletsG2[i].Y);
+                Rectangle _colBoxG2 = new Rectangle((int)bulletsG2[i].X - 286 / 4, (int)bulletsG2[i].Y - 146 / 4, 143, 30);
+                if (_colBoxG2.Intersects(_boxPerso1))
+                {
+                    _vieperso1--;
+                    bulletsG2.RemoveAt(i);
+                }
+            }
+
+
+
+            //Jump Joueur 1
+            if (jumpingP1)
+            {
+                _perso1Position.Y += jumpspeedP1;//Making it go up
+                jumpspeedP1 += 1;//Some math (explained later)
+                if (_perso1Position.Y >= startYP1)
+                //If it's farther than ground
+                {
+                    _perso1Position.Y = startYP1;//Then set it on
+                    jumpingP1 = false;
+                }
+            }
+            else
+            {
+                if (keyboardState.IsKeyDown(Keys.Z))
+                {
+                    jumpingP1 = true;
+                    jumpspeedP1 = -44;//Give it upward thrust
+                }
+            }
+
+
+            //Jump Joueur 2
+            if (jumpingP2)
+            {
+                _perso2Position.Y += jumpspeedP2;//Making it go up
+                jumpspeedP2 += 1;//Some math (explained later)
+                if (_perso2Position.Y >= startYP2)
+                //If it's farther than ground
+                {
+                    _perso2Position.Y = startYP2;//Then set it on
+                    jumpingP2 = false;
+                }
+            }
+            else
+            {
+                if (keyboardState.IsKeyDown(Keys.Up))
+                {
+                    jumpingP2 = true;
+                    jumpspeedP2 = -44;//Give it upward thrust
+                }
+            }
+
+
+            //Direction dans laquelles regarder
+            if (lastDirP1 == "D")
+                animationP1 = "idleD";
+            else
+                animationP1 = "idleG";
+
+
+            if (lastDirP2 == "D")
+                animationP2 = "idleD";
+            else
+                animationP2 = "idleG";
+
+            //Deplacement Joueur 1
+            if (keyboardState.IsKeyDown(Keys.D))
+            {
+                animationP1 = "runD";
+                _perso1Position.X += walkSpeedPerso1;
+                lastDirP1 = "D";
+            }
+
+
+
+            if (keyboardState.IsKeyDown(Keys.Q))
+            {
+                animationP1 = "runG";
+                _perso1Position.X -= walkSpeedPerso1;
+                lastDirP1 = "G";
+            }
+
+            ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
+            ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
+
+
+            int tile1 = MapLayerSol.GetTile(x1, y1).GlobalIdentifier;
+            if (tile1 == 0)
+            {
+                _perso1Position.Y += 14;
+            }
+            else
+                startYP1 = _perso1Position.Y;
+
+            ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
+            ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
+
+
+            int tile2 = MapLayerSol.GetTile(x2, y2).GlobalIdentifier;
+            if (tile2 == 0)
+            {
+                _perso2Position.Y += 14;
+            }
+            else
+                startYP2 = _perso2Position.Y;
+
+
+            //Deplacement Joueur 2
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+                animationP2 = "runD";
+                _perso2Position.X += walkSpeedPerso2;
+                lastDirP2 = "D";
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Left))
+            {
+                animationP2 = "runG";
+                _perso2Position.X -= walkSpeedPerso2;
+                lastDirP2 = "G";
+            }
+            */
+
+
             // TODO: Add your update logic here
-        
 
 
-           // _perso1.Play(animationP1);
+
+            // _perso1.Play(animationP1);
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
             _bullet2.Play(animationBullet2);
@@ -571,7 +713,7 @@ namespace SmashCup_AllStars
             _bulletD2.Update(deltaSeconds);
             _bulletG2.Update(deltaSeconds);
             //_persoRed.Update(gameTime);
-            _bullet.Update(deltaSeconds);
+            //_bullet.Update(deltaSeconds);
 
             _persoBlue.TextureBleu.Play(animationP1);
             _persoBlue.TextureBleu.Update(deltaSeconds);
@@ -580,6 +722,11 @@ namespace SmashCup_AllStars
 
             //base.Update(gameTime);
         }
+    
+
+           
+
+        
            
 
         public override void Draw(GameTime gameTime)
