@@ -222,7 +222,7 @@ namespace SmashCup_AllStars
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             float walkSpeedBdf = deltaSeconds * _vitesseBullet;
-            float deltaSecond = deltaSeconds / 3;
+            float deltaSecond = deltaSeconds / 2;
             _timer = _timer - (deltaSeconds / 3);
             if (_timer > 0)
             {
