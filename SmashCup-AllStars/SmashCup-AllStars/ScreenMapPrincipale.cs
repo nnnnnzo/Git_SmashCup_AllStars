@@ -691,7 +691,7 @@ namespace SmashCup_AllStars
 
 
 
-            // _perso1.Play(animationP1);
+             _perso1.Play(animationP1);
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
             _bullet2.Play(animationBullet2);
@@ -702,7 +702,7 @@ namespace SmashCup_AllStars
             _bulletG2.Play(_annimationBulletG2);
             _perso1.Update(deltaSeconds);
 
-            //_persoRed.Perso1.Update(deltaSeconds);
+            
             _perso2.Update(deltaSeconds);
             _bullet1.Update(deltaSeconds);
             _bullet2.Update(deltaSeconds);
@@ -712,8 +712,8 @@ namespace SmashCup_AllStars
 
             _bulletD2.Update(deltaSeconds);
             _bulletG2.Update(deltaSeconds);
-            //_persoRed.Update(gameTime);
-            //_bullet.Update(deltaSeconds);
+          
+           
 
             _persoBlue.TextureBleu.Play(animationP1);
             _persoBlue.TextureBleu.Update(deltaSeconds);
@@ -779,7 +779,7 @@ namespace SmashCup_AllStars
 
 
             //_game1.SpriteBatch.Draw(_bullet, _positionBullet);
-            //_persoRed.Draw(_game1.SpriteBatch);
+            _persoRed.Draw(_game1.SpriteBatch);
             _game1.SpriteBatch.End();
 
 

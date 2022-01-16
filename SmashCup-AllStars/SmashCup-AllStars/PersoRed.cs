@@ -27,14 +27,13 @@ namespace SmashCup_AllStars
         private bool _jumpingP1;
         private float _jumpspeedP1 = 0;
 
-        private ScreenMapPrincipale _screenMapPrincipal;
-        private Game1 _game1;
+        
+       
         private float _startYP1;
-        private TiledMap mapLayerSol;
+       
 
 
-        private TiledMap _mapPrincipale;
-        private TiledMapRenderer _renduMapPrincipale;
+ 
         private TiledMapTileLayer _mapLayerSol;
 
 
@@ -73,8 +72,7 @@ namespace SmashCup_AllStars
 
         public  void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                _game1.Exit();
+         
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             KeyboardState keyboardState = Keyboard.GetState();
@@ -126,7 +124,7 @@ namespace SmashCup_AllStars
             ushort y2 = (ushort)(_positionPersoRed.Y / 70 + 2);
 
             TiledMapTile? tile2;
-            MapLayerSol.TryGetTile(x2, y2, out tile2);
+            _mapLayerSol.TryGetTile(x2, y2, out tile2);
             if (tile2 == null)
             {
                 _positionPersoRed.Y += 14;
