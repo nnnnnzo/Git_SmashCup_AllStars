@@ -153,7 +153,7 @@ namespace SmashCup_AllStars
             _vieMob = 12;
             
             //var Mob
-            _mobPosition = new Vector2(800, 650);
+            _mobPosition = new Vector2(-500, -500);
             animationMob = "idleG";
 
             //Timer
@@ -189,7 +189,7 @@ namespace SmashCup_AllStars
             _perso2 = new AnimatedSprite(spriteSheetP2);
 
             // spritesheet mob
-            SpriteSheet mobSheet = Content.Load<SpriteSheet>("mob1.sf", new JsonContentLoader());
+            SpriteSheet mobSheet = Content.Load<SpriteSheet>("spriteMob.sf", new JsonContentLoader());
             _mob = new AnimatedSprite(mobSheet);
 
             // spritesheet boule de feu
@@ -241,7 +241,7 @@ namespace SmashCup_AllStars
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
                 Rectangle _boxB1 = new Rectangle((int)_bulletPosition1.X - 286 / 4, (int)_bulletPosition1.Y - 146 / 4, 143, 73);
                 Rectangle _boxB2 = new Rectangle((int)_bulletPosition2.X - 286 / 4, (int)_bulletPosition2.Y - 146 / 4, 143, 73);
-                Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 100, 400, 600); // collision pour que les joueurs lui tire dessus
+                Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 200, 400, 600); // collision pour que les joueurs lui tire dessus
                 //Rectangle _boxMobRangeG = new Rectangle((int)_mobPosition.X - 750, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
                 //Rectangle _boxMobRangeD = new Rectangle((int)_mobPosition.X, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
                 
@@ -436,9 +436,10 @@ namespace SmashCup_AllStars
                     }
                 }
 
-                if (_timer >= 100 && _timer <= 170 ) // temps où l'IA va apparaitre dans le jeu
+                if (_timer >= 100 && _timer <= 175 ) // temps où l'IA va apparaitre dans le jeu
                 {
                     spawnMob = true;
+                    
                 }
                 else
                 {
@@ -447,13 +448,19 @@ namespace SmashCup_AllStars
 
                 if (_vieMob == 0) // si la vie de l'IA est égale à 0 on fait apparaitre le sprite de sa mort pendant 2s (PS : ça marche)
                 {
-                    animationMob = "mortG";
+                    animationMob = "mort";
                     _timerMort = _timerMort - (deltaSeconds / 3);
                 }
                 if (_timerMort <= 0)
                 {
                     spawnMob = false;
+                    _mobPosition = new Vector2(-500, -500);
                 }
+                if (_timer >= 100 && _timer <= 175  && _mobPosition.X <= 700 && spawnMob == true)
+                {
+                    _mobPosition = new Vector2(800, 650);
+                }
+
 
                 if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
                 {
@@ -462,42 +469,51 @@ namespace SmashCup_AllStars
 
                 if (spawnMob)
                 {
-                    //_mobPosition = new Vector2(800, 650);
                     //Direction du mob selon le joueur (IA)
                     if (_vieMob > 6) // si la vie est supérieur à 6
                     {
                         if (_perso1Position.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                         {
-                            animationMob = "idleD";
-                            _mobPosition.X++;
-                            
+                            animationMob = "idleG";
+                            if(_mobPosition.X <= 1350)
+                            {
+                                _mobPosition.X++;
+                            }
                         }
                         else if (_perso1Position.X < _mobPosition.X)
                         {
-                            animationMob = "idleG";
-                            _mobPosition.X--;
+                            animationMob = "idleD";
+                            if (_mobPosition.X >= 700)
+                            {
+                                _mobPosition.X--;
+                            }
                         }
                         else if (_perso1Position.X == _mobPosition.X)
                         {
-                            animationMob = "idleG";
+                            animationMob = "idleD";
                         }
                     }
-
-                    if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6
+                    else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6
                     {
                         if (_perso1Position.X > _mobPosition.X)
                         {
-                            animationMob = "rageD";
-                            _mobPosition.X++;
+                            animationMob = "rageG";
+                            if (_mobPosition.X <= 1350)
+                            {
+                                _mobPosition.X++;
+                            }
                         }
                         else if (_perso1Position.X < _mobPosition.X)
                         {
-                            animationMob = "rageG";
-                            _mobPosition.X--;
+                            animationMob = "rageD";
+                            if (_mobPosition.X >= 700)
+                            {
+                                _mobPosition.X--;
+                            }
                         }
                         else if (_perso1Position.X == _mobPosition.X)
                         {
-                            animationMob = "rageG";
+                            animationMob = "rageD";
                         }
                     }
                 }
@@ -574,6 +590,8 @@ namespace SmashCup_AllStars
 
             else
                 _timer = -1;
+
+            Console.WriteLine(_mobPosition.X);
 
             /*
             _currentCooldown += deltaSeconds;
