@@ -44,6 +44,15 @@ namespace SmashCup_AllStars
         private bool spawnMob;
         private float _timerMort;
 
+        private AnimatedSprite _bulletMob;
+        private Vector2 _bulletPositionMob;
+        private string _bulletPositionDepartMob;
+        private string animationBulletMob;
+        private int _vitesseBulletMob;
+        private bool deplacementBMob;
+        private float _timerBulletMob;
+        private string lastDirMob;
+
         //animation boule de feu 
         private AnimatedSprite _bullet1;
         private AnimatedSprite _bullet2;
@@ -151,16 +160,22 @@ namespace SmashCup_AllStars
             // Vie IA / Mob
             _positionVieMob = new Vector2(1200, 0);
             _vieMob = 12;
-            
             //var Mob
             _mobPosition = new Vector2(-500, -500);
             animationMob = "idleG";
+            //var bullet Mob
+            animationBulletMob = "dirG";
+            _bulletPositionMob = new Vector2(100, 100);
+            _vitesseBulletMob = 200;
+            deplacementBMob = false;
+
 
             //Timer
             _positionTimer = new Vector2(0, 120);
             _timer = 180;
 
             _timerMort = 2;
+            _timerBulletMob = 2;
 
             //Bullets
             _positionBullet = new Vector2(800, 200);
@@ -197,6 +212,8 @@ namespace SmashCup_AllStars
             _bullet1 = new AnimatedSprite(spriteSheetB1);
             SpriteSheet spriteSheetB2 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
             _bullet2 = new AnimatedSprite(spriteSheetB2);
+            SpriteSheet spriteSheetB3 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+            _bulletMob = new AnimatedSprite(spriteSheetB3);
 
             bullets = new List<Vector2>();
             SpriteSheet bulletImage = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
@@ -241,6 +258,7 @@ namespace SmashCup_AllStars
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
                 Rectangle _boxB1 = new Rectangle((int)_bulletPosition1.X - 286 / 4, (int)_bulletPosition1.Y - 146 / 4, 143, 73);
                 Rectangle _boxB2 = new Rectangle((int)_bulletPosition2.X - 286 / 4, (int)_bulletPosition2.Y - 146 / 4, 143, 73);
+                Rectangle _boxB3 = new Rectangle((int)_bulletPositionMob.X - 286 / 4, (int)_bulletPositionMob.Y - 146 / 4, 143, 73);
                 Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 200, 400, 600); // collision pour que les joueurs lui tire dessus
                 //Rectangle _boxMobRangeG = new Rectangle((int)_mobPosition.X - 750, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
                 //Rectangle _boxMobRangeD = new Rectangle((int)_mobPosition.X, (int)_mobPosition.Y, 750, 900); // collision pour déplacer le mob et le faire s'approcher des joueurs
@@ -460,6 +478,66 @@ namespace SmashCup_AllStars
                 {
                     _mobPosition = new Vector2(800, 650);
                 }
+                //----------------------------------------------------------------------------------------
+                if (deplacementBMob)
+                {
+                    _timerBulletMob = _timerBulletMob - (deltaSeconds / 3);
+                    if (_bulletPositionDepartMob == "D")
+                    {
+                        animationBulletMob = "dirD";
+                        if (_bulletPositionMob.X > 2800)
+                        {
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso1))
+                        {
+                            _vieperso1--;
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso2))
+                        {
+                            _vieperso2--;
+                            deplacementBMob = false;
+                        }
+                        else
+                        {
+                            _bulletPositionMob.X += walkSpeedBdf;
+                        }
+                    }
+                    else
+                    {
+                        animationBulletMob = "dirG";
+                        if (_bulletPositionMob.X < 0)
+                        {
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso1))
+                        {
+                            _vieperso1--;
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso2))
+                        {
+                            _vieperso2--;
+                            deplacementBMob = false;
+                        }
+                        else
+                        {
+                            _bulletPositionMob.X -= walkSpeedBdf;
+                        }
+                    }
+                }
+                else
+                {
+                    if (_timerBulletMob <= 2)
+                    {
+                        deplacementBMob = true;
+                        _bulletPositionDepartMob = lastDirMob;
+                        _bulletPositionMob = _mobPosition;
+                        _bulletPositionMob.Y = _bulletPositionMob.Y + 75;
+                    }
+                }
+                //----------------------------------------------------------------------------------------
 
 
                 if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
@@ -478,6 +556,7 @@ namespace SmashCup_AllStars
                             if(_mobPosition.X <= 1350)
                             {
                                 _mobPosition.X++;
+                                lastDirMob = "D";
                             }
                         }
                         else if (_perso1Position.X < _mobPosition.X)
@@ -486,6 +565,7 @@ namespace SmashCup_AllStars
                             if (_mobPosition.X >= 700)
                             {
                                 _mobPosition.X--;
+                                lastDirMob = "G";
                             }
                         }
                         else if (_perso1Position.X == _mobPosition.X)
@@ -501,6 +581,7 @@ namespace SmashCup_AllStars
                             if (_mobPosition.X <= 1350)
                             {
                                 _mobPosition.X++;
+                                lastDirMob = "D";
                             }
                         }
                         else if (_perso1Position.X < _mobPosition.X)
@@ -509,6 +590,7 @@ namespace SmashCup_AllStars
                             if (_mobPosition.X >= 700)
                             {
                                 _mobPosition.X--;
+                                lastDirMob = "G";
                             }
                         }
                         else if (_perso1Position.X == _mobPosition.X)
@@ -832,12 +914,14 @@ namespace SmashCup_AllStars
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
             _bullet2.Play(animationBullet2);
+            _bulletMob.Play(animationBullet2);
             //_bullet.Play(_annimationBullet);
             _perso1.Update(deltaSeconds);
             //_persoRed.Perso1.Update(deltaSeconds);
             _perso2.Update(deltaSeconds);
             _bullet1.Update(deltaSeconds);
             _bullet2.Update(deltaSeconds);
+            _bulletMob.Update(deltaSeconds);
             //_bullet.Update(deltaSeconds);
             //_persoRed.Update(gameTime);
             _mob.Play(animationMob);
@@ -893,6 +977,7 @@ namespace SmashCup_AllStars
             {
                 _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
                 _game1.SpriteBatch.DrawString(_police, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.White);
+                _game1.SpriteBatch.Draw(_bulletMob, _bulletPositionMob, 0, scalem);
             }
             if (deplacementB1 == true)
                 _game1.SpriteBatch.Draw(_bullet1, _bulletPosition1, 0, scalem);
