@@ -30,7 +30,7 @@ namespace SmashCup_AllStars
         private AnimatedSprite _perso1;
         private int _vitessePerso1;
         private string animationP1;
-        private string lastDirP1;
+        private string _lastDirP1;
 
         //perso bleu
         private Vector2 _perso2Position;
@@ -41,11 +41,7 @@ namespace SmashCup_AllStars
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
 
-        //perso test
-        private Texture2D _persoTest;
-        private Vector2 _positionTest;
-        private int _vitesseTest;
-        private PersoBlue _persoBlue;
+      
 
 
         //animation boule de feu 
@@ -104,9 +100,13 @@ namespace SmashCup_AllStars
         //perso test red
         private PersoRed _persoRed;
         private Vector2 _startYPtest;
-        private Vector2 _jumpSpeedTest;
-        private float _startYPtestFloat;
-        private bool _jumpingTest;
+        
+        //Perso test Blue
+        private PersoBlue _persoBlue;
+
+
+
+
 
         public TiledMapTileLayer MapLayerSol { get => _mapLayerSol; set => _mapLayerSol = value; }
         public float Timer { get => _timer; set => _timer = value; }
@@ -127,20 +127,27 @@ namespace SmashCup_AllStars
             _game1.Graphics.IsFullScreen = false;
             _game1.Graphics.ApplyChanges();
 
-
-            // joueur 1
-            //_persoRed = new PersoRed();
+           
+           
             _currentCooldownP1 = _definedCooldown;
             _currentCooldownP2 = _definedCooldown;
+
+            //Perso Class red
             _persoRed = new PersoRed();
             _persoRed.Initialize();
 
+            //Perso Class blue
+            _persoBlue = new PersoBlue();
+            _persoBlue.Initialize();
+
+
+          /*
 
             //var joueur 1
             _perso1Position = new Vector2(900, 200);
             _vitessePerso1 = 200;
             animationP1 = "idleD";
-            lastDirP1 = "D";
+            _lastDirP1 = "D";
             startYP1 = _perso1Position.Y;//Starting position
             jumpingP1 = false;//Init jumping to false
             jumpspeedP1 = 0;
@@ -162,6 +169,7 @@ namespace SmashCup_AllStars
             _vitesseBullet = 500;
             deplacementB1 = false;
             deplacementB2 = false;
+          */
 
             // Vie perso
             _positionVie1 = new Vector2(0, 0);
@@ -182,15 +190,7 @@ namespace SmashCup_AllStars
             _annimationBulletD2 = "dirD";
             _annimationBulletG2 = "dirG";
 
-            //Perso test:
-
-            _persoBlue = new PersoBlue();
-            _persoBlue.PositionBleu = new Vector2(800, 200);
-            _persoBlue.VitesseBleu = 200;
-            _startYPtest = new Vector2(0, _persoRed.PositionPersoRed.Y);
-            _jumpSpeedTest = new Vector2(0, 0);
-            _startYPtestFloat = _persoRed.PositionPersoRed.Y;
-
+        
 
 
 
@@ -203,24 +203,23 @@ namespace SmashCup_AllStars
         {
             _mapPrincipale = Content.Load<TiledMap>("IceMap");
             _renduMapPrincipale = new TiledMapRenderer(GraphicsDevice, _mapPrincipale);
-            MapLayerSol = _mapPrincipale.GetLayer<TiledMapTileLayer>("Terrain");
-            _persoRed.MapLayerSol = MapLayerSol;
+            _mapLayerSol = _mapPrincipale.GetLayer<TiledMapTileLayer>("Terrain");
+            _persoRed.MapLayerSolPersoRed = _mapLayerSol;
+            _persoBlue.MapLayerSolPersoBlue = _mapLayerSol;
 
 
 
             // spritesheet personnages
+
+            /*
             SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
 
             _perso1 = new AnimatedSprite(spriteSheetP1);
 
             SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
             _perso2 = new AnimatedSprite(spriteSheetP2);
-
-            // spritesheet boule de feu
-            SpriteSheet spriteSheetB1 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
-            _bullet1 = new AnimatedSprite(spriteSheetB1);
-            SpriteSheet spriteSheetB2 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
-            _bullet2 = new AnimatedSprite(spriteSheetB2);
+            */
+           
 
             bulletsD1 = new List<Vector2>();
             SpriteSheet bulletD1Image = Content.Load<SpriteSheet>("bulletRedV2.sf", new JsonContentLoader());
@@ -230,12 +229,7 @@ namespace SmashCup_AllStars
             SpriteSheet bulletG1Image = Content.Load<SpriteSheet>("bulletRedV2.sf", new JsonContentLoader());
             _bulletG1 = new AnimatedSprite(bulletG1Image);
 
-            //spritesheet perso test
-            SpriteSheet test = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
-
-            _persoBlue.TextureBleu = new AnimatedSprite(test);
-
-
+           
             bulletsD2 = new List<Vector2>();
             SpriteSheet bulletD2Image = Content.Load<SpriteSheet>("bulletBlueV2.sf", new JsonContentLoader());
             _bulletD2 = new AnimatedSprite(bulletD2Image);
@@ -247,12 +241,9 @@ namespace SmashCup_AllStars
             // police de vie
             _police = Content.Load<SpriteFont>("Font");
 
-            //spritesheet bullet
-
-            //_bullet = new AnimatedSprite(spriteSheetBullet);
-
+            
             _persoRed.LoadContent(Content);
-
+            _persoBlue.LoadContent(Content);
             //base.LoadContent();
         }
 
@@ -266,7 +257,7 @@ namespace SmashCup_AllStars
 
                 float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
                 float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
-                float walkSpeedPersoTest = deltaSeconds * _persoBlue.VitesseBleu;
+               
                 float walkSpeedBdf = deltaSeconds * _vitesseBullet;
                 _timer = _timer - (deltaSeconds / 3);
 
@@ -280,12 +271,14 @@ namespace SmashCup_AllStars
                 Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
 
+               
+                /*
 
                 if (keyboardState.IsKeyDown(Keys.Space))
                 {
                     if (_currentCooldownP1 >= _definedCooldown)
                     {
-                        if (lastDirP1 == "D")
+                        if (_lastDirP1 == "D")
                         {
                             bulletsD1.Add(new Vector2(_perso1Position.X + 50, _perso1Position.Y + 60));
                             _currentCooldownP1 = 0;
@@ -299,6 +292,9 @@ namespace SmashCup_AllStars
                     }
                 }
 
+                */
+
+                /*
                 if (keyboardState.IsKeyDown(Keys.RightControl))
                 {
                     if (_currentCooldownP2 >= _definedCooldown)
@@ -346,47 +342,9 @@ namespace SmashCup_AllStars
 
                 }
 
-
-                /*
-                //Deplacement Joueur test
-                if (keyboardState.IsKeyDown(Keys.C))
-                {
-                    animationP1 = "runD";
-                    _persoBlue.PositionBleu += new Vector2(walkSpeedPersoTest, 0);
-                    lastDirP1 = "D";
-                }
-
-
-
-                if (keyboardState.IsKeyDown(Keys.W))
-                {
-                    animationP1 = "runG";
-                    _persoBlue.PositionBleu -= new Vector2(walkSpeedPersoTest, 0);
-                    lastDirP1 = "G";
-                }
                 */
 
-
-
-
-
-                ushort xTest = (ushort)(_persoRed.PositionPersoRed.X / 70 + 0.5);
-                ushort yTest = (ushort)(_persoRed.PositionPersoRed.Y / 70 + 2.12);
-
-
-                int tileTest = MapLayerSol.GetTile(xTest, yTest).GlobalIdentifier;
-                if (tileTest == 0)
-                {
-                    _persoRed.PositionPersoRed += new Vector2(0, 14);
-                }
-                else
-                {
-                    _startYPtest = _persoRed.PositionPersoRed;
-
-                }
-
-
-
+                /*
 
                 for (int i = 0; i < bulletsD2.Count; i++)
                 {
@@ -415,7 +373,65 @@ namespace SmashCup_AllStars
                     }
                 }
 
+                */
 
+
+
+
+                //Missile test PersoRed Gauche Marche droite non
+
+                if (keyboardState.IsKeyDown(Keys.I))
+                {
+                    if (_currentCooldownP1 >= _definedCooldown)
+                    {
+                        if (_persoRed.LastDirPersoRed == "D")
+                        {
+                            bulletsD1.Add(new Vector2(_persoRed.PositionPersoRed.X/ +50, _persoRed.PositionPersoRed.Y + 60));
+                            _currentCooldownP1 = 0;
+                        }
+                        else if (_persoRed.LastDirPersoRed == "G")
+                        {
+                            bulletsG1.Add(new Vector2(_persoRed.PositionPersoRed.X - 50, _persoRed.PositionPersoRed.Y + 60));
+                            _currentCooldownP1 = 0;
+                        }
+                     
+                    }
+                }
+
+                for (int i = 0; i < bulletsD1.Count; i++)
+                {
+
+                    float x = bulletsD1[i].X;
+                    x += walkSpeedBdf;
+                    bulletsD1[i] = new Vector2(x, bulletsD1[i].Y);
+                    Rectangle _colBoxD1 = new Rectangle((int)bulletsD1[i].X - 286 / 4, (int)bulletsD1[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxD1.Intersects(_boxPerso2))
+                    {
+                        _vieperso2--;
+                        bulletsD1.RemoveAt(i);
+                    }
+
+                }
+
+                for (int i = 0; i < bulletsG1.Count; i++)
+                {
+                    float x = bulletsG1[i].X;
+                    x -= walkSpeedBdf;
+                    bulletsG1[i] = new Vector2(x, bulletsG1[i].Y);
+                    Rectangle _colBoxG1 = new Rectangle((int)bulletsG1[i].X - 286 / 4, (int)bulletsG1[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxG1.Intersects(_boxPerso2))
+                    {
+                        _vieperso2--;
+                        bulletsG1.RemoveAt(i);
+                    }
+
+                }
+
+
+
+
+
+                /*
 
                 //Jump Joueur 1
                 if (jumpingP1)
@@ -462,7 +478,7 @@ namespace SmashCup_AllStars
 
 
                 //Direction dans laquelles regarder
-                if (lastDirP1 == "D")
+                if (_lastDirP1 == "D")
                     animationP1 = "idleD";
                 else
                     animationP1 = "idleG";
@@ -478,7 +494,7 @@ namespace SmashCup_AllStars
                 {
                     animationP1 = "runD";
                     _perso1Position.X += walkSpeedPerso1;
-                    lastDirP1 = "D";
+                    _lastDirP1 = "D";
                 }
 
 
@@ -487,9 +503,27 @@ namespace SmashCup_AllStars
                 {
                     animationP1 = "runG";
                     _perso1Position.X -= walkSpeedPerso1;
-                    lastDirP1 = "G";
+                    _lastDirP1 = "G";
                 }
 
+           
+                //Deplacement Joueur 2
+                if (keyboardState.IsKeyDown(Keys.Right))
+                {
+                    animationP2 = "runD";
+                    _perso2Position.X += walkSpeedPerso2;
+                    lastDirP2 = "D";
+                }
+
+                if (keyboardState.IsKeyDown(Keys.Left))
+                {
+                    animationP2 = "runG";
+                    _perso2Position.X -= walkSpeedPerso2;
+                    lastDirP2 = "G";
+                }
+
+
+                
                 ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
                 ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
 
@@ -514,24 +548,44 @@ namespace SmashCup_AllStars
                 else
                     startYP2 = _perso2Position.Y;
 
+                */
 
-                //Deplacement Joueur 2
-                if (keyboardState.IsKeyDown(Keys.Right))
+                // Gravité classe perso Red test si fonctionne ou pas
+
+               
+                ushort xPersoRed = (ushort)(_persoRed.PositionPersoRed.X / 70 + 0.5);
+                ushort yPersoRed = (ushort)(_persoRed.PositionPersoRed.Y / 70 + 2.12);
+
+
+                int tilePersoRed = MapLayerSol.GetTile(xPersoRed, yPersoRed).GlobalIdentifier;
+                if (tilePersoRed == 0)
                 {
-                    animationP2 = "runD";
-                    _perso2Position.X += walkSpeedPerso2;
-                    lastDirP2 = "D";
+                    _persoRed.PositionPersoRed += new Vector2(0, 14);
+                }
+                else
+                {
+                    _startYPtest = _persoRed.PositionPersoRed;
+
                 }
 
-                if (keyboardState.IsKeyDown(Keys.Left))
+
+                // Gravité classe perso Bluetest si fonctionne ou pas
+
+
+                ushort xPersoBlue = (ushort)(_persoBlue.PositionPersoBlue.X / 70 + 0.5);
+                ushort yPersoBlue = (ushort)(_persoBlue.PositionPersoBlue.Y / 70 + 2.12);
+
+
+                int tilePersoBlue= MapLayerSol.GetTile(xPersoBlue, yPersoBlue).GlobalIdentifier;
+                if (tilePersoBlue == 0)
                 {
-                    animationP2 = "runG";
-                    _perso2Position.X -= walkSpeedPerso2;
-                    lastDirP2 = "G";
+                    _persoBlue.PositionPersoBlue += new Vector2(0, 14);
                 }
+                else
+                {
+                    _startYPtest = _persoBlue.PositionPersoBlue;
 
-
-
+                }
 
 
 
@@ -691,21 +745,20 @@ namespace SmashCup_AllStars
 
 
 
-             _perso1.Play(animationP1);
-            _perso2.Play(animationP2);
-            _bullet1.Play(animationBullet1);
-            _bullet2.Play(animationBullet2);
+            // _perso1.Play(animationP1);
+           //  _perso2.Play(animationP2);
+           
             _bulletD1.Play(_annimationBulletD1);
             _bulletG1.Play(_annimationBulletG1);
 
             _bulletD2.Play(_annimationBulletD2);
             _bulletG2.Play(_annimationBulletG2);
-            _perso1.Update(deltaSeconds);
 
+
+
+          //  _perso1.Update(deltaSeconds);
+           // _perso2.Update(deltaSeconds);
             
-            _perso2.Update(deltaSeconds);
-            _bullet1.Update(deltaSeconds);
-            _bullet2.Update(deltaSeconds);
 
             _bulletD1.Update(deltaSeconds);
             _bulletG1.Update(deltaSeconds);
@@ -715,11 +768,10 @@ namespace SmashCup_AllStars
           
            
 
-            _persoBlue.TextureBleu.Play(animationP1);
-            _persoBlue.TextureBleu.Update(deltaSeconds);
+          
 
             _persoRed.Update(gameTime);
-
+            _persoBlue.Update(gameTime);
             //base.Update(gameTime);
         }
     
@@ -755,15 +807,10 @@ namespace SmashCup_AllStars
             }
 
             Vector2 scalem = new Vector2((float)scaleX * 1.65f, (float)scaleY * 1.35f);
-            _game1.SpriteBatch.Draw(_perso1, _perso1Position);
-            _game1.SpriteBatch.Draw(_perso2, _perso2Position);
+          //  _game1.SpriteBatch.Draw(_perso1, _perso1Position);
+          //  _game1.SpriteBatch.Draw(_perso2, _perso2Position);
 
-            _game1.SpriteBatch.Draw(_persoBlue.TextureBleu, _persoBlue.PositionBleu);
-            if (deplacementB1 == true)
-                _game1.SpriteBatch.Draw(_bullet1, _bulletPosition1, 0, scalem);
-            if (deplacementB2 == true)
-                _game1.SpriteBatch.Draw(_bullet2, _bulletPosition2, 0, scalem);
-
+         
 
             for (int i = 0; i < bulletsD1.Count; i++)
                 _game1.SpriteBatch.Draw(_bulletD1, bulletsD1[i], 0, scalem);
@@ -778,8 +825,9 @@ namespace SmashCup_AllStars
                 _game1.SpriteBatch.Draw(_bulletG2, bulletsG2[i], 0, scalem);
 
 
-            //_game1.SpriteBatch.Draw(_bullet, _positionBullet);
+           
             _persoRed.Draw(_game1.SpriteBatch);
+            _persoBlue.Draw(_game1.SpriteBatch);
             _game1.SpriteBatch.End();
 
 

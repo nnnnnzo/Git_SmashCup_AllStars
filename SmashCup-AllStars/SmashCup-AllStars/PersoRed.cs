@@ -10,6 +10,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
+using System.Collections.Generic;
 
 namespace SmashCup_AllStars
 {
@@ -19,31 +20,30 @@ namespace SmashCup_AllStars
 
         //Perso rouge
         private Vector2 _positionPersoRed;
-        private AnimatedSprite _perso1;
-        private int _vitessePerso1;
-        private string _animationP1;
-        private string _lastDirP1;
-        
-        private bool _jumpingP1;
-        private float _jumpspeedP1 = 0;
+        private AnimatedSprite _persoRedSprite;
+        private int _vitessePersoRed;
+        private string _animationPersoRed;
+        private string _lastDirPersoRed;
+        private bool _jumpingPersoRed;
+        private float _jumpspeedPersoRed = 0;
+        private float _startYPersoRed;
 
-        
+        // Map perso Red
+        private TiledMapTileLayer _mapLayerSolPersoRed;
+
+
+
+
+
        
-        private float _startYP1;
        
-
-
- 
-        private TiledMapTileLayer _mapLayerSol;
-
-
-
-
-
-        public AnimatedSprite Perso1 { get => _perso1; set => _perso1 = value; }
-        public string AnimationP1 { get => _animationP1; set => _animationP1 = value; }
         public Vector2 PositionPersoRed { get => _positionPersoRed; set => _positionPersoRed = value; }
-        public TiledMapTileLayer MapLayerSol { get => _mapLayerSol; set => _mapLayerSol = value; }
+        public TiledMapTileLayer MapLayerSolPersoRed { get => _mapLayerSolPersoRed; set => _mapLayerSolPersoRed = value; }
+        public string AnimationPersoRed { get => _animationPersoRed; set => _animationPersoRed = value; }
+        public AnimatedSprite PersoRedSprite { get => _persoRedSprite; set => _persoRedSprite = value; }
+        public string LastDirPersoRed { get => _lastDirPersoRed; set => _lastDirPersoRed = value; }
+
+  
 
         public  void Initialize()
         {
@@ -51,10 +51,13 @@ namespace SmashCup_AllStars
 
             // joueur 1
             _positionPersoRed = new Vector2(ScreenMapPrincipale.WIDTH_WINDOW/2, ScreenMapPrincipale.HEIGHT_WINDOW / 2);
-            _vitessePerso1 = 200;
-            _animationP1 = "idleD";
-            _lastDirP1 = "D";
-            _startYP1 = _positionPersoRed.Y;//Starting position
+            _vitessePersoRed = 200;
+            AnimationPersoRed = "idleD";
+            LastDirPersoRed = "D";
+            _startYPersoRed = _positionPersoRed.Y;//Starting position
+
+        
+
 
 
 
@@ -62,11 +65,11 @@ namespace SmashCup_AllStars
 
         public  void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
-            SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
+            SpriteSheet spriteSheetPersoRed = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
+            _persoRedSprite = new AnimatedSprite(spriteSheetPersoRed);
 
-            _perso1 = new AnimatedSprite(spriteSheetP1);
+      
 
-           
 
         }
 
@@ -74,78 +77,84 @@ namespace SmashCup_AllStars
         {
          
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
-            float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
+            float walkSpeedPersoRed = deltaSeconds * _vitessePersoRed;
+           
             KeyboardState keyboardState = Keyboard.GetState();
 
+
             //Direction dans laquelles regarder
-            if (_lastDirP1 == "D")
-                _animationP1 = "idleD";
-            else
-                _animationP1 = "idleG";
+            if (LastDirPersoRed == "D")
+                AnimationPersoRed = "idleD";
+            else if (LastDirPersoRed=="G")
+                AnimationPersoRed = "idleG";
 
             Vector2 deplacement= new Vector2(0,0);
             //Deplacement Joueur 1
             if (keyboardState.IsKeyDown(Keys.J))
             {
-                _animationP1 = "runD";
-                PositionPersoRed += new Vector2(walkSpeedPerso1, 0);
-                _lastDirP1 = "D";
+                AnimationPersoRed = "runD";
+                PositionPersoRed += new Vector2(walkSpeedPersoRed, 0);
+                LastDirPersoRed = "D";
             }
 
             if (keyboardState.IsKeyDown(Keys.H))
             {
-                _animationP1 = "runG";
-                PositionPersoRed-= new Vector2(walkSpeedPerso1,0);
-                _lastDirP1 = "G";
+                AnimationPersoRed = "runG";
+                PositionPersoRed-= new Vector2(walkSpeedPersoRed, 0);
+                LastDirPersoRed = "G";
             }
             
 
-            if (_jumpingP1)
+            if (_jumpingPersoRed)
             {
-                _positionPersoRed.Y += _jumpspeedP1;//Making it go up
-                _jumpspeedP1 += 1;//Some math (explained later)
-                if (_positionPersoRed.Y >= _startYP1)
+                _positionPersoRed.Y += _jumpspeedPersoRed;//Making it go up
+                _jumpspeedPersoRed += 1;//Some math (explained later)
+                if (_positionPersoRed.Y >= _startYPersoRed)
                 //If it's farther than ground
                 {
-                    _positionPersoRed.Y = _startYP1;//Then set it on
-                    _jumpingP1 = false;
+                    _positionPersoRed.Y = _startYPersoRed;//Then set it on
+                    _jumpingPersoRed = false;
                 }
             }
             else
             {
                 if (keyboardState.IsKeyDown(Keys.U))
                 {
-                    _jumpingP1 = true;
-                    _jumpspeedP1 = -44;//Give it upward thrust
+                    _jumpingPersoRed = true;
+                    _jumpspeedPersoRed = -44;//Give it upward thrust
                 }
             }
 
+            
             ushort x2 = (ushort)(_positionPersoRed.X / 70 + 0.5);
             ushort y2 = (ushort)(_positionPersoRed.Y / 70 + 2);
 
-            TiledMapTile? tile2;
-            _mapLayerSol.TryGetTile(x2, y2, out tile2);
-            if (tile2 == null)
+            TiledMapTile? tilePersoRed;
+            MapLayerSolPersoRed.TryGetTile(x2, y2, out tilePersoRed);
+            if (tilePersoRed == null)
             {
                 _positionPersoRed.Y += 14;
             }
             else
-                _startYP1 = _positionPersoRed.Y;
-            
-            
+                _startYPersoRed = _positionPersoRed.Y;
 
-            _perso1.Play(_animationP1);
-           _perso1.Update(deltaSeconds);
+
+         
+          
+
+            _persoRedSprite.Play(AnimationPersoRed);
+            _persoRedSprite.Update(deltaSeconds);
             
 
         }
 
         public   void Draw(SpriteBatch sp)
         {
+         
+           
 
 
-
-            sp.Draw(_perso1, PositionPersoRed);
+            sp.Draw(_persoRedSprite, PositionPersoRed);
         }
     }
 
