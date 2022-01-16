@@ -50,7 +50,6 @@ namespace SmashCup_AllStars
         private string animationBulletMob;
         private int _vitesseBulletMob;
         private bool deplacementBMob;
-        private float _timerBulletMob;
         private string lastDirMob;
 
         //animation boule de feu 
@@ -166,7 +165,7 @@ namespace SmashCup_AllStars
             //var bullet Mob
             animationBulletMob = "dirG";
             _bulletPositionMob = new Vector2(100, 100);
-            _vitesseBulletMob = 200;
+            _vitesseBulletMob = 100;
             deplacementBMob = false;
 
 
@@ -175,7 +174,6 @@ namespace SmashCup_AllStars
             _timer = 180;
 
             _timerMort = 2;
-            _timerBulletMob = 2;
 
             //Bullets
             _positionBullet = new Vector2(800, 200);
@@ -454,6 +452,8 @@ namespace SmashCup_AllStars
                     }
                 }
 
+
+                //----------------------------------------------------------------------------------------
                 if (_timer >= 100 && _timer <= 175 ) // temps où l'IA va apparaitre dans le jeu
                 {
                     spawnMob = true;
@@ -478,10 +478,8 @@ namespace SmashCup_AllStars
                 {
                     _mobPosition = new Vector2(800, 650);
                 }
-                //----------------------------------------------------------------------------------------
-                if (deplacementBMob)
+                if (deplacementBMob) // apparition de la bullet du mob
                 {
-                    _timerBulletMob = _timerBulletMob - (deltaSeconds / 3);
                     if (_bulletPositionDepartMob == "D")
                     {
                         animationBulletMob = "dirD";
@@ -529,16 +527,14 @@ namespace SmashCup_AllStars
                 }
                 else
                 {
-                    if (_timerBulletMob <= 2)
+                    if (spawnMob == true)
                     {
                         deplacementBMob = true;
                         _bulletPositionDepartMob = lastDirMob;
                         _bulletPositionMob = _mobPosition;
-                        _bulletPositionMob.Y = _bulletPositionMob.Y + 75;
+                        _bulletPositionMob.Y = _perso1Position.Y + 80;
                     }
                 }
-                //----------------------------------------------------------------------------------------
-
 
                 if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
                 {
@@ -573,7 +569,7 @@ namespace SmashCup_AllStars
                             animationMob = "idleD";
                         }
                     }
-                    else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6
+                    else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6 de vie
                     {
                         if (_perso1Position.X > _mobPosition.X)
                         {
@@ -600,8 +596,23 @@ namespace SmashCup_AllStars
                     }
                 }
 
-                //Direction dans laquelles regarder
-                if (lastDirP1 == "D")
+                // si les perso tombent de la platforme, ils perdent une vie et respawn. 
+                if(_perso1Position.X >= 2800 || _perso1Position.Y >= 1250 || _perso1Position.X <= 0)
+                {
+                    _vieperso1--;
+                    _perso1Position = new Vector2(800, 650);
+                }
+
+                if (_perso2Position.X >= 2700 || _perso2Position.Y >= 1250 || _perso2Position.X <= 0)
+                {
+                    _vieperso2--;
+                    _perso2Position = new Vector2(800, 650);
+                }
+
+                    //----------------------------------------------------------------------------------------
+
+                    //Direction dans laquelles regarder
+                    if (lastDirP1 == "D")
                     animationP1 = "idleD";
                 else
                     animationP1 = "idleG";
@@ -672,8 +683,6 @@ namespace SmashCup_AllStars
 
             else
                 _timer = -1;
-
-            Console.WriteLine(_mobPosition.X);
 
             /*
             _currentCooldown += deltaSeconds;
@@ -972,7 +981,7 @@ namespace SmashCup_AllStars
             Vector2 scalem2 = new Vector2((float)scaleX * 2f, (float)scaleY * 1.6f);
             _game1.SpriteBatch.Draw(_perso1, _perso1Position);
             _game1.SpriteBatch.Draw(_perso2, _perso2Position);
-            //_game1.SpriteBatch.DrawRectangle(new RectangleF(300, 350, 400, 600), Color.Black, 1f);
+            //_game1.SpriteBatch.DrawRectangle(new RectangleF(0, 0, 2800, 1400), Color.Black, 1f);
             if(spawnMob == true)
             {
                 _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
