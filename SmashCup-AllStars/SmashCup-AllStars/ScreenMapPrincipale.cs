@@ -231,18 +231,22 @@ namespace SmashCup_AllStars
             if (_timer > 0)
             {
 
-                _currentPositionDPersoBlue = new Vector2(_persoBlue.PositionPersoBlue.X + 50, _persoBlue.PositionPersoBlue.Y + 60);
-                _currentPositionGPersoBlue = new Vector2(_persoBlue.PositionPersoBlue.X - 50, _persoBlue.PositionPersoBlue.Y + 60);
+           
 
                 _currentPositionDPersoRed = new Vector2(_persoRed.PositionPersoRed.X + 50, _persoRed.PositionPersoRed.Y + 60);
                 _currentPositionGPersoRed = new Vector2(_persoRed.PositionPersoRed.X - 50, _persoRed.PositionPersoRed.Y + 60);
 
-                
+                _currentPositionDPersoBlue = new Vector2(_persoBlue.PositionPersoBlue.X + 50, _persoBlue.PositionPersoBlue.Y + 60);
+                _currentPositionGPersoBlue = new Vector2(_persoBlue.PositionPersoBlue.X - 50, _persoBlue.PositionPersoBlue.Y + 60);
+
+
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     _game1.Exit();
 
              
                 float walkSpeedBdf = deltaSeconds * _vitesseBullet;
+                float walkSpeedBulletMob = deltaSeconds * _vitesseBulletMob;
+                float walkSpeedMob = deltaSeconds * _vitesseMob;
                 _timer = _timer - (deltaSeconds / 3);
 
 
@@ -442,12 +446,12 @@ namespace SmashCup_AllStars
                         {
                             deplacementBMob = false;
                         }
-                        if (_boxB3.Intersects(_boxPerso1))
+                        if (_boxB3.Intersects(_boxPersoRed))
                         {
                             _vieperso1--;
                             deplacementBMob = false;
                         }
-                        if (_boxB3.Intersects(_boxPerso2))
+                        if (_boxB3.Intersects(_boxPersoBlue))
                         {
                             _vieperso2--;
                             deplacementBMob = false;
@@ -456,11 +460,11 @@ namespace SmashCup_AllStars
                         {
                             if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
                             {
-                                _bulletPositionMob.X += walkSpeedBMob * 2;
+                                _bulletPositionMob.X += walkSpeedBulletMob * 2;
                             }
                             else
                             {
-                                _bulletPositionMob.X += walkSpeedBMob;
+                                _bulletPositionMob.X += walkSpeedBulletMob;
                             }
                         }
                     }
@@ -471,12 +475,12 @@ namespace SmashCup_AllStars
                         {
                             deplacementBMob = false;
                         }
-                        if (_boxB3.Intersects(_boxPerso1))
+                        if (_boxB3.Intersects(_boxPersoRed))
                         {
                             _vieperso1--;
                             deplacementBMob = false;
                         }
-                        if (_boxB3.Intersects(_boxPerso2))
+                        if (_boxB3.Intersects(_boxPersoBlue))
                         {
                             _vieperso2--;
                             deplacementBMob = false;
@@ -485,11 +489,11 @@ namespace SmashCup_AllStars
                         {
                             if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
                             {
-                                _bulletPositionMob.X -= walkSpeedBMob * 2;
+                                _bulletPositionMob.X -= walkSpeedBulletMob * 2;
                             }
                             else
                             {
-                                _bulletPositionMob.X -= walkSpeedBMob;
+                                _bulletPositionMob.X -= walkSpeedBulletMob;
                             }
                         }
                     }
@@ -501,7 +505,7 @@ namespace SmashCup_AllStars
                         deplacementBMob = true;
                         _bulletPositionDepartMob = lastDirMob;
                         _bulletPositionMob = _mobPosition;
-                        _bulletPositionMob.Y = _perso1Position.Y + 80;
+                        _bulletPositionMob.Y = _persoRed.PositionPersoRed.Y + 80;
                     }
                 }
 
@@ -515,7 +519,7 @@ namespace SmashCup_AllStars
                     //Direction du mob selon le joueur (IA)
                     if (_vieMob > 6) // si la vie est supérieur à 6
                     {
-                        if (_perso1Position.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
+                        if (_persoRed.PositionPersoRed.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                         {
                             animationMob = "idleG";
                             lastDirMob = "D";
@@ -524,7 +528,7 @@ namespace SmashCup_AllStars
                                 _mobPosition.X += walkSpeedMob;
                             }
                         }
-                        else if (_perso1Position.X < _mobPosition.X)
+                        else if (_persoRed.PositionPersoRed.X < _mobPosition.X)
                         {
                             animationMob = "idleD";
                             lastDirMob = "G";
@@ -533,14 +537,14 @@ namespace SmashCup_AllStars
                                 _mobPosition.X -= walkSpeedMob;
                             }
                         }
-                        else if (_perso1Position.X == _mobPosition.X)
+                        else if (_persoRed.PositionPersoRed.X == _mobPosition.X)
                         {
                             animationMob = "idleD";
                         }
                     }
                     else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6 de vie
                     {
-                        if (_perso1Position.X > _mobPosition.X)
+                        if (_persoRed.PositionPersoRed.X > _mobPosition.X)
                         {
                             animationMob = "rageG";
                             lastDirMob = "D";
@@ -549,7 +553,7 @@ namespace SmashCup_AllStars
                                 _mobPosition.X += walkSpeedMob;
                             }
                         }
-                        else if (_perso1Position.X < _mobPosition.X)
+                        else if (_persoRed.PositionPersoRed.X < _mobPosition.X)
                         {
                             animationMob = "rageD";
                             lastDirMob = "G";
@@ -558,7 +562,7 @@ namespace SmashCup_AllStars
                                 _mobPosition.X -= walkSpeedMob;
                             }
                         }
-                        else if (_perso1Position.X == _mobPosition.X)
+                        else if (_persoRed.PositionPersoRed.X == _mobPosition.X)
                         {
                             animationMob = "rageD";
                         }
@@ -566,16 +570,16 @@ namespace SmashCup_AllStars
                 }
 
                 // si les perso tombent de la platforme, ils perdent une vie et respawn. 
-                if (_perso1Position.X >= 2800 || _perso1Position.Y >= 1250 || _perso1Position.X <= 0)
+                if (_persoRed.PositionPersoRed.X >= 2800 || _persoRed.PositionPersoRed.Y >= 1250 || _persoRed.PositionPersoRed.X <= 0)
                 {
                     _vieperso1--;
-                    _perso1Position = new Vector2(800, 650);
+                    _persoRed.PositionPersoRed = new Vector2(800, 650);
                 }
 
-                if (_perso2Position.X >= 2700 || _perso2Position.Y >= 1250 || _perso2Position.X <= 0)
+                if (_persoBlue.PositionPersoBlue.X >= 2700 || _persoBlue.PositionPersoBlue.Y >= 1250 || _persoBlue.PositionPersoBlue.X <= 0)
                 {
                     _vieperso2--;
-                    _perso2Position = new Vector2(800, 650);
+                    _persoBlue.PositionPersoBlue = new Vector2(800, 650);
                 }
 
                 //----------------------------------------------------------------------------------------
