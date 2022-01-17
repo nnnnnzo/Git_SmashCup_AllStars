@@ -667,7 +667,7 @@ namespace SmashCup_AllStars
             }
 
             Vector2 scalem = new Vector2((float)scaleX * 1.65f, (float)scaleY * 1.35f);
-
+            Vector2 scalem2 = new Vector2((float)scaleX * 2f, (float)scaleY * 1.6f);
             if (spawnMob == true)
             {
                 _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
