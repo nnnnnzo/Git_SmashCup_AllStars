@@ -407,6 +407,186 @@ namespace SmashCup_AllStars
                 }
 
 
+                //----------------------------------------------------------------------------------------
+                if (_timer >= 100 && _timer <= 175) // temps où l'IA va apparaitre dans le jeu
+                {
+                    spawnMob = true;
+
+                }
+                else
+                {
+                    spawnMob = false;
+                }
+
+                if (_vieMob == 0) // si la vie de l'IA est égale à 0 on fait apparaitre le sprite de sa mort pendant 2s (PS : ça marche)
+                {
+                    animationMob = "mort";
+                    _timerMort = _timerMort - (deltaSeconds / 3);
+                }
+                if (_timerMort <= 0)
+                {
+                    spawnMob = false;
+                    _mobPosition = new Vector2(-500, -500);
+                }
+                if (_timer >= 100 && _timer <= 175 && _mobPosition.X <= 700 && spawnMob == true)
+                {
+                    _mobPosition = new Vector2(800, 650);
+                }
+
+                if (deplacementBMob) // apparition de la bullet du mob
+                {
+                    if (_bulletPositionDepartMob == "D")
+                    {
+                        animationBulletMob = "dirD";
+                        if (_bulletPositionMob.X > 2800)
+                        {
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso1))
+                        {
+                            _vieperso1--;
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso2))
+                        {
+                            _vieperso2--;
+                            deplacementBMob = false;
+                        }
+                        else
+                        {
+                            if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
+                            {
+                                _bulletPositionMob.X += walkSpeedBMob * 2;
+                            }
+                            else
+                            {
+                                _bulletPositionMob.X += walkSpeedBMob;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        animationBulletMob = "dirG";
+                        if (_bulletPositionMob.X < 0)
+                        {
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso1))
+                        {
+                            _vieperso1--;
+                            deplacementBMob = false;
+                        }
+                        if (_boxB3.Intersects(_boxPerso2))
+                        {
+                            _vieperso2--;
+                            deplacementBMob = false;
+                        }
+                        else
+                        {
+                            if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
+                            {
+                                _bulletPositionMob.X -= walkSpeedBMob * 2;
+                            }
+                            else
+                            {
+                                _bulletPositionMob.X -= walkSpeedBMob;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (spawnMob == true)
+                    {
+                        deplacementBMob = true;
+                        _bulletPositionDepartMob = lastDirMob;
+                        _bulletPositionMob = _mobPosition;
+                        _bulletPositionMob.Y = _perso1Position.Y + 80;
+                    }
+                }
+
+                if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
+                {
+                    _vieMob = 0;
+                }
+
+                if (spawnMob)
+                {
+                    //Direction du mob selon le joueur (IA)
+                    if (_vieMob > 6) // si la vie est supérieur à 6
+                    {
+                        if (_perso1Position.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
+                        {
+                            animationMob = "idleG";
+                            lastDirMob = "D";
+                            if (_mobPosition.X <= 1350)
+                            {
+                                _mobPosition.X += walkSpeedMob;
+                            }
+                        }
+                        else if (_perso1Position.X < _mobPosition.X)
+                        {
+                            animationMob = "idleD";
+                            lastDirMob = "G";
+                            if (_mobPosition.X >= 700)
+                            {
+                                _mobPosition.X -= walkSpeedMob;
+                            }
+                        }
+                        else if (_perso1Position.X == _mobPosition.X)
+                        {
+                            animationMob = "idleD";
+                        }
+                    }
+                    else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6 de vie
+                    {
+                        if (_perso1Position.X > _mobPosition.X)
+                        {
+                            animationMob = "rageG";
+                            lastDirMob = "D";
+                            if (_mobPosition.X <= 1350)
+                            {
+                                _mobPosition.X += walkSpeedMob;
+                            }
+                        }
+                        else if (_perso1Position.X < _mobPosition.X)
+                        {
+                            animationMob = "rageD";
+                            lastDirMob = "G";
+                            if (_mobPosition.X >= 700)
+                            {
+                                _mobPosition.X -= walkSpeedMob;
+                            }
+                        }
+                        else if (_perso1Position.X == _mobPosition.X)
+                        {
+                            animationMob = "rageD";
+                        }
+                    }
+                }
+
+                // si les perso tombent de la platforme, ils perdent une vie et respawn. 
+                if (_perso1Position.X >= 2800 || _perso1Position.Y >= 1250 || _perso1Position.X <= 0)
+                {
+                    _vieperso1--;
+                    _perso1Position = new Vector2(800, 650);
+                }
+
+                if (_perso2Position.X >= 2700 || _perso2Position.Y >= 1250 || _perso2Position.X <= 0)
+                {
+                    _vieperso2--;
+                    _perso2Position = new Vector2(800, 650);
+                }
+
+                //----------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 
 
