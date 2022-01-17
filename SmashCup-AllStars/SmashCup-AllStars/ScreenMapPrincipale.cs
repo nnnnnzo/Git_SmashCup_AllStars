@@ -24,68 +24,34 @@ namespace SmashCup_AllStars
         private float _definedCooldown = 0.5f;
         
 
-        //perso rouge
-        private Vector2 _perso1Position;
-        private AnimatedSprite _perso1;
-        private int _vitessePerso1;
-        private string animationP1;
-        private string _lastDirP1;
-
-        //perso bleu
-        private Vector2 _perso2Position;
-        private AnimatedSprite _perso2;
-        private int _vitessePerso2;
-        private string animationP2;
-        private string lastDirP2;
-        private bool jumpingP1, jumpingP2; //Is the character jumping?
-        private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
 
       
 
 
-        //animation boule de feu 
-        private AnimatedSprite _bullet1;
-        private AnimatedSprite _bullet2;
-        private Vector2 _bulletPosition1;
-        private Vector2 _bulletPosition2;
-        private string _bulletPositionDepart1;
-        private string _bulletPositionDepart2;
-        private string animationBullet1;
-        private string animationBullet2;
-        private int _vitesseBullet;
-        private bool deplacementB1;
-        private bool deplacementB2;
+       
 
         // Animation bullets
 
         private AnimatedSprite _bulletD1;
-        private Vector2 _positionBulletD1;
         private string _annimationBulletD1;
         List<Vector2> bulletsD1;
 
         private AnimatedSprite _bulletG1;
-        private Vector2 _positionBulletG1;
         private string _annimationBulletG1;
         List<Vector2> bulletsG1;
 
         private AnimatedSprite _bulletD2;
-        private Vector2 _positionBulletD2;
         private string _annimationBulletD2;
         List<Vector2> bulletsD2;
 
         private AnimatedSprite _bulletG2;
-        private Vector2 _positionBulletG2;
         private string _annimationBulletG2;
         List<Vector2> bulletsG2;
+        private int _vitesseBullet;
 
 
         private SpriteFont _police;
-        //vie perso 1
-        private int _vieperso1;
-        private Vector2 _positionVie1;
-        //vie perso 2
-        private int _vieperso2;
-        private Vector2 _positionVie2;
+      
         //timer
         private float _timer;
         private Vector2 _positionTimer;
@@ -121,7 +87,6 @@ namespace SmashCup_AllStars
         public float Timer { get => _timer; set => _timer = value; }
         public Vector2 StartYPtest { get => _startYPtest; set => _startYPtest = value; }
 
-        //public Vector2 Perso1Position { get => _perso1Position; set => _perso1Position = value; }
 
         public ScreenMapPrincipale(Game1 game) : base(game)
         {
@@ -152,36 +117,6 @@ namespace SmashCup_AllStars
 
 
 
-            /*
-
-            //var joueur 1
-            _perso1Position = new Vector2(900, 200);
-            _vitessePerso1 = 200;
-            animationP1 = "idleD";
-            _lastDirP1 = "D";
-            startYP1 = _perso1Position.Y;//Starting position
-            jumpingP1 = false;//Init jumping to false
-            jumpspeedP1 = 0;
-
-            /*
-            //var joueur 2
-            _perso2Position = new Vector2(WIDTH_WINDOW / 2, HEIGHT_WINDOW / 2);
-            _vitessePerso2 = 200;
-            animationP2 = "idleG";
-            lastDirP2 = "G";
-            startYP2 = _perso2Position.Y;//Starting position
-            jumpingP2 = false;//Init jumping to false
-            jumpspeedP2 = 0;
-
-            //Boule de feu
-            animationBullet1 = "dirG";
-            animationBullet2 = "dirD";
-            _bulletPosition1 = new Vector2(800, -100);
-            _bulletPosition2 = new Vector2(800, -100);
-            _vitesseBullet = 500;
-            deplacementB1 = false;
-            deplacementB2 = false;
-          */
 
             // Vie perso Red
             _positionDamagePersoRed = new Vector2(0, 0);
@@ -198,7 +133,7 @@ namespace SmashCup_AllStars
             _timer = 500;
 
             //Bullets
-            //_positionBulletD1 = new Vector2(800, 200);
+            
             _annimationBulletD1 = "dirD";
             _annimationBulletG1 = "dirG";
             _vitesseBullet = 500;
@@ -224,15 +159,6 @@ namespace SmashCup_AllStars
 
 
 
-            // spritesheet personnages
-
-            
-           // SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
-
-            //_perso1 = new AnimatedSprite(spriteSheetP1);
-
-            //SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
-            //_perso2 = new AnimatedSprite(spriteSheetP2);
             
            
 
@@ -278,9 +204,7 @@ namespace SmashCup_AllStars
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     _game1.Exit();
 
-                float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
-                float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
-               
+             
                 float walkSpeedBdf = deltaSeconds * _vitesseBullet;
                 _timer = _timer - (deltaSeconds / 3);
 
@@ -462,25 +386,12 @@ namespace SmashCup_AllStars
 
             _bulletD1.Play(_annimationBulletD1);
             _bulletG1.Play(_annimationBulletG1);
-
             _bulletD2.Play(_annimationBulletD2);
             _bulletG2.Play(_annimationBulletG2);
-
-
-
-            
-            
-
             _bulletD1.Update(deltaSeconds);
             _bulletG1.Update(deltaSeconds);
-
             _bulletD2.Update(deltaSeconds);
             _bulletG2.Update(deltaSeconds);
-          
-           
-
-          
-
             _persoRed.Update(gameTime);
             _persoBlue.Update(gameTime);
             //base.Update(gameTime);
@@ -508,8 +419,8 @@ namespace SmashCup_AllStars
 
            
             
-                _game1.SpriteBatch.DrawString(_police, $"Damage Counter : {_damagePersoRed}", _positionDamagePersoRed, Color.White);
-                _game1.SpriteBatch.DrawString(_police, $"Damage Counter : {_damagePersoBlue} ", _positionDamagePersoBlue, Color.White);
+                _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoRed : {_damagePersoRed}", _positionDamagePersoRed, Color.White);
+                _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoBlue : {_damagePersoBlue} ", _positionDamagePersoBlue, Color.White);
             if (_timer > 0)
             {
                 _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
