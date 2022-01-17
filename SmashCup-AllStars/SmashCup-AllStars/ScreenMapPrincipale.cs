@@ -79,6 +79,22 @@ namespace SmashCup_AllStars
         private Vector2 _positionDamagePersoBlue;
         private float _currentCooldownPersoBlue;
 
+        // Mob
+        private int _vieMob;
+        private Vector2 _positionVieMob;
+        private Vector2 _mobPosition;
+        private int _vitesseMob;
+        private AnimatedSprite _mob;
+        private string animationMob;
+        private bool spawnMob;
+        private float _timerMort;
+        private AnimatedSprite _bulletMob;
+        private Vector2 _bulletPositionMob;
+        private string _bulletPositionDepartMob;
+        private string animationBulletMob;
+        private int _vitesseBulletMob;
+        private bool deplacementBMob;
+        private string lastDirMob;
 
 
 
