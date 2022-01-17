@@ -90,14 +90,14 @@ namespace SmashCup_AllStars
 
             Vector2 deplacement= new Vector2(0,0);
             //Deplacement Joueur 1
-            if (keyboardState.IsKeyDown(Keys.J))
+            if (keyboardState.IsKeyDown(Keys.D))
             {
                 AnimationPersoRed = "runD";
                 PositionPersoRed += new Vector2(walkSpeedPersoRed, 0);
                 LastDirPersoRed = "D";
             }
 
-            if (keyboardState.IsKeyDown(Keys.H))
+            if (keyboardState.IsKeyDown(Keys.Q))
             {
                 AnimationPersoRed = "runG";
                 PositionPersoRed-= new Vector2(walkSpeedPersoRed, 0);
@@ -118,7 +118,7 @@ namespace SmashCup_AllStars
             }
             else
             {
-                if (keyboardState.IsKeyDown(Keys.U))
+                if (keyboardState.IsKeyDown(Keys.Z))
                 {
                     _jumpingPersoRed = true;
                     _jumpspeedPersoRed = -44;//Give it upward thrust

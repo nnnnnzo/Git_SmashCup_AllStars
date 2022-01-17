@@ -22,8 +22,7 @@ namespace SmashCup_AllStars
         private TiledMapRenderer _renduMapPrincipale;
         private TiledMapTileLayer _mapLayerSol;
         private float _definedCooldown = 0.5f;
-        private float _currentCooldownP1;
-        private float _currentCooldownP2;
+        
 
         //perso rouge
         private Vector2 _perso1Position;
@@ -100,9 +99,19 @@ namespace SmashCup_AllStars
         //perso test red
         private PersoRed _persoRed;
         private Vector2 _startYPtest;
-        
+        private Vector2 _currentPositionDPersoRed;
+        private Vector2 _currentPositionGPersoRed;
+        private int _damagePersoRed;
+        private Vector2 _positionDamagePersoRed;
+        private float _currentCooldownPersoRed;
+
         //Perso test Blue
         private PersoBlue _persoBlue;
+        private Vector2 _currentPositionDPersoBlue;
+        private Vector2 _currentPositionGPersoBlue;
+        private int _damagePersoBlue;
+        private Vector2 _positionDamagePersoBlue;
+        private float _currentCooldownPersoBlue;
 
 
 
@@ -127,13 +136,14 @@ namespace SmashCup_AllStars
             _game1.Graphics.IsFullScreen = false;
             _game1.Graphics.ApplyChanges();
 
-           
-           
-            _currentCooldownP1 = _definedCooldown;
-            _currentCooldownP2 = _definedCooldown;
+
+
+            _currentCooldownPersoRed = _definedCooldown;
+            _currentCooldownPersoBlue = _definedCooldown;
 
             //Perso Class red
             _persoRed = new PersoRed();
+          
             _persoRed.Initialize();
 
             //Perso Class blue
@@ -141,7 +151,8 @@ namespace SmashCup_AllStars
             _persoBlue.Initialize();
 
 
-          /*
+
+            /*
 
             //var joueur 1
             _perso1Position = new Vector2(900, 200);
@@ -152,6 +163,7 @@ namespace SmashCup_AllStars
             jumpingP1 = false;//Init jumping to false
             jumpspeedP1 = 0;
 
+            /*
             //var joueur 2
             _perso2Position = new Vector2(WIDTH_WINDOW / 2, HEIGHT_WINDOW / 2);
             _vitessePerso2 = 200;
@@ -171,22 +183,25 @@ namespace SmashCup_AllStars
             deplacementB2 = false;
           */
 
-            // Vie perso
-            _positionVie1 = new Vector2(0, 0);
-            _vieperso1 = 3;
-            _positionVie2 = new Vector2(0, 60);
-            _vieperso2 = 3;
+            // Vie perso Red
+            _positionDamagePersoRed = new Vector2(0, 0);
+            _damagePersoRed = 0;
+            _positionDamagePersoBlue = new Vector2(0, 60);
+            _damagePersoBlue = 0;
 
+            // Vie perso Blue
+            _positionDamagePersoBlue = new Vector2(0, 60);
+            _damagePersoBlue = 0;
 
             //Timer
             _positionTimer = new Vector2(0, 120);
             _timer = 500;
 
             //Bullets
-            _positionBulletD1 = new Vector2(800, 200);
+            //_positionBulletD1 = new Vector2(800, 200);
             _annimationBulletD1 = "dirD";
             _annimationBulletG1 = "dirG";
-
+            _vitesseBullet = 500;
             _annimationBulletD2 = "dirD";
             _annimationBulletG2 = "dirG";
 
@@ -211,14 +226,14 @@ namespace SmashCup_AllStars
 
             // spritesheet personnages
 
-            /*
-            SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
+            
+           // SpriteSheet spriteSheetP1 = Content.Load<SpriteSheet>("animRed.sf", new JsonContentLoader());
 
-            _perso1 = new AnimatedSprite(spriteSheetP1);
+            //_perso1 = new AnimatedSprite(spriteSheetP1);
 
-            SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
-            _perso2 = new AnimatedSprite(spriteSheetP2);
-            */
+            //SpriteSheet spriteSheetP2 = Content.Load<SpriteSheet>("animBlue.sf", new JsonContentLoader());
+            //_perso2 = new AnimatedSprite(spriteSheetP2);
+            
            
 
             bulletsD1 = new List<Vector2>();
@@ -252,6 +267,14 @@ namespace SmashCup_AllStars
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds * 3;
             if (_timer > 0)
             {
+
+                _currentPositionDPersoBlue = new Vector2(_persoBlue.PositionPersoBlue.X + 50, _persoBlue.PositionPersoBlue.Y + 60);
+                _currentPositionGPersoBlue = new Vector2(_persoBlue.PositionPersoBlue.X - 50, _persoBlue.PositionPersoBlue.Y + 60);
+
+                _currentPositionDPersoRed = new Vector2(_persoRed.PositionPersoRed.X + 50, _persoRed.PositionPersoRed.Y + 60);
+                _currentPositionGPersoRed = new Vector2(_persoRed.PositionPersoRed.X - 50, _persoRed.PositionPersoRed.Y + 60);
+
+                
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     _game1.Exit();
 
@@ -265,134 +288,32 @@ namespace SmashCup_AllStars
 
                 KeyboardState keyboardState = Keyboard.GetState();
 
-                _currentCooldownP1 += deltaSeconds;
-                _currentCooldownP2 += deltaSeconds;
+                _currentCooldownPersoRed += deltaSeconds;
+                _currentCooldownPersoBlue += deltaSeconds;
                 //colisions
-                Rectangle _boxPerso1 = new Rectangle((int)_perso1Position.X - 98 / 2, (int)_perso1Position.Y - 5, 98, 150);
-                Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
+                Rectangle _boxPersoRed = new Rectangle((int)_persoRed.PositionPersoRed.X - 98 / 2, (int)_persoRed.PositionPersoRed.Y - 5, 98, 150);
+                Rectangle _boxPersoBlue = new Rectangle((int)_persoBlue.PositionPersoBlue.X - 98 / 2, (int)_persoBlue.PositionPersoBlue.Y - 5, 98, 150);
 
                
                 
 
+
+
+                //Missile test PersoRed Gauche ,droite
+
                 if (keyboardState.IsKeyDown(Keys.Space))
                 {
-                    if (_currentCooldownP1 >= _definedCooldown)
-                    {
-                        if (_lastDirP1 == "D")
-                        {
-                            bulletsD1.Add(new Vector2(_persoRed.PositionPersoRed.X + 50, _persoRed.PositionPersoRed.Y + 60));
-                            _currentCooldownP1 = 0;
-                        }
-                        else
-                        {
-                            bulletsG1.Add(new Vector2(_persoRed.PositionPersoRed.X - 50, _persoRed.PositionPersoRed.Y + 60));
-                            _currentCooldownP1 = 0;
-                        }
-
-                    }
-                }
-
-                
-
-                
-                if (keyboardState.IsKeyDown(Keys.RightControl))
-                {
-                    if (_currentCooldownP2 >= _definedCooldown)
-                    {
-                        if (lastDirP2 == "D")
-                        {
-                            bulletsD2.Add(new Vector2(_perso2Position.X + 50, _perso2Position.Y + 60));
-                            _currentCooldownP2 = 0;
-                        }
-                        else
-                        {
-                            bulletsG2.Add(new Vector2(_perso2Position.X - 50, _perso2Position.Y + 60));
-                            _currentCooldownP2 = 0;
-                        }
-
-                    }
-                }
-
-                for (int i = 0; i < bulletsD1.Count; i++)
-                {
-
-                    float x = bulletsD1[i].X;
-                    x += walkSpeedBdf;
-                    bulletsD1[i] = new Vector2(x, bulletsD1[i].Y);
-                    Rectangle _colBoxD1 = new Rectangle((int)bulletsD1[i].X - 286 / 4, (int)bulletsD1[i].Y - 146 / 4, 143, 30);
-                    if (_colBoxD1.Intersects(_boxPerso2))
-                    {
-                        _vieperso2--;
-                        bulletsD1.RemoveAt(i);
-                    }
-
-                }
-
-                for (int i = 0; i < bulletsG1.Count; i++)
-                {
-                    float x = bulletsG1[i].X;
-                    x -= walkSpeedBdf;
-                    bulletsG1[i] = new Vector2(x, bulletsG1[i].Y);
-                    Rectangle _colBoxG1 = new Rectangle((int)bulletsG1[i].X - 286 / 4, (int)bulletsG1[i].Y - 146 / 4, 143, 30);
-                    if (_colBoxG1.Intersects(_boxPerso2))
-                    {
-                        _vieperso2--;
-                        bulletsG1.RemoveAt(i);
-                    }
-
-                }
-
-                
-
-                
-
-                for (int i = 0; i < bulletsD2.Count; i++)
-                {
-                    float x = bulletsD2[i].X;
-                    x += walkSpeedBdf;
-                    bulletsD2[i] = new Vector2(x, bulletsD2[i].Y);
-                    Rectangle _colBoxD2 = new Rectangle((int)bulletsD2[i].X - 286 / 4, (int)bulletsD2[i].Y - 146 / 4, 143, 30);
-                    if (_colBoxD2.Intersects(_boxPerso1))
-                    {
-                        _vieperso1--;
-                        bulletsD2.RemoveAt(i);
-                    }
-
-
-                }
-                for (int i = 0; i < bulletsG2.Count; i++)
-                {
-                    float x = bulletsG2[i].X;
-                    x -= walkSpeedBdf;
-                    bulletsG2[i] = new Vector2(x, bulletsG2[i].Y);
-                    Rectangle _colBoxG2 = new Rectangle((int)bulletsG2[i].X - 286 / 4, (int)bulletsG2[i].Y - 146 / 4, 143, 30);
-                    if (_colBoxG2.Intersects(_boxPerso1))
-                    {
-                        _vieperso1--;
-                        bulletsG2.RemoveAt(i);
-                    }
-                }
-
-                
-
-
-                /*
-
-                //Missile test PersoRed Gauche Marche droite non
-
-                if (keyboardState.IsKeyDown(Keys.I))
-                {
-                    if (_currentCooldownP1 >= _definedCooldown)
+                    if (_currentCooldownPersoRed >= _definedCooldown)
                     {
                         if (_persoRed.LastDirPersoRed == "D")
                         {
-                            bulletsD1.Add(new Vector2(_persoRed.PositionPersoRed.X/ +50, _persoRed.PositionPersoRed.Y + 60));
-                            _currentCooldownP1 = 0;
+                            bulletsD1.Add(_currentPositionDPersoRed);
+                            _currentCooldownPersoRed = 0;
                         }
-                        else if (_persoRed.LastDirPersoRed == "G")
+                        else
                         {
-                            bulletsG1.Add(new Vector2(_persoRed.PositionPersoRed.X - 50, _persoRed.PositionPersoRed.Y + 60));
-                            _currentCooldownP1 = 0;
+                            bulletsG1.Add(_currentPositionGPersoRed);
+                            _currentCooldownPersoRed = 0;
                         }
                      
                     }
@@ -405,9 +326,9 @@ namespace SmashCup_AllStars
                     x += walkSpeedBdf;
                     bulletsD1[i] = new Vector2(x, bulletsD1[i].Y);
                     Rectangle _colBoxD1 = new Rectangle((int)bulletsD1[i].X - 286 / 4, (int)bulletsD1[i].Y - 146 / 4, 143, 30);
-                    if (_colBoxD1.Intersects(_boxPerso2))
+                    if (_colBoxD1.Intersects(_boxPersoBlue))
                     {
-                        _vieperso2--;
+                        _damagePersoBlue= _damagePersoBlue+3;
                         bulletsD1.RemoveAt(i);
                     }
 
@@ -419,137 +340,72 @@ namespace SmashCup_AllStars
                     x -= walkSpeedBdf;
                     bulletsG1[i] = new Vector2(x, bulletsG1[i].Y);
                     Rectangle _colBoxG1 = new Rectangle((int)bulletsG1[i].X - 286 / 4, (int)bulletsG1[i].Y - 146 / 4, 143, 30);
-                    if (_colBoxG1.Intersects(_boxPerso2))
+                    if (_colBoxG1.Intersects(_boxPersoBlue))
                     {
-                        _vieperso2--;
+                        _damagePersoBlue = _damagePersoBlue + 3;
                         bulletsG1.RemoveAt(i);
                     }
 
                 }
 
-                */
 
 
 
+                //Missile test PersoBlue Gauche ,droite
 
-                
-
-                //Jump Joueur 1
-                if (jumpingP1)
+                if (keyboardState.IsKeyDown(Keys.RightControl))
                 {
-                    _perso1Position.Y += jumpspeedP1;//Making it go up
-                    jumpspeedP1 += 1;//Some math (explained later)
-                    if (_perso1Position.Y >= startYP1)
-                    //If it's farther than ground
+                    if (_currentCooldownPersoBlue >= _definedCooldown)
                     {
-                        _perso1Position.Y = startYP1;//Then set it on
-                        jumpingP1 = false;
-                    }
-                }
-                else
-                {
-                    if (keyboardState.IsKeyDown(Keys.Z))
-                    {
-                        jumpingP1 = true;
-                        jumpspeedP1 = -44;//Give it upward thrust
+                        if (_persoBlue.LastDirPersoBlue == "D")
+                        {
+                            bulletsD2.Add(_currentPositionDPersoBlue);
+                            _currentCooldownPersoBlue = 0;
+                        }
+                        else 
+                        {
+                            bulletsG2.Add(_currentPositionGPersoBlue);
+                            _currentCooldownPersoBlue = 0;
+                        }
+
                     }
                 }
 
 
-                //Jump Joueur 2
-                if (jumpingP2)
+                for (int i = 0; i < bulletsD2.Count; i++)
                 {
-                    _perso2Position.Y += jumpspeedP2;//Making it go up
-                    jumpspeedP2 += 1;//Some math (explained later)
-                    if (_perso2Position.Y >= startYP2)
-                    //If it's farther than ground
+                    float x = bulletsD2[i].X;
+                    x += walkSpeedBdf;
+                    bulletsD2[i] = new Vector2(x, bulletsD2[i].Y);
+                    Rectangle _colBoxD2 = new Rectangle((int)bulletsD2[i].X - 286 / 4, (int)bulletsD2[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxD2.Intersects(_boxPersoRed))
                     {
-                        _perso2Position.Y = startYP2;//Then set it on
-                        jumpingP2 = false;
+                        _damagePersoRed = _damagePersoRed + 3;
+                        bulletsD2.RemoveAt(i);
+                    }
+
+
+                }
+                for (int i = 0; i < bulletsG2.Count; i++)
+                {
+                    float x = bulletsG2[i].X;
+                    x -= walkSpeedBdf;
+                    bulletsG2[i] = new Vector2(x, bulletsG2[i].Y);
+                    Rectangle _colBoxG2 = new Rectangle((int)bulletsG2[i].X - 286 / 4, (int)bulletsG2[i].Y - 146 / 4, 143, 30);
+                    if (_colBoxG2.Intersects(_boxPersoRed))
+                    {
+                        _damagePersoRed = _damagePersoRed + 3;
+                        bulletsG2.RemoveAt(i);
                     }
                 }
-                else
-                {
-                    if (keyboardState.IsKeyDown(Keys.Up))
-                    {
-                        jumpingP2 = true;
-                        jumpspeedP2 = -44;//Give it upward thrust
-                    }
-                }
-
-
-                //Direction dans laquelles regarder
-                if (_lastDirP1 == "D")
-                    animationP1 = "idleD";
-                else
-                    animationP1 = "idleG";
-
-
-                if (lastDirP2 == "D")
-                    animationP2 = "idleD";
-                else
-                    animationP2 = "idleG";
-
-                //Deplacement Joueur 1
-                if (keyboardState.IsKeyDown(Keys.D))
-                {
-                    animationP1 = "runD";
-                    _perso1Position.X += walkSpeedPerso1;
-                    _lastDirP1 = "D";
-                }
 
 
 
-                if (keyboardState.IsKeyDown(Keys.Q))
-                {
-                    animationP1 = "runG";
-                    _perso1Position.X -= walkSpeedPerso1;
-                    _lastDirP1 = "G";
-                }
-
-           
-                //Deplacement Joueur 2
-                if (keyboardState.IsKeyDown(Keys.Right))
-                {
-                    animationP2 = "runD";
-                    _perso2Position.X += walkSpeedPerso2;
-                    lastDirP2 = "D";
-                }
-
-                if (keyboardState.IsKeyDown(Keys.Left))
-                {
-                    animationP2 = "runG";
-                    _perso2Position.X -= walkSpeedPerso2;
-                    lastDirP2 = "G";
-                }
-
-                /*
-                
-                ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
-                ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
 
 
-                int tile1 = MapLayerSol.GetTile(x1, y1).GlobalIdentifier;
-                if (tile1 == 0)
-                {
-                    _perso1Position.Y += 14;
-                }
-                else
-                    startYP1 = _perso1Position.Y;
-
-                ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
-                ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
 
 
-                int tile2 = MapLayerSol.GetTile(x2, y2).GlobalIdentifier;
-                if (tile2 == 0)
-                {
-                    _perso2Position.Y += 14;
-                }
-                else
-                    startYP2 = _perso2Position.Y;
-
-                */
+              
 
                 // Gravité classe perso Red test si fonctionne ou pas
 
@@ -597,158 +453,13 @@ namespace SmashCup_AllStars
             else
                 _timer = -1;
 
-            /*
-            for (int i = 0; i < bulletsD2.Count; i++)
-            {
-                float x = bulletsD2[i].X;
-                x += walkSpeedBdf;
-                bulletsD2[i] = new Vector2(x, bulletsD2[i].Y);
-                Rectangle _colBoxD2 = new Rectangle((int)bulletsD2[i].X - 286 / 4, (int)bulletsD2[i].Y - 146 / 4, 143, 30);
-                if (_colBoxD2.Intersects(_boxPerso1))
-                {
-                    _vieperso1--;
-                    bulletsD2.RemoveAt(i);
-                }
-
-
-            }
-            for (int i = 0; i < bulletsG2.Count; i++)
-            {
-                float x = bulletsG2[i].X;
-                x -= walkSpeedBdf;
-                bulletsG2[i] = new Vector2(x, bulletsG2[i].Y);
-                Rectangle _colBoxG2 = new Rectangle((int)bulletsG2[i].X - 286 / 4, (int)bulletsG2[i].Y - 146 / 4, 143, 30);
-                if (_colBoxG2.Intersects(_boxPerso1))
-                {
-                    _vieperso1--;
-                    bulletsG2.RemoveAt(i);
-                }
-            }
-
-
-
-            //Jump Joueur 1
-            if (jumpingP1)
-            {
-                _perso1Position.Y += jumpspeedP1;//Making it go up
-                jumpspeedP1 += 1;//Some math (explained later)
-                if (_perso1Position.Y >= startYP1)
-                //If it's farther than ground
-                {
-                    _perso1Position.Y = startYP1;//Then set it on
-                    jumpingP1 = false;
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.Z))
-                {
-                    jumpingP1 = true;
-                    jumpspeedP1 = -44;//Give it upward thrust
-                }
-            }
-
-
-            //Jump Joueur 2
-            if (jumpingP2)
-            {
-                _perso2Position.Y += jumpspeedP2;//Making it go up
-                jumpspeedP2 += 1;//Some math (explained later)
-                if (_perso2Position.Y >= startYP2)
-                //If it's farther than ground
-                {
-                    _perso2Position.Y = startYP2;//Then set it on
-                    jumpingP2 = false;
-                }
-            }
-            else
-            {
-                if (keyboardState.IsKeyDown(Keys.Up))
-                {
-                    jumpingP2 = true;
-                    jumpspeedP2 = -44;//Give it upward thrust
-                }
-            }
-
-
-            //Direction dans laquelles regarder
-            if (lastDirP1 == "D")
-                animationP1 = "idleD";
-            else
-                animationP1 = "idleG";
-
-
-            if (lastDirP2 == "D")
-                animationP2 = "idleD";
-            else
-                animationP2 = "idleG";
-
-            //Deplacement Joueur 1
-            if (keyboardState.IsKeyDown(Keys.D))
-            {
-                animationP1 = "runD";
-                _perso1Position.X += walkSpeedPerso1;
-                lastDirP1 = "D";
-            }
-
-
-
-            if (keyboardState.IsKeyDown(Keys.Q))
-            {
-                animationP1 = "runG";
-                _perso1Position.X -= walkSpeedPerso1;
-                lastDirP1 = "G";
-            }
-
-            ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
-            ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
-
-
-            int tile1 = MapLayerSol.GetTile(x1, y1).GlobalIdentifier;
-            if (tile1 == 0)
-            {
-                _perso1Position.Y += 14;
-            }
-            else
-                startYP1 = _perso1Position.Y;
-
-            ushort x2 = (ushort)(_perso2Position.X / 70 + 0.5);
-            ushort y2 = (ushort)(_perso2Position.Y / 70 + 2);
-
-
-            int tile2 = MapLayerSol.GetTile(x2, y2).GlobalIdentifier;
-            if (tile2 == 0)
-            {
-                _perso2Position.Y += 14;
-            }
-            else
-                startYP2 = _perso2Position.Y;
-
-
-            //Deplacement Joueur 2
-            if (keyboardState.IsKeyDown(Keys.Right))
-            {
-                animationP2 = "runD";
-                _perso2Position.X += walkSpeedPerso2;
-                lastDirP2 = "D";
-            }
-
-            if (keyboardState.IsKeyDown(Keys.Left))
-            {
-                animationP2 = "runG";
-                _perso2Position.X -= walkSpeedPerso2;
-                lastDirP2 = "G";
-            }
-            */
+           
 
 
             // TODO: Add your update logic here
 
 
 
-            // _perso1.Play(animationP1);
-            // _perso2.Play(animationP2);
-           
             _bulletD1.Play(_annimationBulletD1);
             _bulletG1.Play(_annimationBulletG1);
 
@@ -757,8 +468,7 @@ namespace SmashCup_AllStars
 
 
 
-           // _perso1.Update(deltaSeconds);
-            //_perso2.Update(deltaSeconds);
+            
             
 
             _bulletD1.Update(deltaSeconds);
@@ -795,21 +505,18 @@ namespace SmashCup_AllStars
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             _renduMapPrincipale.Draw(matrix);
 
-            //_game1.SpriteBatch.Draw(_persoRed.Perso1, _persoRed.Perso1Position);
-
 
            
             
-                _game1.SpriteBatch.DrawString(_police, $"Vie RED : {_vieperso1}", _positionVie1, Color.White);
-                _game1.SpriteBatch.DrawString(_police, $"Vie BLUE : {_vieperso2} ", _positionVie2, Color.White);
+                _game1.SpriteBatch.DrawString(_police, $"Damage Counter : {_damagePersoRed}", _positionDamagePersoRed, Color.White);
+                _game1.SpriteBatch.DrawString(_police, $"Damage Counter : {_damagePersoBlue} ", _positionDamagePersoBlue, Color.White);
             if (_timer > 0)
             {
                 _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
             }
 
             Vector2 scalem = new Vector2((float)scaleX * 1.65f, (float)scaleY * 1.35f);
-          //  _game1.SpriteBatch.Draw(_perso1, _perso1Position);
-          //  _game1.SpriteBatch.Draw(_perso2, _perso2Position);
+        
 
          
 
@@ -832,12 +539,7 @@ namespace SmashCup_AllStars
             _game1.SpriteBatch.End();
 
 
-            /*
-            _game1.GraphicsDevice.Clear(Color.Red);
-            _game1.SpriteBatch.Begin();
-            _renduMapPrincipale.Draw();
-            _game1.SpriteBatch.End();
-            */
+
         }
 
 
