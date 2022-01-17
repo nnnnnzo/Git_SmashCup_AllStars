@@ -210,6 +210,12 @@ namespace SmashCup_AllStars
             SpriteSheet bulletG2Image = Content.Load<SpriteSheet>("bulletBlueV2.sf", new JsonContentLoader());
             _bulletG2 = new AnimatedSprite(bulletG2Image);
 
+            // spritesheet mob
+            SpriteSheet mobSheet = Content.Load<SpriteSheet>("spriteMob.sf", new JsonContentLoader());
+            _mob = new AnimatedSprite(mobSheet);
+            SpriteSheet spriteSheetB3 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+            _bulletMob = new AnimatedSprite(spriteSheetB3);
+
             // police de vie
             _police = Content.Load<SpriteFont>("Font");
 
