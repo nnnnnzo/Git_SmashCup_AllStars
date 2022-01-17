@@ -38,12 +38,15 @@ namespace SmashCup_AllStars
         private bool jumpingP1, jumpingP2; //Is the character jumping?
         private float startYP1, jumpspeedP1 = 0, startYP2, jumpspeedP2 = 0; //startY to tell us //where it lands, jumpspeed to see how fast it jumps
 
+        //var IA
+        private int _vieMob;
+        private Vector2 _positionVieMob;
         private Vector2 _mobPosition;
+        private int _vitesseMob;
         private AnimatedSprite _mob;
         private string animationMob;
         private bool spawnMob;
         private float _timerMort;
-
         private AnimatedSprite _bulletMob;
         private Vector2 _bulletPositionMob;
         private string _bulletPositionDepartMob;
@@ -81,9 +84,6 @@ namespace SmashCup_AllStars
         //vie perso 2
         private int _vieperso2;
         private Vector2 _positionVie2;
-        //vie Mob
-        private int _vieMob;
-        private Vector2 _positionVieMob;
 
         //timer
         private float _timer;
@@ -161,11 +161,13 @@ namespace SmashCup_AllStars
             _vieMob = 12;
             //var Mob
             _mobPosition = new Vector2(-500, -500);
-            animationMob = "idleG";
+            animationMob = "idleD";
+            _vitesseMob = 50;
             //var bullet Mob
-            animationBulletMob = "dirG";
+            animationBulletMob = "dirD";
+            lastDirMob = "D";
             _bulletPositionMob = new Vector2(100, 100);
-            _vitesseBulletMob = 100;
+            _vitesseBulletMob = 200;
             deplacementBMob = false;
 
 
@@ -237,16 +239,14 @@ namespace SmashCup_AllStars
             float walkSpeedPerso1 = deltaSeconds * _vitessePerso1;
             float walkSpeedPerso2 = deltaSeconds * _vitessePerso2;
             float walkSpeedBdf = deltaSeconds * _vitesseBullet;
+            float walkSpeedBMob = deltaSeconds * _vitesseBulletMob;
+            float walkSpeedMob = deltaSeconds * _vitesseMob;
             float deltaSecond = deltaSeconds / 2;
             _timer = _timer - (deltaSeconds / 3);
             if (_timer > 0)
             {
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     _game1.Exit();
-              
-                
-
-
 
                 KeyboardState keyboardState = Keyboard.GetState();
 
@@ -478,6 +478,7 @@ namespace SmashCup_AllStars
                 {
                     _mobPosition = new Vector2(800, 650);
                 }
+                
                 if (deplacementBMob) // apparition de la bullet du mob
                 {
                     if (_bulletPositionDepartMob == "D")
@@ -499,7 +500,14 @@ namespace SmashCup_AllStars
                         }
                         else
                         {
-                            _bulletPositionMob.X += walkSpeedBdf;
+                            if(_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
+                            {
+                                _bulletPositionMob.X += walkSpeedBMob * 2;
+                            }
+                            else
+                            {
+                                _bulletPositionMob.X += walkSpeedBMob;
+                            }
                         }
                     }
                     else
@@ -521,7 +529,14 @@ namespace SmashCup_AllStars
                         }
                         else
                         {
-                            _bulletPositionMob.X -= walkSpeedBdf;
+                            if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
+                            {
+                                _bulletPositionMob.X -= walkSpeedBMob * 2;
+                            }
+                            else
+                            {
+                                _bulletPositionMob.X -= walkSpeedBMob;
+                            }
                         }
                     }
                 }
@@ -535,7 +550,7 @@ namespace SmashCup_AllStars
                         _bulletPositionMob.Y = _perso1Position.Y + 80;
                     }
                 }
-
+                
                 if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
                 {
                     _vieMob = 0;
@@ -549,19 +564,19 @@ namespace SmashCup_AllStars
                         if (_perso1Position.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                         {
                             animationMob = "idleG";
+                            lastDirMob = "D";
                             if(_mobPosition.X <= 1350)
                             {
-                                _mobPosition.X++;
-                                lastDirMob = "D";
+                                _mobPosition.X += walkSpeedMob;
                             }
                         }
                         else if (_perso1Position.X < _mobPosition.X)
                         {
                             animationMob = "idleD";
+                            lastDirMob = "G";
                             if (_mobPosition.X >= 700)
                             {
-                                _mobPosition.X--;
-                                lastDirMob = "G";
+                                _mobPosition.X -= walkSpeedMob;
                             }
                         }
                         else if (_perso1Position.X == _mobPosition.X)
@@ -574,19 +589,19 @@ namespace SmashCup_AllStars
                         if (_perso1Position.X > _mobPosition.X)
                         {
                             animationMob = "rageG";
+                            lastDirMob = "D";
                             if (_mobPosition.X <= 1350)
                             {
-                                _mobPosition.X++;
-                                lastDirMob = "D";
+                                _mobPosition.X += walkSpeedMob;
                             }
                         }
                         else if (_perso1Position.X < _mobPosition.X)
                         {
                             animationMob = "rageD";
+                            lastDirMob = "G";
                             if (_mobPosition.X >= 700)
                             {
-                                _mobPosition.X--;
-                                lastDirMob = "G";
+                                _mobPosition.X -= walkSpeedMob;
                             }
                         }
                         else if (_perso1Position.X == _mobPosition.X)
@@ -597,7 +612,7 @@ namespace SmashCup_AllStars
                 }
 
                 // si les perso tombent de la platforme, ils perdent une vie et respawn. 
-                if(_perso1Position.X >= 2800 || _perso1Position.Y >= 1250 || _perso1Position.X <= 0)
+                if (_perso1Position.X >= 2800 || _perso1Position.Y >= 1250 || _perso1Position.X <= 0)
                 {
                     _vieperso1--;
                     _perso1Position = new Vector2(800, 650);
@@ -612,7 +627,7 @@ namespace SmashCup_AllStars
                     //----------------------------------------------------------------------------------------
 
                     //Direction dans laquelles regarder
-                    if (lastDirP1 == "D")
+                if (lastDirP1 == "D")
                     animationP1 = "idleD";
                 else
                     animationP1 = "idleG";
@@ -923,7 +938,7 @@ namespace SmashCup_AllStars
             _perso2.Play(animationP2);
             _bullet1.Play(animationBullet1);
             _bullet2.Play(animationBullet2);
-            _bulletMob.Play(animationBullet2);
+            _bulletMob.Play(animationBulletMob);
             //_bullet.Play(_annimationBullet);
             _perso1.Update(deltaSeconds);
             //_persoRed.Perso1.Update(deltaSeconds);
