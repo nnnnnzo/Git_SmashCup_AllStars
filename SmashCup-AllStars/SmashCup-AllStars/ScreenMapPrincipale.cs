@@ -667,9 +667,14 @@ namespace SmashCup_AllStars
             }
 
             Vector2 scalem = new Vector2((float)scaleX * 1.65f, (float)scaleY * 1.35f);
-        
 
-         
+            if (spawnMob == true)
+            {
+                _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
+                _game1.SpriteBatch.DrawString(_police, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.White);
+                _game1.SpriteBatch.Draw(_bulletMob, _bulletPositionMob, 0, scalem);
+            }
+
 
             for (int i = 0; i < bulletsD1.Count; i++)
                 _game1.SpriteBatch.Draw(_bulletD1, bulletsD1[i], 0, scalem);
