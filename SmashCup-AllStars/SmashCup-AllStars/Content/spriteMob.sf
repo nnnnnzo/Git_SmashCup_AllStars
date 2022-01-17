@@ -1,0 +1,24 @@
+{
+  "textureAtlas": {
+    "texture": "spritesheetMob.png",
+    "regionWidth": 750,
+    "regionHeight": 900
+  },
+  "cycles": {
+    "idleG": {
+      "frames": [10,12,14,16,14,12]
+    },
+    "idleD": {
+      "frames": [11,13,15,17,15,13]
+    },
+    "rageG": {
+      "frames": [3,5,7,9,7,5]
+    },
+    "rageD": {
+      "frames": [2,4,6,8,6,4]
+    },
+    "mort": {
+      "frames": [1,0]
+    }
+  }
+}
