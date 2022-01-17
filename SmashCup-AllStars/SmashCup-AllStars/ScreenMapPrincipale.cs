@@ -322,7 +322,7 @@ namespace SmashCup_AllStars
                     if (_colBoxG1.Intersects(_boxMob))
                     {
                         _vieMob --;
-                        bulletsD1.RemoveAt(i);
+                        bulletsG1.RemoveAt(i);
                     }
 
                 }
@@ -668,7 +668,8 @@ namespace SmashCup_AllStars
 
             Vector2 scalem = new Vector2((float)scaleX * 1.65f, (float)scaleY * 1.35f);
             Vector2 scalem2 = new Vector2((float)scaleX * 2f, (float)scaleY * 1.6f);
-            if (spawnMob == true)
+
+            if (spawnMob == false)
             {
                 _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
                 _game1.SpriteBatch.DrawString(_police, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.White);
