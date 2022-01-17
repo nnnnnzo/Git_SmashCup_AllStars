@@ -623,10 +623,15 @@ namespace SmashCup_AllStars
             _bulletG1.Play(_annimationBulletG1);
             _bulletD2.Play(_annimationBulletD2);
             _bulletG2.Play(_annimationBulletG2);
+            _bulletMob.Play(animationBulletMob);
+            _mob.Play(animationMob);
+
             _bulletD1.Update(deltaSeconds);
             _bulletG1.Update(deltaSeconds);
             _bulletD2.Update(deltaSeconds);
             _bulletG2.Update(deltaSeconds);
+            _bulletMob.Update(deltaSeconds);
+            _mob.Update(deltaSeconds);
             _persoRed.Update(gameTime);
             _persoBlue.Update(gameTime);
             //base.Update(gameTime);
