@@ -156,7 +156,22 @@ namespace SmashCup_AllStars
             _annimationBulletD2 = "dirD";
             _annimationBulletG2 = "dirG";
 
-        
+
+            // Vie IA / Mob
+            _positionVieMob = new Vector2(1200, 0);
+            _vieMob = 12;
+            //var Mob
+            _mobPosition = new Vector2(-500, -500);
+            animationMob = "idleD";
+            _vitesseMob = 50;
+            //var bullet Mob
+            animationBulletMob = "dirD";
+            lastDirMob = "D";
+            _bulletPositionMob = new Vector2(100, 100);
+            _vitesseBulletMob = 200;
+            deplacementBMob = false;
+
+
 
 
 
