@@ -298,6 +298,13 @@ namespace SmashCup_AllStars
                         bulletsD1.RemoveAt(i);
                     }
 
+                    if (_colBoxD1.Intersects(_boxMob))
+                    {
+                        _vieMob--;
+                        bulletsD1.RemoveAt(i);
+                    }
+
+
                 }
 
                 for (int i = 0; i < bulletsG1.Count; i++)
@@ -310,6 +317,12 @@ namespace SmashCup_AllStars
                     {
                         _damagePersoBlue = _damagePersoBlue + 3;
                         bulletsG1.RemoveAt(i);
+                    }
+
+                    if (_colBoxG1.Intersects(_boxMob))
+                    {
+                        _vieMob --;
+                        bulletsD1.RemoveAt(i);
                     }
 
                 }
@@ -448,12 +461,12 @@ namespace SmashCup_AllStars
                         }
                         if (_boxB3.Intersects(_boxPersoRed))
                         {
-                            _vieperso1--;
+                            _damagePersoRed = _damagePersoRed + 6;
                             deplacementBMob = false;
                         }
                         if (_boxB3.Intersects(_boxPersoBlue))
                         {
-                            _vieperso2--;
+                            _damagePersoBlue = _damagePersoBlue + 6;
                             deplacementBMob = false;
                         }
                         else
@@ -477,12 +490,12 @@ namespace SmashCup_AllStars
                         }
                         if (_boxB3.Intersects(_boxPersoRed))
                         {
-                            _vieperso1--;
+                            _damagePersoRed = _damagePersoRed + 6;
                             deplacementBMob = false;
                         }
                         if (_boxB3.Intersects(_boxPersoBlue))
                         {
-                            _vieperso2--;
+                            _damagePersoBlue = _damagePersoBlue + 6;
                             deplacementBMob = false;
                         }
                         else
@@ -572,13 +585,13 @@ namespace SmashCup_AllStars
                 // si les perso tombent de la platforme, ils perdent une vie et respawn. 
                 if (_persoRed.PositionPersoRed.X >= 2800 || _persoRed.PositionPersoRed.Y >= 1250 || _persoRed.PositionPersoRed.X <= 0)
                 {
-                    _vieperso1--;
+                    _damagePersoRed = _damagePersoRed + 3;
                     _persoRed.PositionPersoRed = new Vector2(800, 650);
                 }
 
                 if (_persoBlue.PositionPersoBlue.X >= 2700 || _persoBlue.PositionPersoBlue.Y >= 1250 || _persoBlue.PositionPersoBlue.X <= 0)
                 {
-                    _vieperso2--;
+                    _damagePersoBlue = _damagePersoBlue + 3;
                     _persoBlue.PositionPersoBlue = new Vector2(800, 650);
                 }
 
@@ -641,8 +654,8 @@ namespace SmashCup_AllStars
 
            
             
-                _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoRed : {_damagePersoRed}", _positionDamagePersoRed, Color.White);
-                _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoBlue : {_damagePersoBlue} ", _positionDamagePersoBlue, Color.White);
+                _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoRed : {_damagePersoRed}", _positionDamagePersoRed, Color.Red);
+                _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoBlue : {_damagePersoBlue} ", _positionDamagePersoBlue, Color.Blue);
             if (_timer > 0)
             {
                 _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
