@@ -86,7 +86,7 @@ namespace SmashCup_AllStars
         private int _vitesseMob;
         private AnimatedSprite _mob;
         private string animationMob;
-        private bool spawnMob;
+        private bool spawnMob=false;
         private float _timerMort;
         private AnimatedSprite _bulletMob;
         private Vector2 _bulletPositionMob;
@@ -146,7 +146,7 @@ namespace SmashCup_AllStars
 
             //Timer
             _positionTimer = new Vector2(0, 120);
-            _timer = 500;
+            _timer = 180;
 
             //Bullets
             

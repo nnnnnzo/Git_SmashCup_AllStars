@@ -80,10 +80,16 @@
     <None Update="Content\musicMenu3.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\spriteMob.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\spritesBdf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\spritesheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\spritesheetMob.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
    </ItemGroup>
