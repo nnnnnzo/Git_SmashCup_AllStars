@@ -183,7 +183,7 @@ namespace SmashCup_AllStars
             _timer = 500;
 
             //Bullets
-            //_positionBulletD1 = new Vector2(800, 200);
+            _positionBulletD1 = new Vector2(800, 200);
             _annimationBulletD1 = "dirD";
             _annimationBulletG1 = "dirG";
 
@@ -272,7 +272,7 @@ namespace SmashCup_AllStars
                 Rectangle _boxPerso2 = new Rectangle((int)_perso2Position.X - 98 / 2, (int)_perso2Position.Y - 5, 98, 150);
 
                
-                /*
+                
 
                 if (keyboardState.IsKeyDown(Keys.Space))
                 {
@@ -280,21 +280,21 @@ namespace SmashCup_AllStars
                     {
                         if (_lastDirP1 == "D")
                         {
-                            bulletsD1.Add(new Vector2(_perso1Position.X + 50, _perso1Position.Y + 60));
+                            bulletsD1.Add(new Vector2(_persoRed.PositionPersoRed.X + 50, _persoRed.PositionPersoRed.Y + 60));
                             _currentCooldownP1 = 0;
                         }
                         else
                         {
-                            bulletsG1.Add(new Vector2(_perso1Position.X - 50, _perso1Position.Y + 60));
+                            bulletsG1.Add(new Vector2(_persoRed.PositionPersoRed.X - 50, _persoRed.PositionPersoRed.Y + 60));
                             _currentCooldownP1 = 0;
                         }
 
                     }
                 }
 
-                */
+                
 
-                /*
+                
                 if (keyboardState.IsKeyDown(Keys.RightControl))
                 {
                     if (_currentCooldownP2 >= _definedCooldown)
@@ -342,9 +342,9 @@ namespace SmashCup_AllStars
 
                 }
 
-                */
+                
 
-                /*
+                
 
                 for (int i = 0; i < bulletsD2.Count; i++)
                 {
@@ -373,10 +373,10 @@ namespace SmashCup_AllStars
                     }
                 }
 
-                */
+                
 
 
-
+                /*
 
                 //Missile test PersoRed Gauche Marche droite non
 
@@ -427,11 +427,12 @@ namespace SmashCup_AllStars
 
                 }
 
+                */
 
 
 
 
-                /*
+                
 
                 //Jump Joueur 1
                 if (jumpingP1)
@@ -522,7 +523,7 @@ namespace SmashCup_AllStars
                     lastDirP2 = "G";
                 }
 
-
+                /*
                 
                 ushort x1 = (ushort)(_perso1Position.X / 70 + 0.5);
                 ushort y1 = (ushort)(_perso1Position.Y / 70 + 2.12);
@@ -746,7 +747,7 @@ namespace SmashCup_AllStars
 
 
             // _perso1.Play(animationP1);
-           //  _perso2.Play(animationP2);
+            // _perso2.Play(animationP2);
            
             _bulletD1.Play(_annimationBulletD1);
             _bulletG1.Play(_annimationBulletG1);
@@ -756,8 +757,8 @@ namespace SmashCup_AllStars
 
 
 
-          //  _perso1.Update(deltaSeconds);
-           // _perso2.Update(deltaSeconds);
+           // _perso1.Update(deltaSeconds);
+            //_perso2.Update(deltaSeconds);
             
 
             _bulletD1.Update(deltaSeconds);
