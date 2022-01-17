@@ -254,9 +254,10 @@ namespace SmashCup_AllStars
                 //colisions
                 Rectangle _boxPersoRed = new Rectangle((int)_persoRed.PositionPersoRed.X - 98 / 2, (int)_persoRed.PositionPersoRed.Y - 5, 98, 150);
                 Rectangle _boxPersoBlue = new Rectangle((int)_persoBlue.PositionPersoBlue.X - 98 / 2, (int)_persoBlue.PositionPersoBlue.Y - 5, 98, 150);
+                Rectangle _boxB3 = new Rectangle((int)_bulletPositionMob.X - 286 / 4, (int)_bulletPositionMob.Y - 146 / 4, 143, 73);
+                Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 200, 400, 600);
 
-               
-                
+
 
 
 
