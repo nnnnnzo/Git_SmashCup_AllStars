@@ -408,7 +408,6 @@ namespace SmashCup_AllStars
                 }
 
 
-
                 //Jump Joueur 1
                 if (jumpingP1)
                 {
@@ -556,34 +555,57 @@ namespace SmashCup_AllStars
                     _vieMob = 0;
                 }
 
+                int distRed = Math.Abs((int)_mobPosition.X + (int)_perso1Position.X);
+                int distBlue = Math.Abs((int)_mobPosition.X + (int)_perso2Position.X);
+
+
+
                 if (spawnMob)
                 {
                     //Direction du mob selon le joueur (IA)
                     if (_vieMob > 6) // si la vie est supérieur à 6
                     {
-                        if (_perso1Position.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
+                        if (_perso1Position.X < _mobPosition.X && _perso2Position.X < _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                         {
                             animationMob = "idleG";
                             lastDirMob = "D";
-                            if(_mobPosition.X <= 1350)
-                            {
-                                _mobPosition.X += walkSpeedMob;
-                            }
-                        }
-                        else if (_perso1Position.X < _mobPosition.X)
-                        {
-                            animationMob = "idleD";
-                            lastDirMob = "G";
                             if (_mobPosition.X >= 700)
                             {
                                 _mobPosition.X -= walkSpeedMob;
                             }
                         }
-                        else if (_perso1Position.X == _mobPosition.X)
+                        else if (_perso1Position.X > _mobPosition.X && _perso2Position.X > _mobPosition.X) //si le red.X < mob.X alors gauche
+                        {
+                            animationMob = "idleD";
+                            lastDirMob = "G";
+                            if (_mobPosition.X <= 1350)
+                            {
+                                _mobPosition.X += walkSpeedMob;
+                            }
+                        }
+                        else if(distRed < distBlue && _perso1Position.X > _mobPosition.X) // si red gauche de mob et distance la plus petite alors mob dir gauche
+                        {
+                            _mobPosition.X -= walkSpeedMob;
+                        }
+                        else if (distRed < distBlue && _perso1Position.X < _mobPosition.X)
+                        {
+                            _mobPosition.X += walkSpeedMob;
+                        }
+                        else if (distBlue < distRed && _perso2Position.X > _mobPosition.X)
+                        {
+                            _mobPosition.X -= walkSpeedMob;
+                        }
+                        else if (distBlue < distRed && _perso2Position.X < _mobPosition.X)
+                        {
+                            _mobPosition.X += walkSpeedMob;
+                        }
+                        else if (_perso1Position.X == _mobPosition.X || _perso2Position.X == _mobPosition.X) //on peut laisser
                         {
                             animationMob = "idleD";
                         }
                     }
+
+
                     else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6 de vie
                     {
                         if (_perso1Position.X > _mobPosition.X)
