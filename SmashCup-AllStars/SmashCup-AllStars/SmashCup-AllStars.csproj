@@ -62,6 +62,12 @@
     <None Update="Content\bdf.sf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\bulletMob.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\bulletMobIm2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\bulletRedIm2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

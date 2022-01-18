@@ -1,0 +1,15 @@
+{
+  "textureAtlas": {
+    "texture": "bulletMobIm2.png",
+    "regionWidth": 155,
+    "regionHeight": 125
+  },
+  "cycles": {
+    "dirG": {
+      "frames": [0,1,2,3]
+    },
+    "dirD": {
+      "frames": [11,10,9,8]
+    }
+  }
+}

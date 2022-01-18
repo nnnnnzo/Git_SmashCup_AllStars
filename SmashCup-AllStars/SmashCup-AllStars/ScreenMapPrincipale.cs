@@ -213,7 +213,7 @@ namespace SmashCup_AllStars
             // spritesheet mob
             SpriteSheet mobSheet = Content.Load<SpriteSheet>("spriteMob.sf", new JsonContentLoader());
             _mob = new AnimatedSprite(mobSheet);
-            SpriteSheet spriteSheetB3 = Content.Load<SpriteSheet>("bullet.sf", new JsonContentLoader());
+            SpriteSheet spriteSheetB3 = Content.Load<SpriteSheet>("bulletMob.sf", new JsonContentLoader());
             _bulletMob = new AnimatedSprite(spriteSheetB3);
 
             // police de vie

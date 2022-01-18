@@ -90,6 +90,24 @@
 /processorParam:TextureFormat=Color
 /build:bulletImage.png
 
+#begin bulletMob.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:bulletMob.sf
+
+#begin bulletMobIm2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bulletMobIm2.png
+
 #begin bulletRedIm2.png
 /importer:TextureImporter
 /processor:TextureProcessor
