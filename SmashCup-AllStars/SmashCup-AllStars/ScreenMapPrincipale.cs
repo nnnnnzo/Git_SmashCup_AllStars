@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace SmashCup_AllStars
 {
-    public enum TimerFin { Fin };
+   
     public class ScreenMapPrincipale : GameScreen
     {
 
@@ -21,14 +21,9 @@ namespace SmashCup_AllStars
         private TiledMap _mapPrincipale;
         private TiledMapRenderer _renduMapPrincipale;
         private TiledMapTileLayer _mapLayerSol;
-        private float _definedCooldown = 0.5f;
+        private float _definedCooldown = 0.7f;
         
 
-
-      
-
-
-       
 
         // Animation bullets
 
@@ -50,8 +45,11 @@ namespace SmashCup_AllStars
         private int _vitesseBullet;
 
 
-        private SpriteFont _police;
-      
+        private SpriteFont _policePersoRed;
+        private SpriteFont _policePersoBlue;
+        private SpriteFont _policeMob;
+        private SpriteFont _policeTimer;
+
         //timer
         private float _timer;
         private Vector2 _positionTimer;
@@ -97,12 +95,16 @@ namespace SmashCup_AllStars
         private string lastDirMob;
 
 
+        // Condition de victoire
+        
 
 
         public TiledMapTileLayer MapLayerSol { get => _mapLayerSol; set => _mapLayerSol = value; }
         public float Timer { get => _timer; set => _timer = value; }
         public Vector2 StartYPtest { get => _startYPtest; set => _startYPtest = value; }
-
+       
+        public int DamagePersoRed { get => _damagePersoRed; set => _damagePersoRed = value; }
+        public int DamagePersoBlue { get => _damagePersoBlue; set => _damagePersoBlue = value; }
 
         public ScreenMapPrincipale(Game1 game) : base(game)
         {
@@ -137,16 +139,15 @@ namespace SmashCup_AllStars
             // Vie perso Red
             _positionDamagePersoRed = new Vector2(0, 0);
             _damagePersoRed = 0;
-            _positionDamagePersoBlue = new Vector2(0, 60);
-            _damagePersoBlue = 0;
+           
 
             // Vie perso Blue
-            _positionDamagePersoBlue = new Vector2(0, 60);
+            _positionDamagePersoBlue = new Vector2(2500, 0);
             _damagePersoBlue = 0;
 
             //Timer
-            _positionTimer = new Vector2(0, 120);
-            _timer = 180;
+            _positionTimer = new Vector2(1350, 60);
+            _timer = 120;
 
             //Bullets
             
@@ -189,11 +190,12 @@ namespace SmashCup_AllStars
             _mapLayerSol = _mapPrincipale.GetLayer<TiledMapTileLayer>("Terrain");
             _persoRed.MapLayerSolPersoRed = _mapLayerSol;
             _persoBlue.MapLayerSolPersoBlue = _mapLayerSol;
-
-
-
             
-           
+
+
+
+
+
 
             bulletsD1 = new List<Vector2>();
             SpriteSheet bulletD1Image = Content.Load<SpriteSheet>("bulletRedV2.sf", new JsonContentLoader());
@@ -218,10 +220,13 @@ namespace SmashCup_AllStars
             SpriteSheet spriteSheetB3 = Content.Load<SpriteSheet>("bulletMob.sf", new JsonContentLoader());
             _bulletMob = new AnimatedSprite(spriteSheetB3);
 
-            // police de vie
-            _police = Content.Load<SpriteFont>("Font");
+            // police 
+            _policePersoRed = Content.Load<SpriteFont>("font2");
+            _policePersoBlue = Content.Load<SpriteFont>("font2");
+            _policeMob = Content.Load<SpriteFont>("font2");
+            _policeTimer = Content.Load<SpriteFont>("font2");
 
-            
+
             _persoRed.LoadContent(Content);
             _persoBlue.LoadContent(Content);
             //base.LoadContent();
@@ -255,6 +260,8 @@ namespace SmashCup_AllStars
                 Rectangle _boxB3 = new Rectangle((int)_bulletPositionMob.X - 286 / 4, (int)_bulletPositionMob.Y - 146 / 4, 143, 73);
                 Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 200, 400, 600);
 
+
+                Console.WriteLine(_persoRed.PositionPersoRed.X+"  "+ _persoRed.PositionPersoRed.Y);
                 //Missile test PersoRed Gauche ,droite
                 if (keyboardState.IsKeyDown(Keys.Space))
                 {
@@ -282,7 +289,7 @@ namespace SmashCup_AllStars
                     Rectangle _colBoxD1 = new Rectangle((int)bulletsD1[i].X - 286 / 4, (int)bulletsD1[i].Y - 146 / 4, 143, 30);
                     if (_colBoxD1.Intersects(_boxPersoBlue))
                     {
-                        _damagePersoBlue= _damagePersoBlue+3;
+                        DamagePersoBlue= DamagePersoBlue+3;
                         bulletsD1.RemoveAt(i);
                     }
 
@@ -301,7 +308,7 @@ namespace SmashCup_AllStars
                     Rectangle _colBoxG1 = new Rectangle((int)bulletsG1[i].X - 286 / 4, (int)bulletsG1[i].Y - 146 / 4, 143, 30);
                     if (_colBoxG1.Intersects(_boxPersoBlue))
                     {
-                        _damagePersoBlue = _damagePersoBlue + 3;
+                        DamagePersoBlue = DamagePersoBlue + 3;
                         bulletsG1.RemoveAt(i);
                     }
                     if (_colBoxG1.Intersects(_boxMob))
@@ -338,7 +345,7 @@ namespace SmashCup_AllStars
                     Rectangle _colBoxD2 = new Rectangle((int)bulletsD2[i].X - 286 / 4, (int)bulletsD2[i].Y - 146 / 4, 143, 30);
                     if (_colBoxD2.Intersects(_boxPersoRed))
                     {
-                        _damagePersoRed = _damagePersoRed + 3;
+                        DamagePersoRed = DamagePersoRed + 3;
                         bulletsD2.RemoveAt(i);
                     }
                     if (_colBoxD2.Intersects(_boxMob))
@@ -356,7 +363,7 @@ namespace SmashCup_AllStars
                     Rectangle _colBoxG2 = new Rectangle((int)bulletsG2[i].X - 286 / 4, (int)bulletsG2[i].Y - 146 / 4, 143, 30);
                     if (_colBoxG2.Intersects(_boxPersoRed))
                     {
-                        _damagePersoRed = _damagePersoRed + 3;
+                        DamagePersoRed = DamagePersoRed + 3;
                         bulletsG2.RemoveAt(i);
                     }
                     if (_colBoxG2.Intersects(_boxMob))
@@ -395,7 +402,7 @@ namespace SmashCup_AllStars
                 }
 
                 //----------------------------------------------------------------------------------------
-                if (_timer >= 100 && _timer <= 175) // temps où l'IA va apparaitre dans le jeu
+                if (_timer >= 100 && _timer <=115) // temps où l'IA va apparaitre dans le jeu
                 {
                     spawnMob = true;
                 }
@@ -414,7 +421,7 @@ namespace SmashCup_AllStars
                     spawnMob = false;
                     _mobPosition = new Vector2(-500, -500);
                 }
-                if (_timer >= 100 && _timer <= 175 && _mobPosition.X <= 700 && spawnMob == true)
+                if (_timer >= 100 && _timer <= 115 && _mobPosition.X <= 700 && spawnMob == true)
                 {
                     _mobPosition = new Vector2(800, 650);
                 }
@@ -429,12 +436,12 @@ namespace SmashCup_AllStars
                         }
                         if (_boxB3.Intersects(_boxPersoRed))
                         {
-                            _damagePersoRed = _damagePersoRed + 6;
+                            DamagePersoRed = DamagePersoRed + 6;
                             deplacementBMob = false;
                         }
                         if (_boxB3.Intersects(_boxPersoBlue))
                         {
-                            _damagePersoBlue = _damagePersoBlue + 6;
+                            DamagePersoBlue = DamagePersoBlue + 6;
                             deplacementBMob = false;
                         }
                         else
@@ -458,12 +465,12 @@ namespace SmashCup_AllStars
                         }
                         if (_boxB3.Intersects(_boxPersoRed))
                         {
-                            _damagePersoRed = _damagePersoRed + 6;
+                            DamagePersoRed = DamagePersoRed + 6;
                             deplacementBMob = false;
                         }
                         if (_boxB3.Intersects(_boxPersoBlue))
                         {
-                            _damagePersoBlue = _damagePersoBlue + 6;
+                            DamagePersoBlue = DamagePersoBlue + 6;
                             deplacementBMob = false;
                         }
                         else
@@ -550,23 +557,28 @@ namespace SmashCup_AllStars
                     }
                 }
 
+
                 // si les perso tombent de la platforme, ils perdent une vie et respawn. 
                 if (_persoRed.PositionPersoRed.X >= 2800 || _persoRed.PositionPersoRed.Y >= 1250 || _persoRed.PositionPersoRed.X <= 0)
                 {
-                    _damagePersoRed = _damagePersoRed + 3;
+                    DamagePersoRed = DamagePersoRed + 3;
                     _persoRed.PositionPersoRed = new Vector2(800, 650);
                 }
 
                 if (_persoBlue.PositionPersoBlue.X >= 2700 || _persoBlue.PositionPersoBlue.Y >= 1250 || _persoBlue.PositionPersoBlue.X <= 0)
                 {
-                    _damagePersoBlue = _damagePersoBlue + 3;
+                    DamagePersoBlue = DamagePersoBlue + 3;
                     _persoBlue.PositionPersoBlue = new Vector2(800, 650);
                 }
                 //----------------------------------------------------------------------------------------
+
+
+
             }
 
             else
                 _timer = -1;
+
 
             _bulletD1.Play(_annimationBulletD1);
             _bulletG1.Play(_annimationBulletG1);
@@ -593,12 +605,12 @@ namespace SmashCup_AllStars
             var matrixMin = Matrix.CreateScale(scaleX, scaleY, 0.5f);
             _game1.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             _renduMapPrincipale.Draw(matrix);
-            _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoRed : {_damagePersoRed} %", _positionDamagePersoRed, Color.Red);
-            _game1.SpriteBatch.DrawString(_police, $"Damage Counter PersoBlue : {_damagePersoBlue} %", _positionDamagePersoBlue, Color.Blue);
+            _game1.SpriteBatch.DrawString(_policePersoRed, $"Damage Red : {DamagePersoRed} %", _positionDamagePersoRed, Color.DarkRed);
+            _game1.SpriteBatch.DrawString(_policePersoBlue, $"Damage Blue : {DamagePersoBlue} %", _positionDamagePersoBlue, Color.DarkBlue);
             
             if (_timer > 0)
             {
-                _game1.SpriteBatch.DrawString(_police, $"Chrono : {Math.Round(Timer)} ", _positionTimer, Color.White);
+                _game1.SpriteBatch.DrawString(_policeTimer, $"{Math.Round(_timer)}", _positionTimer, Color.Black);
             }
 
             Vector2 scalem = new Vector2((float)scaleX * 1.65f, (float)scaleY * 1.35f);
@@ -607,7 +619,7 @@ namespace SmashCup_AllStars
             if (spawnMob == true)
             {
                 _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
-                _game1.SpriteBatch.DrawString(_police, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.White);
+                _game1.SpriteBatch.DrawString(_policeMob, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.DarkGreen);
                 _game1.SpriteBatch.Draw(_bulletMob, _bulletPositionMob, 0, scalem);
             }
 

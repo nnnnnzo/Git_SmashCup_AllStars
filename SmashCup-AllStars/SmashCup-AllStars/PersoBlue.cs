@@ -58,7 +58,7 @@ namespace SmashCup_AllStars
 
 
             // joueur 1
-            _positionPersoBlue = new Vector2(ScreenMapPrincipale.WIDTH_WINDOW / 2, ScreenMapPrincipale.HEIGHT_WINDOW / 2);
+            _positionPersoBlue = new Vector2(1970,840);
             _vitessePersoBlue = 200;
             _animationPersoBlue = "idleG";
             _lastDirPersoBlue = "G";

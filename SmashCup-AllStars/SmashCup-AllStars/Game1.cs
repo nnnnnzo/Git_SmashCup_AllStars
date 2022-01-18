@@ -128,13 +128,26 @@ namespace SmashCup_AllStars
 
             }
 
-            else if (_ecranEnCours == Ecran.Principal && _screenMapPrincipale.Timer == -1)
+            else if (_ecranEnCours == Ecran.Principal && _screenMapPrincipale.Timer == -1 && _screenMapPrincipale.DamagePersoBlue<_screenMapPrincipale.DamagePersoRed)
             {
                 _ecranEnCours = Ecran.End;
                 _screenManager.LoadScreen(_screenFin, new FadeTransition(GraphicsDevice, Color.Black));
+                _screenFin.Fin = FinGame.BleuWon;
+            }
+            else if (_ecranEnCours == Ecran.Principal && _screenMapPrincipale.Timer == -1 && _screenMapPrincipale.DamagePersoBlue > _screenMapPrincipale.DamagePersoRed)
+            {
+                _ecranEnCours = Ecran.End;
+                _screenManager.LoadScreen(_screenFin, new FadeTransition(GraphicsDevice, Color.Black));
+                _screenFin.Fin = FinGame.RougeWon;
+            }
+
+            else if (_ecranEnCours == Ecran.End && keyboardState.IsKeyDown(Keys.R))
+            {
+                _ecranEnCours = Ecran.Menu;
+                _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
 
             }
-            
+
 
             base.Update(gameTime);
         }
