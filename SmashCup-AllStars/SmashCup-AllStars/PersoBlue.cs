@@ -112,7 +112,6 @@ namespace SmashCup_AllStars
                 _lastDirPersoBlue = "G";
             }
 
-
             if (_jumpingPersoBlue)
             {
                 _positionPersoBlue.Y += _jumpspeedPersoBlue;//Making it go up
@@ -126,10 +125,17 @@ namespace SmashCup_AllStars
             }
             else
             {
-                if (keyboardState.IsKeyDown(Keys.Up))
+                if(PositionPersoBlue.Y >= 0)
                 {
-                    _jumpingPersoBlue = true;
-                    _jumpspeedPersoBlue = -44;//Give it upward thrust
+                    if (keyboardState.IsKeyDown(Keys.Up))
+                    {
+                        _jumpingPersoBlue = true;
+                        _jumpspeedPersoBlue = -44;//Give it upward thrust
+                    }
+                }
+                else
+                {
+                    _positionPersoBlue.Y = 10;
                 }
             }
 

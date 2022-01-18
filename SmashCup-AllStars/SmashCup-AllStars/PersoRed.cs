@@ -118,10 +118,17 @@ namespace SmashCup_AllStars
             }
             else
             {
-                if (keyboardState.IsKeyDown(Keys.Z))
+                if(PositionPersoRed.Y >= 0)
                 {
-                    _jumpingPersoRed = true;
-                    _jumpspeedPersoRed = -44;//Give it upward thrust
+                    if (keyboardState.IsKeyDown(Keys.Z))
+                    {
+                        _jumpingPersoRed = true;
+                        _jumpspeedPersoRed = -44;//Give it upward thrust
+                    }
+                }
+                else
+                {
+                    _positionPersoRed.Y = 10;
                 }
             }
 
