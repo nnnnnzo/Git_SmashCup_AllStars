@@ -407,7 +407,6 @@ namespace SmashCup_AllStars
                     }
                 }
 
-
                 //Jump Joueur 1
                 if (jumpingP1)
                 {
@@ -456,7 +455,6 @@ namespace SmashCup_AllStars
                 if (_timer >= 100 && _timer <= 175 ) // temps où l'IA va apparaitre dans le jeu
                 {
                     spawnMob = true;
-                    
                 }
                 else
                 {
@@ -468,74 +466,65 @@ namespace SmashCup_AllStars
                     animationMob = "mort";
                     _timerMort = _timerMort - (deltaSeconds / 3);
                 }
-                if (_timerMort <= 0)
+                if (_timerMort <= 0) //faire disparaître le mob lorsqu'il à passé 2s en animation "mort"
                 {
                     spawnMob = false;
                     _mobPosition = new Vector2(-500, -500);
                 }
-                if (_timer >= 100 && _timer <= 175  && _mobPosition.X <= 700 && spawnMob == true)
+                if (_timer >= 100 && _timer <= 175  && _mobPosition.X <= 700 && spawnMob == true) //moment auquel le mob doit spawn
                 {
                     _mobPosition = new Vector2(800, 650);
                 }
-                
+                // si les perso tombent de la platforme, ils perdent une vie et respawn. 
+                if (_perso1Position.X >= 2800 || _perso1Position.Y >= 1250 || _perso1Position.X <= 0) // si le joueur tombe de la platforme
+                {
+                    _vieperso1--;
+                    _perso1Position = new Vector2(800, 650);
+                }
+
+                if (_perso2Position.X >= 2700 || _perso2Position.Y >= 1250 || _perso2Position.X <= 0) // si le joueur tombe de la platforme
+                {
+                    _vieperso2--;
+                    _perso2Position = new Vector2(800, 650);
+                }
+                if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
+                {
+                    _vieMob = 0;
+                }
+
                 if (deplacementBMob) // apparition de la bullet du mob
                 {
                     if (_bulletPositionDepartMob == "D")
                     {
                         animationBulletMob = "dirD";
-                        if (_bulletPositionMob.X > 2800)
-                        {
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPerso1))
-                        {
-                            _vieperso1--;
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPerso2))
-                        {
-                            _vieperso2--;
-                            deplacementBMob = false;
-                        }
-                        else
-                        {
-                            if(_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
-                            {
-                                _bulletPositionMob.X += walkSpeedBMob * 2;
-                            }
-                            else
-                            {
-                                _bulletPositionMob.X += walkSpeedBMob;
-                            }
-                        }
                     }
                     else
                     {
                         animationBulletMob = "dirG";
-                        if (_bulletPositionMob.X < 0)
+                    }
+                    if (_bulletPositionMob.X > 2800 || _bulletPositionMob.X < 0)
+                    {
+                        deplacementBMob = false;
+                    }
+                    if (_boxB3.Intersects(_boxPerso1))
+                    {
+                        _vieperso1--;
+                        deplacementBMob = false;
+                    }
+                    if (_boxB3.Intersects(_boxPerso2))
+                    {
+                        _vieperso2--;
+                        deplacementBMob = false;
+                    }
+                    else
+                    {
+                        if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
                         {
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPerso1))
-                        {
-                            _vieperso1--;
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPerso2))
-                        {
-                            _vieperso2--;
-                            deplacementBMob = false;
+                            _bulletPositionMob.X += walkSpeedBMob * 2;
                         }
                         else
                         {
-                            if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
-                            {
-                                _bulletPositionMob.X -= walkSpeedBMob * 2;
-                            }
-                            else
-                            {
-                                _bulletPositionMob.X -= walkSpeedBMob;
-                            }
+                            _bulletPositionMob.X += walkSpeedBMob;
                         }
                     }
                 }
@@ -549,102 +538,32 @@ namespace SmashCup_AllStars
                         _bulletPositionMob.Y = _perso1Position.Y + 80;
                     }
                 }
-                
-                if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
-                {
-                    _vieMob = 0;
-                }
 
                 int distRed = Math.Abs((int)_mobPosition.X + (int)_perso1Position.X);
                 int distBlue = Math.Abs((int)_mobPosition.X + (int)_perso2Position.X);
-
-
-
+                // idleD = qui regarde à droite et idleG = qui regarde à gauche
                 if (spawnMob)
                 {
-                    //Direction du mob selon le joueur (IA)
-                    if (_vieMob > 6) // si la vie est supérieur à 6
+                    if (_perso1Position.X < _mobPosition.X && _perso2Position.X < _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                     {
-                        if (_perso1Position.X < _mobPosition.X && _perso2Position.X < _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
-                        {
-                            animationMob = "idleG";
-                            lastDirMob = "D";
-                            if (_mobPosition.X >= 700)
-                            {
-                                _mobPosition.X -= walkSpeedMob;
-                            }
-                        }
-                        else if (_perso1Position.X > _mobPosition.X && _perso2Position.X > _mobPosition.X) //si le red.X < mob.X alors gauche
-                        {
-                            animationMob = "idleD";
-                            lastDirMob = "G";
-                            if (_mobPosition.X <= 1350)
-                            {
-                                _mobPosition.X += walkSpeedMob;
-                            }
-                        }
-                        else if(distRed < distBlue && _perso1Position.X > _mobPosition.X) // si red gauche de mob et distance la plus petite alors mob dir gauche
+                        animationMob = "idleD";
+                        lastDirMob = "G";
+                        if (_mobPosition.X >= 700)
                         {
                             _mobPosition.X -= walkSpeedMob;
-                        }
-                        else if (distRed < distBlue && _perso1Position.X < _mobPosition.X)
-                        {
-                            _mobPosition.X += walkSpeedMob;
-                        }
-                        else if (distBlue < distRed && _perso2Position.X > _mobPosition.X)
-                        {
-                            _mobPosition.X -= walkSpeedMob;
-                        }
-                        else if (distBlue < distRed && _perso2Position.X < _mobPosition.X)
-                        {
-                            _mobPosition.X += walkSpeedMob;
-                        }
-                        else if (_perso1Position.X == _mobPosition.X || _perso2Position.X == _mobPosition.X) //on peut laisser
-                        {
-                            animationMob = "idleD";
                         }
                     }
-
-
-                    else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6 de vie
+                    else if (_perso1Position.X > _mobPosition.X && _perso2Position.X > _mobPosition.X || distRed < distBlue && _perso1Position.X > _mobPosition.X || distRed < distBlue && _perso1Position.X < _mobPosition.X || distBlue < distRed && _perso2Position.X > _mobPosition.X || distBlue < distRed && _perso2Position.X < _mobPosition.X) //si le red.X < mob.X alors gauche
                     {
-                        if (_perso1Position.X > _mobPosition.X)
+                        animationMob = "idleG";
+                        lastDirMob = "D";
+                        if (_mobPosition.X <= 1350)
                         {
-                            animationMob = "rageG";
-                            lastDirMob = "D";
-                            if (_mobPosition.X <= 1350)
-                            {
-                                _mobPosition.X += walkSpeedMob;
-                            }
-                        }
-                        else if (_perso1Position.X < _mobPosition.X)
-                        {
-                            animationMob = "rageD";
-                            lastDirMob = "G";
-                            if (_mobPosition.X >= 700)
-                            {
-                                _mobPosition.X -= walkSpeedMob;
-                            }
-                        }
-                        else if (_perso1Position.X == _mobPosition.X)
-                        {
-                            animationMob = "rageD";
+                            _mobPosition.X += walkSpeedMob;
                         }
                     }
                 }
 
-                // si les perso tombent de la platforme, ils perdent une vie et respawn. 
-                if (_perso1Position.X >= 2800 || _perso1Position.Y >= 1250 || _perso1Position.X <= 0)
-                {
-                    _vieperso1--;
-                    _perso1Position = new Vector2(800, 650);
-                }
-
-                if (_perso2Position.X >= 2700 || _perso2Position.Y >= 1250 || _perso2Position.X <= 0)
-                {
-                    _vieperso2--;
-                    _perso2Position = new Vector2(800, 650);
-                }
 
                     //----------------------------------------------------------------------------------------
 
