@@ -596,9 +596,11 @@ namespace SmashCup_AllStars
 
             if (spawnMob == true)
             {
-                _game1.SpriteBatch.Draw(_bulletMob, _bulletPositionMob, 0, scalem);
-                _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
-                _game1.SpriteBatch.DrawString(_policeMob, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.DarkGreen);
+               
+                
+                    _game1.SpriteBatch.Draw(_bulletMob, _bulletPositionMob, 0, scalem);
+                    _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
+                    _game1.SpriteBatch.DrawString(_policeMob, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.DarkGreen);
                 
             }
 
