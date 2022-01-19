@@ -425,64 +425,51 @@ namespace SmashCup_AllStars
                 {
                     _mobPosition = new Vector2(800, 650);
                 }
+                // si les perso tombent de la platforme, ils perdent une vie et respawn. 
+                if (_persoRed.PositionPersoRed.X >= 2800 || _persoRed.PositionPersoRed.Y >= 1250 || _persoRed.PositionPersoRed.X <= 0)
+                {
+                    DamagePersoRed = DamagePersoRed + 3;
+                    _persoRed.PositionPersoRed = new Vector2(800, 650);
+                }
+
+                if (_persoBlue.PositionPersoBlue.X >= 2700 || _persoBlue.PositionPersoBlue.Y >= 1250 || _persoBlue.PositionPersoBlue.X <= 0)
+                {
+                    DamagePersoBlue = DamagePersoBlue + 3;
+                    _persoBlue.PositionPersoBlue = new Vector2(800, 650);
+                }
                 if (deplacementBMob) // apparition de la bullet du mob
                 {
                     if (_bulletPositionDepartMob == "D")
                     {
                         animationBulletMob = "dirD";
-                        if (_bulletPositionMob.X > 2800)
-                        {
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPersoRed))
-                        {
-                            DamagePersoRed = DamagePersoRed + 6;
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPersoBlue))
-                        {
-                            DamagePersoBlue = DamagePersoBlue + 6;
-                            deplacementBMob = false;
-                        }
-                        else
-                        {
-                            if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
-                            {
-                                _bulletPositionMob.X += walkSpeedBulletMob * 2;
-                            }
-                            else
-                            {
-                                _bulletPositionMob.X += walkSpeedBulletMob;
-                            }
-                        }
                     }
                     else
                     {
                         animationBulletMob = "dirG";
-                        if (_bulletPositionMob.X < 0)
+                    }
+                    if (_bulletPositionMob.X > 2800 || _bulletPositionMob.X < 0)
+                    {
+                        deplacementBMob = false;
+                    }
+                    if (_boxB3.Intersects(_boxPersoRed))
+                    {
+                        DamagePersoRed = DamagePersoRed + 3;
+                        deplacementBMob = false;
+                    }
+                    if (_boxB3.Intersects(_boxPersoBlue))
+                    {
+                        DamagePersoBlue = DamagePersoBlue + 3;
+                        deplacementBMob = false;
+                    }
+                    else
+                    {
+                        if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
                         {
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPersoRed))
-                        {
-                            DamagePersoRed = DamagePersoRed + 6;
-                            deplacementBMob = false;
-                        }
-                        if (_boxB3.Intersects(_boxPersoBlue))
-                        {
-                            DamagePersoBlue = DamagePersoBlue + 6;
-                            deplacementBMob = false;
+                            _bulletPositionMob.X += walkSpeedBulletMob * 2;
                         }
                         else
                         {
-                            if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
-                            {
-                                _bulletPositionMob.X -= walkSpeedBulletMob * 2;
-                            }
-                            else
-                            {
-                                _bulletPositionMob.X -= walkSpeedBulletMob;
-                            }
+                            _bulletPositionMob.X += walkSpeedBulletMob;
                         }
                     }
                 }
@@ -496,84 +483,35 @@ namespace SmashCup_AllStars
                         _bulletPositionMob.Y = _persoRed.PositionPersoRed.Y + 80;
                     }
                 }
-
                 if (_vieMob <= 0) // si la vie de l'IA est <= à 0, elle reste à 0
                 {
                     _vieMob = 0;
                 }
-
+                int distRed = Math.Abs((int)_mobPosition.X + (int)_persoRed.PositionPersoRed.X);
+                int distBlue = Math.Abs((int)_mobPosition.X + (int)_persoBlue.PositionPersoBlue.X);
+                // idleD = qui regarde à droite et idleG = qui regarde à gauche
                 if (spawnMob)
                 {
-                    //Direction du mob selon le joueur (IA)
-                    if (_vieMob > 6) // si la vie est supérieur à 6
+                    if (_persoRed.PositionPersoRed.X < _mobPosition.X && _persoBlue.PositionPersoBlue.X < _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                     {
-                        if (_persoRed.PositionPersoRed.X > _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
+                        animationMob = "idleD";
+                        lastDirMob = "G";
+                        if (_mobPosition.X >= 700)
                         {
-                            animationMob = "idleG";
-                            lastDirMob = "D";
-                            if (_mobPosition.X <= 1350)
-                            {
-                                _mobPosition.X += walkSpeedMob;
-                            }
-                        }
-                        else if (_persoRed.PositionPersoRed.X < _mobPosition.X)
-                        {
-                            animationMob = "idleD";
-                            lastDirMob = "G";
-                            if (_mobPosition.X >= 700)
-                            {
-                                _mobPosition.X -= walkSpeedMob;
-                            }
-                        }
-                        else if (_persoRed.PositionPersoRed.X == _mobPosition.X)
-                        {
-                            animationMob = "idleD";
+                            _mobPosition.X -= walkSpeedMob;
                         }
                     }
-                    else if (_vieMob <= 6 && _vieMob > 0) // si la vie de l'IA est entre 0 et 6 de vie
+                    else if (_persoRed.PositionPersoRed.X > _mobPosition.X && _persoBlue.PositionPersoBlue.X > _mobPosition.X || distRed < distBlue && _persoRed.PositionPersoRed.X > _mobPosition.X || distRed < distBlue && _persoRed.PositionPersoRed.X < _mobPosition.X || distBlue < distRed && _persoBlue.PositionPersoBlue.X > _mobPosition.X || distBlue < distRed && _persoBlue.PositionPersoBlue.X < _mobPosition.X) //si le red.X < mob.X alors gauche
                     {
-                        if (_persoRed.PositionPersoRed.X > _mobPosition.X)
+                        animationMob = "idleG";
+                        lastDirMob = "D";
+                        if (_mobPosition.X <= 1350)
                         {
-                            animationMob = "rageG";
-                            lastDirMob = "D";
-                            if (_mobPosition.X <= 1350)
-                            {
-                                _mobPosition.X += walkSpeedMob;
-                            }
-                        }
-                        else if (_persoRed.PositionPersoRed.X < _mobPosition.X)
-                        {
-                            animationMob = "rageD";
-                            lastDirMob = "G";
-                            if (_mobPosition.X >= 700)
-                            {
-                                _mobPosition.X -= walkSpeedMob;
-                            }
-                        }
-                        else if (_persoRed.PositionPersoRed.X == _mobPosition.X)
-                        {
-                            animationMob = "rageD";
+                            _mobPosition.X += walkSpeedMob;
                         }
                     }
-                }
-
-
-                // si les perso tombent de la platforme, ils perdent une vie et respawn. 
-                if (_persoRed.PositionPersoRed.X >= 2800 || _persoRed.PositionPersoRed.Y >= 1250 || _persoRed.PositionPersoRed.X <= 0)
-                {
-                    DamagePersoRed = DamagePersoRed + 3;
-                    _persoRed.PositionPersoRed = new Vector2(800, 650);
-                }
-
-                if (_persoBlue.PositionPersoBlue.X >= 2700 || _persoBlue.PositionPersoBlue.Y >= 1250 || _persoBlue.PositionPersoBlue.X <= 0)
-                {
-                    DamagePersoBlue = DamagePersoBlue + 3;
-                    _persoBlue.PositionPersoBlue = new Vector2(800, 650);
                 }
                 //----------------------------------------------------------------------------------------
-
-
-
             }
 
             else
