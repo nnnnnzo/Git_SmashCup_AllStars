@@ -21,7 +21,7 @@ namespace SmashCup_AllStars
         private TiledMap _mapPrincipale;
         private TiledMapRenderer _renduMapPrincipale;
         private TiledMapTileLayer _mapLayerSol;
-        private float _definedCooldown = 0.7f;
+        private float _definedCooldown = 0.6f;
         
 
 
