@@ -96,9 +96,10 @@ namespace SmashCup_AllStars
         private string lastDirMob;
         private int Yneed;
 
+       
 
         // Condition de victoire
-        
+
 
 
         public TiledMapTileLayer MapLayerSol { get => _mapLayerSol; set => _mapLayerSol = value; }
@@ -242,6 +243,8 @@ namespace SmashCup_AllStars
             float walkSpeedBdf = deltaSeconds * _vitesseBullet;
             float walkSpeedBulletMob = deltaSeconds * _vitesseBulletMob;
             float walkSpeedMob = deltaSeconds * _vitesseMob;
+            
+
             _timer = _timer - (deltaSeconds / 3);
             if (_timer > 0)
             {
@@ -263,7 +266,7 @@ namespace SmashCup_AllStars
                 Rectangle _boxPersoBlue = new Rectangle((int)_persoBlue.PositionPersoBlue.X - 98 / 2, (int)_persoBlue.PositionPersoBlue.Y - 5, 98, 150);
                 Rectangle _boxB3 = new Rectangle((int)_bulletPositionMob.X - 286 / 4, (int)_bulletPositionMob.Y - 146 / 4, 143, 73);
                 Rectangle _boxMob = new Rectangle((int)_mobPosition.X - 400 / 2, (int)_mobPosition.Y - 200, 400, 600);
-
+                
 
                 Console.WriteLine(_persoRed.PositionPersoRed.X+"  "+ _persoRed.PositionPersoRed.Y);
                 //Missile test PersoRed Gauche ,droite
@@ -427,7 +430,7 @@ namespace SmashCup_AllStars
                 }
                 if (_timer >= 100 && _timer <= 115 && _mobPosition.X <= 700 && spawnMob == true)
                 {
-                    _mobPosition = new Vector2(800, 650);
+                    _mobPosition = new Vector2(1050, 650);
                 }
                 // si les perso tombent de la platforme, ils perdent une vie et respawn. 
                 if (_persoRed.PositionPersoRed.X >= 2800 || _persoRed.PositionPersoRed.Y >= 1250 || _persoRed.PositionPersoRed.X <= 0)
@@ -604,6 +607,7 @@ namespace SmashCup_AllStars
                 
             }
 
+            
             for (int i = 0; i < bulletsD1.Count; i++)
                 _game1.SpriteBatch.Draw(_bulletD1, bulletsD1[i], 0, scalem);
 
