@@ -83,7 +83,7 @@
     <None Update="Content\Ice.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\IceMap.tmx">
+    <None Update="Content\IceMapFix.tmx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\musicMenu3.mp3">

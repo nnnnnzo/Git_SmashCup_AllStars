@@ -17,7 +17,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SmashCup_AllStars
 {
-   public enum Touche { Oui,Non}
+   
     public class ScreenMenu: GameScreen
     {
 
@@ -35,7 +35,7 @@ namespace SmashCup_AllStars
 
         private Texture2D _controlKey;
         private Vector2 _positionControKey;
-        private TiledMap _mapPrincipaleMenu;
+        
 
 
        
@@ -45,7 +45,7 @@ namespace SmashCup_AllStars
 
         private Song _musicMenu;
 
-        public TiledMap MapPrincipaleMenu { get => _mapPrincipaleMenu; set => _mapPrincipaleMenu = value; }
+       
 
         public ScreenMenu(Game1 game) : base(game)
         {
@@ -79,7 +79,7 @@ namespace SmashCup_AllStars
 
             _controlKey = Content.Load<Texture2D>("holdControlKey");
 
-            _musicMenu = Content.Load<Song>("musicMenu3");
+            _musicMenu = Content.Load<Song>("musicMenuCupHead");
                 MediaPlayer.Play(_musicMenu);
             MediaPlayer.Volume =1f;
            

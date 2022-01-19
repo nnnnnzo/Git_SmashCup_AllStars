@@ -170,10 +170,10 @@
 /processorParam:TextureFormat=Color
 /build:holdControlKey.png
 
-#begin IceMap.tmx
+#begin IceMapFix.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:IceMap.tmx
+/build:IceMapFix.tmx
 
 #begin imageEnd.jpg
 /importer:TextureImporter
@@ -192,6 +192,12 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:musicMenu3.mp3
+
+#begin musicMenuCupHead.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:musicMenuCupHead.mp3
 
 #begin Piskel Cup (1).png
 /importer:TextureImporter

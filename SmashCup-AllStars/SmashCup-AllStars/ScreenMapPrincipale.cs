@@ -28,19 +28,19 @@ namespace SmashCup_AllStars
         // Animation bullets
 
         private AnimatedSprite _bulletD1;
-        private string _annimationBulletD1;
+        private string _animationBulletD1;
         List<Vector2> bulletsD1;
 
         private AnimatedSprite _bulletG1;
-        private string _annimationBulletG1;
+        private string _animationBulletG1;
         List<Vector2> bulletsG1;
 
         private AnimatedSprite _bulletD2;
-        private string _annimationBulletD2;
+        private string _animationBulletD2;
         List<Vector2> bulletsD2;
 
         private AnimatedSprite _bulletG2;
-        private string _annimationBulletG2;
+        private string _animationBulletG2;
         List<Vector2> bulletsG2;
         private int _vitesseBullet;
 
@@ -151,11 +151,11 @@ namespace SmashCup_AllStars
 
             //Bullets
             
-            _annimationBulletD1 = "dirD";
-            _annimationBulletG1 = "dirG";
+            _animationBulletD1 = "dirD";
+            _animationBulletG1 = "dirG";
             _vitesseBullet = 500;
-            _annimationBulletD2 = "dirD";
-            _annimationBulletG2 = "dirG";
+            _animationBulletD2 = "dirD";
+            _animationBulletG2 = "dirG";
 
 
             // Vie IA / Mob
@@ -185,7 +185,7 @@ namespace SmashCup_AllStars
 
         public override void LoadContent()
         {
-            _mapPrincipale = Content.Load<TiledMap>("IceMap");
+            _mapPrincipale = Content.Load<TiledMap>("IceMapFix");
             _renduMapPrincipale = new TiledMapRenderer(GraphicsDevice, _mapPrincipale);
             _mapLayerSol = _mapPrincipale.GetLayer<TiledMapTileLayer>("Terrain");
             _persoRed.MapLayerSolPersoRed = _mapLayerSol;
@@ -518,10 +518,10 @@ namespace SmashCup_AllStars
                 _timer = -1;
 
 
-            _bulletD1.Play(_annimationBulletD1);
-            _bulletG1.Play(_annimationBulletG1);
-            _bulletD2.Play(_annimationBulletD2);
-            _bulletG2.Play(_annimationBulletG2);
+            _bulletD1.Play(_animationBulletD1);
+            _bulletG1.Play(_animationBulletG1);
+            _bulletD2.Play(_animationBulletD2);
+            _bulletG2.Play(_animationBulletG2);
             _bulletMob.Play(animationBulletMob);
             _mob.Play(animationMob);
             _bulletD1.Update(deltaSeconds);

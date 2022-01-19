@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="SmashCup_AllStars.PersoBlue" Collapsed="true">
+    <Position X="10" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AISACQAAAABAQwACAAAAgAAAIIgBAAAAEAAAAAAAAAY=</HashCode>
+      <FileName>PersoBlue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmashCup_AllStars.PersoRed" Collapsed="true">
+    <Position X="5.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>wAQAAAAAAAAAIwgAAEAKAAAQAAAAAAAAAIAAIgACACQ=</HashCode>
+      <FileName>PersoRed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmashCup_AllStars.ScreenFin" Collapsed="true">
+    <Position X="12.75" Y="2" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAUAABAAAQAAIwCAAAAIAAAAAAACAAAgAAAAQCCAAAQ=</HashCode>
+      <FileName>ScreenFin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmashCup_AllStars.ScreenMenu" Collapsed="true">
+    <Position X="12.25" Y="6.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAIAAAAAIwAAAEAICAgAAACCAAAAAIEQAAAAAAQ=</HashCode>
+      <FileName>ScreenMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmashCup_AllStars.Game1" Collapsed="true">
+    <Position X="9.75" Y="2.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAQIAAAAAAAAAwAAAAAAAAAADAAAAAAiQIACAAAEAAQ=</HashCode>
+      <FileName>Game1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmashCup_AllStars.ScreenMapPrincipale">
+    <Position X="1.25" Y="1.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AiVJBEEwAIAyAziAjAKIAABAJAE2QCCKEQQCAiCMAGQ=</HashCode>
+      <FileName>ScreenMapPrincipale.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="SmashCup_AllStars.FinGame" Collapsed="true">
+    <Position X="8.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>ScreenFin.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
