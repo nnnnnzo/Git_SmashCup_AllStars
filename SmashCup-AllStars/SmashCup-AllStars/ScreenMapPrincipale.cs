@@ -409,7 +409,7 @@ namespace SmashCup_AllStars
                 }
 
                 //----------------------------------------------------------------------------------------
-                if (_timer >= 90 && _timer <=115) // temps où l'IA va apparaitre dans le jeu
+                if (_timer >= 50 && _timer <=110) // temps où l'IA va apparaitre dans le jeu
                 {
                     spawnMob = true;
                 }
