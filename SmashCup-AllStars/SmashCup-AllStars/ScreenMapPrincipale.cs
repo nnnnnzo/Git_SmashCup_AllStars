@@ -539,26 +539,38 @@ namespace SmashCup_AllStars
                     }
                 }
 
-                int distRed = Math.Abs((int)_mobPosition.X + (int)_perso1Position.X);
-                int distBlue = Math.Abs((int)_mobPosition.X + (int)_perso2Position.X);
+                int distRed = (int)_mobPosition.X - (int)_perso1Position.X;
+                int distBlue = (int)_mobPosition.X - (int)_perso2Position.X;
                 // idleD = qui regarde à droite et idleG = qui regarde à gauche
                 if (spawnMob)
                 {
-                    if (_perso1Position.X < _mobPosition.X && _perso2Position.X < _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
+                    if (Math.Abs(distRed) < Math.Abs(distBlue)) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                     {
-                        animationMob = "idleD";
-                        lastDirMob = "G";
-                        if (_mobPosition.X >= 700)
+                        if (distRed > 0)
                         {
+                            animationMob = "idleG";
+                            lastDirMob = "G";
                             _mobPosition.X -= walkSpeedMob;
                         }
-                    }
-                    else if (_perso1Position.X > _mobPosition.X && _perso2Position.X > _mobPosition.X || distRed < distBlue && _perso1Position.X > _mobPosition.X || distRed < distBlue && _perso1Position.X < _mobPosition.X || distBlue < distRed && _perso2Position.X > _mobPosition.X || distBlue < distRed && _perso2Position.X < _mobPosition.X) //si le red.X < mob.X alors gauche
-                    {
-                        animationMob = "idleG";
-                        lastDirMob = "D";
-                        if (_mobPosition.X <= 1350)
+                        if (distRed < 0)
                         {
+                            animationMob = "idleD";
+                            lastDirMob = "D";
+                            _mobPosition.X += walkSpeedMob;
+                        }
+                    }
+                    else
+                    {
+                        if (distBlue > 0)
+                        {
+                            animationMob = "idleG";
+                            lastDirMob = "G";
+                            _mobPosition.X -= walkSpeedMob;
+                        }
+                        if (distBlue < 0)
+                        {
+                            animationMob = "idleD";
+                            lastDirMob = "D";
                             _mobPosition.X += walkSpeedMob;
                         }
                     }
