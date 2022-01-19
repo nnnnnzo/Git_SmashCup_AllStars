@@ -89,10 +89,12 @@ namespace SmashCup_AllStars
         private AnimatedSprite _bulletMob;
         private Vector2 _bulletPositionMob;
         private string _bulletPositionDepartMob;
+        private int _bulletPosDepartY;
         private string animationBulletMob;
         private int _vitesseBulletMob;
         private bool deplacementBMob;
         private string lastDirMob;
+        private int Yneed;
 
 
         // Condition de victoire
@@ -158,6 +160,7 @@ namespace SmashCup_AllStars
             _animationBulletG2 = "dirG";
 
 
+
             // Vie IA / Mob
             _positionVieMob = new Vector2(1200, 0);
             _vieMob = 12;
@@ -168,6 +171,7 @@ namespace SmashCup_AllStars
             //var bullet Mob
             animationBulletMob = "dirD";
             lastDirMob = "D";
+            Yneed = (int)_persoRed.PositionPersoRed.Y + 80;
             _bulletPositionMob = new Vector2(100, 100);
             _vitesseBulletMob = 200;
             deplacementBMob = false;
@@ -443,7 +447,7 @@ namespace SmashCup_AllStars
                     {
                         animationBulletMob = "dirD";
                     }
-                    else
+                    if(_bulletPositionDepartMob == "G")
                     {
                         animationBulletMob = "dirG";
                     }
@@ -465,11 +469,29 @@ namespace SmashCup_AllStars
                     {
                         if (_vieMob <= 6 && _vieMob > 0) // vitesse de la bullet suivant si le boss est en mode rage ou non.
                         {
-                            _bulletPositionMob.X += walkSpeedBulletMob * 2;
+                            if (_bulletPositionDepartMob == "D")
+                            {
+                                _bulletPositionMob.X += walkSpeedBulletMob * 2;
+                                _bulletPositionMob.Y = _bulletPosDepartY;
+                            }
+                            if (_bulletPositionDepartMob == "G")
+                            {
+                                _bulletPositionMob.X -= walkSpeedBulletMob * 2;
+                                _bulletPositionMob.Y = _bulletPosDepartY;
+                            }
                         }
                         else
                         {
-                            _bulletPositionMob.X += walkSpeedBulletMob;
+                            if (_bulletPositionDepartMob == "D")
+                            {
+                                _bulletPositionMob.X += walkSpeedBulletMob;
+                                _bulletPositionMob.Y = _bulletPosDepartY;
+                            }
+                            if (_bulletPositionDepartMob == "G")
+                            {
+                                _bulletPositionMob.X -= walkSpeedBulletMob;
+                                _bulletPositionMob.Y = _bulletPosDepartY;
+                            }
                         }
                     }
                 }
@@ -479,6 +501,7 @@ namespace SmashCup_AllStars
                     {
                         deplacementBMob = true;
                         _bulletPositionDepartMob = lastDirMob;
+                        _bulletPosDepartY = Yneed+80;
                         _bulletPositionMob = _mobPosition;
                         _bulletPositionMob.Y = _persoRed.PositionPersoRed.Y + 80;
                     }
@@ -487,26 +510,43 @@ namespace SmashCup_AllStars
                 {
                     _vieMob = 0;
                 }
-                int distRed = Math.Abs((int)_mobPosition.X + (int)_persoRed.PositionPersoRed.X);
-                int distBlue = Math.Abs((int)_mobPosition.X + (int)_persoBlue.PositionPersoBlue.X);
+                // idleD = qui regarde à droite et idleG = qui regarde à gauche
+                int distRed = (int)_mobPosition.X - (int)_persoRed.PositionPersoRed.X;
+                int distBlue = (int)_mobPosition.X - (int)_persoBlue.PositionPersoBlue.X;
                 // idleD = qui regarde à droite et idleG = qui regarde à gauche
                 if (spawnMob)
                 {
-                    if (_persoRed.PositionPersoRed.X < _mobPosition.X && _persoBlue.PositionPersoBlue.X < _mobPosition.X) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
+                    if (Math.Abs(distRed) < Math.Abs(distBlue)) // orientation de l'IA suivant si le personnage est à gauche ou à droite 
                     {
-                        animationMob = "idleD";
-                        lastDirMob = "G";
-                        if (_mobPosition.X >= 700)
+                        if (distRed > 0)
                         {
+                            animationMob = "idleG";
+                            lastDirMob = "G";
+                            Yneed = (int)_persoRed.PositionPersoRed.Y;
                             _mobPosition.X -= walkSpeedMob;
                         }
-                    }
-                    else if (_persoRed.PositionPersoRed.X > _mobPosition.X && _persoBlue.PositionPersoBlue.X > _mobPosition.X || distRed < distBlue && _persoRed.PositionPersoRed.X > _mobPosition.X || distRed < distBlue && _persoRed.PositionPersoRed.X < _mobPosition.X || distBlue < distRed && _persoBlue.PositionPersoBlue.X > _mobPosition.X || distBlue < distRed && _persoBlue.PositionPersoBlue.X < _mobPosition.X) //si le red.X < mob.X alors gauche
-                    {
-                        animationMob = "idleG";
-                        lastDirMob = "D";
-                        if (_mobPosition.X <= 1350)
+                        if (distRed < 0)
                         {
+                            animationMob = "idleD";
+                            lastDirMob = "D";
+                            Yneed = (int)_persoRed.PositionPersoRed.Y;
+                            _mobPosition.X += walkSpeedMob;
+                        }
+                    }
+                    else
+                    {
+                        if (distBlue > 0)
+                        {
+                            animationMob = "idleG";
+                            lastDirMob = "G";
+                            Yneed = (int)_persoBlue.PositionPersoBlue.Y;
+                            _mobPosition.X -= walkSpeedMob;
+                        }
+                        if (distBlue < 0)
+                        {
+                            animationMob = "idleD";
+                            lastDirMob = "D";
+                            Yneed = (int)_persoBlue.PositionPersoBlue.Y;
                             _mobPosition.X += walkSpeedMob;
                         }
                     }
@@ -556,9 +596,10 @@ namespace SmashCup_AllStars
 
             if (spawnMob == true)
             {
+                _game1.SpriteBatch.Draw(_bulletMob, _bulletPositionMob, 0, scalem);
                 _game1.SpriteBatch.Draw(_mob, _mobPosition, 0, scalem2);
                 _game1.SpriteBatch.DrawString(_policeMob, $"Vie BOSS [ {_vieMob} ]", _positionVieMob, Color.DarkGreen);
-                _game1.SpriteBatch.Draw(_bulletMob, _bulletPositionMob, 0, scalem);
+                
             }
 
             for (int i = 0; i < bulletsD1.Count; i++)

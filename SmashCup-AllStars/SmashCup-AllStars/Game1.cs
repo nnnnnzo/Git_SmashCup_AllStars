@@ -141,10 +141,17 @@ namespace SmashCup_AllStars
                 _screenFin.Fin = FinGame.RougeWon;
             }
 
-            else if (_ecranEnCours == Ecran.End && keyboardState.IsKeyDown(Keys.R))
+            else if (_ecranEnCours == Ecran.End && keyboardState.IsKeyDown(Keys.Escape))
             {
                 _ecranEnCours = Ecran.Menu;
                 _screenManager.LoadScreen(_screenMapMenu, new FadeTransition(GraphicsDevice, Color.Black));
+
+            }
+            else if (_ecranEnCours == Ecran.End && keyboardState.IsKeyDown(Keys.R))
+            {
+
+                _ecranEnCours = Ecran.Principal;
+                _screenManager.LoadScreen(_screenMapPrincipale, new FadeTransition(GraphicsDevice, Color.Black));
 
             }
 
